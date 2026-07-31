@@ -1,0 +1,47 @@
+{
+  "root": "/home/volodymyr-sec/projects/_audit-targets/semaphore/packages/circuits/src",
+  "files_scanned": 1,
+  "languages": [
+    "circom"
+  ],
+  "totals": {
+    "templates": 1,
+    "inputs": 4,
+    "outputs": 1,
+    "equality_constraints": 1,
+    "assign_constraints": 4,
+    "witness_only_assignments": 0,
+    "unconstrained_regions": 0,
+    "flags": 0
+  },
+  "flags": [],
+  "files": [
+    {
+      "file": "/home/volodymyr-sec/projects/_audit-targets/semaphore/packages/circuits/src/semaphore.circom",
+      "language": "circom",
+      "templates": [
+        "Semaphore"
+      ],
+      "inputs": [
+        "merkleProofLength",
+        "message",
+        "scope",
+        "secret"
+      ],
+      "outputs": [
+        "merkleRoot"
+      ],
+      "intermediates": [
+        "dummySquare"
+      ],
+      "components": 1,
+      "constraints_equality": 1,
+      "constraints_assign": 4,
+      "witness_only_assign": 0,
+      "unconstrained_regions": 0,
+      "gates": 0,
+      "advice_assignments": 0,
+      "flags": []
+    }
+  ]
+}

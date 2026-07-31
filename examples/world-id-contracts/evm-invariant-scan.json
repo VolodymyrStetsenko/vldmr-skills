@@ -1,0 +1,2170 @@
+{
+  "root": "/home/volodymyr-sec/projects/_audit-targets/world-id-contracts/src",
+  "files_scanned": 19,
+  "totals": {
+    "contracts": 19,
+    "functions": 146,
+    "entry_points": 17,
+    "permissionless_entry_points": 3,
+    "conservation_seeds": 0,
+    "flags": 0
+  },
+  "flags": [],
+  "files": [
+    {
+      "file": "/home/volodymyr-sec/projects/_audit-targets/world-id-contracts/src/SemaphoreVerifier.sol",
+      "contracts": [
+        "SemaphoreVerifier"
+      ],
+      "functions": [
+        {
+          "name": "negate",
+          "line": 122,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "exp",
+          "line": 134,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "invert_Fp",
+          "line": 160,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "sqrt_Fp",
+          "line": 175,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "isSquare_Fp",
+          "line": 190,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "bool"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "sqrt_Fp2",
+          "line": 207,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x0",
+            "uint256",
+            "x1"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "compress_g1",
+          "line": 238,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "c"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "decompress_g1",
+          "line": 266,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x",
+            "uint256",
+            "y"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "compress_g2",
+          "line": 301,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "c0",
+            "uint256",
+            "c1"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "decompress_g2",
+          "line": 360,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x0",
+            "uint256",
+            "x1",
+            "uint256",
+            "y0",
+            "uint256",
+            "y1"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "publicInputMSM",
+          "line": 404,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x",
+            "uint256",
+            "y"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "compressProof",
+          "line": 468,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "compressed"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "verifyCompressedProof",
+          "line": 487,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "verifyProof",
+          "line": 552,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "/home/volodymyr-sec/projects/_audit-targets/world-id-contracts/src/WorldIDIdentityManager.sol",
+      "contracts": [
+        "WorldIDIdentityManager"
+      ],
+      "functions": [],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "/home/volodymyr-sec/projects/_audit-targets/world-id-contracts/src/WorldIDIdentityManagerImplV1.sol",
+      "contracts": [
+        "WorldIDIdentityManagerImplV1"
+      ],
+      "functions": [
+        {
+          "name": "NO_SUCH_ROOT",
+          "line": 147,
+          "visibility": "public",
+          "mutability": "pure",
+          "modifiers": [
+            "RootInfo",
+            "rootInfo"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "initialize",
+          "line": 297,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "reinitializer"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "__delegateInit",
+          "line": 343,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyInitializing"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "registerIdentities",
+          "line": 376,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized",
+            "onlyIdentityOperator"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "calculateIdentityRegistrationInputHash",
+          "line": 439,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized",
+            "bytes32",
+            "hash"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "latestRoot",
+          "line": 454,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized",
+            "uint256"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "queryRoot",
+          "line": 465,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized",
+            "RootInfo"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "requireValidRoot",
+          "line": 495,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "getRegisterIdentitiesVerifierLookupTableAddress",
+          "line": 519,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized",
+            "address"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "setRegisterIdentitiesVerifierLookupTable",
+          "line": 537,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized",
+            "onlyOwner"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "getSemaphoreVerifierAddress",
+          "line": 558,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized",
+            "address"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "setSemaphoreVerifier",
+          "line": 575,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized",
+            "onlyOwner"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "getRootHistoryExpiry",
+          "line": 596,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized",
+            "uint256"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "setRootHistoryExpiry",
+          "line": 611,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized",
+            "onlyOwner"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "getTreeDepth",
+          "line": 630,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized",
+            "uint8"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "identityOperator",
+          "line": 638,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized",
+            "address"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "setIdentityOperator",
+          "line": 648,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized",
+            "onlyOwner",
+            "address"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "verifyProof",
+          "line": 676,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "/home/volodymyr-sec/projects/_audit-targets/world-id-contracts/src/WorldIDIdentityManagerImplV2.sol",
+      "contracts": [
+        "WorldIDIdentityManagerImplV2"
+      ],
+      "functions": [
+        {
+          "name": "initializeV2",
+          "line": 72,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "reinitializer"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "deleteIdentities",
+          "line": 111,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized",
+            "onlyIdentityOperator"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "getDeleteIdentitiesVerifierLookupTableAddress",
+          "line": 165,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized",
+            "address"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "setDeleteIdentitiesVerifierLookupTable",
+          "line": 183,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized",
+            "onlyOwner"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "calculateIdentityDeletionInputHash",
+          "line": 222,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized",
+            "bytes32",
+            "hash"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "/home/volodymyr-sec/projects/_audit-targets/world-id-contracts/src/WorldIDIdentityManagerImplV3.sol",
+      "contracts": [
+        "WorldIDIdentityManagerImplV3"
+      ],
+      "functions": [
+        {
+          "name": "verifyProof",
+          "line": 67,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "verifyCompressedProof",
+          "line": 95,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "/home/volodymyr-sec/projects/_audit-targets/world-id-contracts/src/WorldIDRouter.sol",
+      "contracts": [
+        "WorldIDRouter"
+      ],
+      "functions": [],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "/home/volodymyr-sec/projects/_audit-targets/world-id-contracts/src/WorldIDRouterImplV1.sol",
+      "contracts": [
+        "WorldIDRouterImplV1"
+      ],
+      "functions": [
+        {
+          "name": "initialize",
+          "line": 123,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "reinitializer"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "__delegateInit",
+          "line": 142,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyInitializing"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "routeFor",
+          "line": 158,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized",
+            "IWorldID"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "addGroup",
+          "line": 196,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized",
+            "onlyOwner"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "updateGroup",
+          "line": 221,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized",
+            "onlyOwner",
+            "IWorldID",
+            "oldTarget"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "disableGroup",
+          "line": 240,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized",
+            "onlyOwner",
+            "IWorldID",
+            "oldTarget"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "performGroupUpdate",
+          "line": 263,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized",
+            "onlyOwner",
+            "IWorldID",
+            "oldTarget"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "groupCount",
+          "line": 287,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized",
+            "uint256",
+            "count"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "insertNewTableEntry",
+          "line": 300,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "nextGroupId",
+          "line": 313,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized",
+            "uint256",
+            "groupId"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "verifyProof",
+          "line": 342,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyProxy",
+            "onlyInitialized"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "/home/volodymyr-sec/projects/_audit-targets/world-id-contracts/src/abstract/WorldIDImpl.sol",
+      "contracts": [
+        "WorldIDImpl"
+      ],
+      "functions": [
+        {
+          "name": "__WorldIDImpl_init",
+          "line": 50,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyInitializing"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_authorizeUpgrade",
+          "line": 71,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyProxy",
+            "onlyOwner"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "renounceOwnership",
+          "line": 86,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "onlyOwner"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "/home/volodymyr-sec/projects/_audit-targets/world-id-contracts/src/abstract/WorldIDProxy.sol",
+      "contracts": [
+        "WorldIDProxy"
+      ],
+      "functions": [],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "/home/volodymyr-sec/projects/_audit-targets/world-id-contracts/src/data/VerifierLookupTable.sol",
+      "contracts": [
+        "VerifierLookupTable"
+      ],
+      "functions": [
+        {
+          "name": "getVerifierFor",
+          "line": 88,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "ITreeVerifier",
+            "verifier"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "addVerifier",
+          "line": 103,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyOwner"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "updateVerifier",
+          "line": 122,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyOwner",
+            "ITreeVerifier",
+            "oldVerifier"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "disableVerifier",
+          "line": 139,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyOwner",
+            "ITreeVerifier",
+            "oldVerifier"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "validateVerifier",
+          "line": 158,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "renounceOwnership",
+          "line": 173,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "onlyOwner"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "/home/volodymyr-sec/projects/_audit-targets/world-id-contracts/src/utils/CheckInitialized.sol",
+      "contracts": [
+        "CheckInitialized"
+      ],
+      "functions": [
+        {
+          "name": "__setInitialized",
+          "line": 20,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyInitializing"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "/home/volodymyr-sec/projects/_audit-targets/world-id-contracts/src/utils/SemaphoreTreeDepthValidator.sol",
+      "contracts": [
+        "SemaphoreTreeDepthValidator"
+      ],
+      "functions": [
+        {
+          "name": "validate",
+          "line": 12,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "bool",
+            "supportedDepth"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "/home/volodymyr-sec/projects/_audit-targets/world-id-contracts/src/utils/UnimplementedTreeVerifier.sol",
+      "contracts": [
+        "UnimplementedTreeVerifier"
+      ],
+      "functions": [
+        {
+          "name": "verifyProof",
+          "line": 23,
+          "visibility": "external",
+          "mutability": "pure",
+          "modifiers": [],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "/home/volodymyr-sec/projects/_audit-targets/world-id-contracts/src/verifiers/deletion/b10.sol",
+      "contracts": [
+        "Verifier"
+      ],
+      "functions": [
+        {
+          "name": "negate",
+          "line": 108,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "exp",
+          "line": 120,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "invert_Fp",
+          "line": 146,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "sqrt_Fp",
+          "line": 161,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "isSquare_Fp",
+          "line": 176,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "bool"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "sqrt_Fp2",
+          "line": 193,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x0",
+            "uint256",
+            "x1"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "compress_g1",
+          "line": 224,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "c"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "decompress_g1",
+          "line": 252,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x",
+            "uint256",
+            "y"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "compress_g2",
+          "line": 287,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "c0",
+            "uint256",
+            "c1"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "decompress_g2",
+          "line": 346,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x0",
+            "uint256",
+            "x1",
+            "uint256",
+            "y0",
+            "uint256",
+            "y1"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "publicInputMSM",
+          "line": 390,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x",
+            "uint256",
+            "y"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "compressProof",
+          "line": 433,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "compressed"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "verifyCompressedProof",
+          "line": 452,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "verifyProof",
+          "line": 517,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "/home/volodymyr-sec/projects/_audit-targets/world-id-contracts/src/verifiers/deletion/b100.sol",
+      "contracts": [
+        "Verifier"
+      ],
+      "functions": [
+        {
+          "name": "negate",
+          "line": 108,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "exp",
+          "line": 120,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "invert_Fp",
+          "line": 146,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "sqrt_Fp",
+          "line": 161,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "isSquare_Fp",
+          "line": 176,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "bool"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "sqrt_Fp2",
+          "line": 193,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x0",
+            "uint256",
+            "x1"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "compress_g1",
+          "line": 224,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "c"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "decompress_g1",
+          "line": 252,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x",
+            "uint256",
+            "y"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "compress_g2",
+          "line": 287,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "c0",
+            "uint256",
+            "c1"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "decompress_g2",
+          "line": 346,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x0",
+            "uint256",
+            "x1",
+            "uint256",
+            "y0",
+            "uint256",
+            "y1"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "publicInputMSM",
+          "line": 390,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x",
+            "uint256",
+            "y"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "compressProof",
+          "line": 433,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "compressed"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "verifyCompressedProof",
+          "line": 452,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "verifyProof",
+          "line": 517,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "/home/volodymyr-sec/projects/_audit-targets/world-id-contracts/src/verifiers/insertion/b10.sol",
+      "contracts": [
+        "Verifier"
+      ],
+      "functions": [
+        {
+          "name": "negate",
+          "line": 108,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "exp",
+          "line": 120,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "invert_Fp",
+          "line": 146,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "sqrt_Fp",
+          "line": 161,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "isSquare_Fp",
+          "line": 176,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "bool"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "sqrt_Fp2",
+          "line": 193,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x0",
+            "uint256",
+            "x1"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "compress_g1",
+          "line": 224,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "c"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "decompress_g1",
+          "line": 252,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x",
+            "uint256",
+            "y"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "compress_g2",
+          "line": 287,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "c0",
+            "uint256",
+            "c1"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "decompress_g2",
+          "line": 346,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x0",
+            "uint256",
+            "x1",
+            "uint256",
+            "y0",
+            "uint256",
+            "y1"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "publicInputMSM",
+          "line": 390,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x",
+            "uint256",
+            "y"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "compressProof",
+          "line": 433,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "compressed"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "verifyCompressedProof",
+          "line": 452,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "verifyProof",
+          "line": 517,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "/home/volodymyr-sec/projects/_audit-targets/world-id-contracts/src/verifiers/insertion/b100.sol",
+      "contracts": [
+        "Verifier"
+      ],
+      "functions": [
+        {
+          "name": "negate",
+          "line": 108,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "exp",
+          "line": 120,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "invert_Fp",
+          "line": 146,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "sqrt_Fp",
+          "line": 161,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "isSquare_Fp",
+          "line": 176,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "bool"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "sqrt_Fp2",
+          "line": 193,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x0",
+            "uint256",
+            "x1"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "compress_g1",
+          "line": 224,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "c"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "decompress_g1",
+          "line": 252,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x",
+            "uint256",
+            "y"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "compress_g2",
+          "line": 287,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "c0",
+            "uint256",
+            "c1"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "decompress_g2",
+          "line": 346,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x0",
+            "uint256",
+            "x1",
+            "uint256",
+            "y0",
+            "uint256",
+            "y1"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "publicInputMSM",
+          "line": 390,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x",
+            "uint256",
+            "y"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "compressProof",
+          "line": 433,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "compressed"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "verifyCompressedProof",
+          "line": 452,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "verifyProof",
+          "line": 517,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "/home/volodymyr-sec/projects/_audit-targets/world-id-contracts/src/verifiers/insertion/b1200.sol",
+      "contracts": [
+        "Verifier"
+      ],
+      "functions": [
+        {
+          "name": "negate",
+          "line": 108,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "exp",
+          "line": 120,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "invert_Fp",
+          "line": 146,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "sqrt_Fp",
+          "line": 161,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "isSquare_Fp",
+          "line": 176,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "bool"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "sqrt_Fp2",
+          "line": 193,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x0",
+            "uint256",
+            "x1"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "compress_g1",
+          "line": 224,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "c"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "decompress_g1",
+          "line": 252,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x",
+            "uint256",
+            "y"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "compress_g2",
+          "line": 287,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "c0",
+            "uint256",
+            "c1"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "decompress_g2",
+          "line": 346,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x0",
+            "uint256",
+            "x1",
+            "uint256",
+            "y0",
+            "uint256",
+            "y1"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "publicInputMSM",
+          "line": 390,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x",
+            "uint256",
+            "y"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "compressProof",
+          "line": 433,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "compressed"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "verifyCompressedProof",
+          "line": 452,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "verifyProof",
+          "line": 517,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "/home/volodymyr-sec/projects/_audit-targets/world-id-contracts/src/verifiers/insertion/b600.sol",
+      "contracts": [
+        "Verifier"
+      ],
+      "functions": [
+        {
+          "name": "negate",
+          "line": 108,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "exp",
+          "line": 120,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "invert_Fp",
+          "line": 146,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "sqrt_Fp",
+          "line": 161,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "isSquare_Fp",
+          "line": 176,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "bool"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "sqrt_Fp2",
+          "line": 193,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x0",
+            "uint256",
+            "x1"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "compress_g1",
+          "line": 224,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "c"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "decompress_g1",
+          "line": 252,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x",
+            "uint256",
+            "y"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "compress_g2",
+          "line": 287,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "c0",
+            "uint256",
+            "c1"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "decompress_g2",
+          "line": 346,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x0",
+            "uint256",
+            "x1",
+            "uint256",
+            "y0",
+            "uint256",
+            "y1"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "publicInputMSM",
+          "line": 390,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "x",
+            "uint256",
+            "y"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "compressProof",
+          "line": 433,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "uint256",
+            "compressed"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "verifyCompressedProof",
+          "line": 452,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "verifyProof",
+          "line": 517,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    }
+  ]
+}

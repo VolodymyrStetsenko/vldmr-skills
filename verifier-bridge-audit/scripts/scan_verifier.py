@@ -27,7 +27,140 @@ import os
 import re
 import sys
 from dataclasses import dataclass, field, asdict
+from datetime import datetime, timezone
 from typing import List
+
+
+# --------------------------------------------------------------------------- #
+# Branding & reporting
+# --------------------------------------------------------------------------- #
+
+_BANNER = r"""
+█   █  █      ████   █   █  ████
+█   █  █      █   █  ██ ██  █   █
+█   █  █      █   █  █ █ █  ████
+ █ █   █      █   █  █   █  █  █
+  █    █████  ████   █   █  █   █
+
+ ████  █   █  ███  █      █       ████
+█      █  █    █   █      █      █
+ ███   ███     █   █      █       ███
+    █  █  █    █   █      █          █
+████   █   █  ███  █████  █████  ████
+"""
+
+_SEVERITY = {
+    "possible-proof-replay": "Critical",
+    "unbound-public-inputs": "High",
+    "mutable-verifier": "High",
+}
+
+
+def _print_banner(subtitle: str) -> None:
+    """Print the VLDMR Skills banner to stderr (stdout stays machine-readable)."""
+    print(_BANNER, file=sys.stderr)
+    print(f"  VLDMR Skills · {subtitle}\n", file=sys.stderr)
+
+
+def _read_version() -> str:
+    try:
+        with open(os.path.join(os.path.dirname(__file__), "..", "VERSION")) as fh:
+            return fh.read().strip()
+    except OSError:
+        return "?"
+
+
+def build_report(summary: dict) -> str:
+    """Render a professional, minimalist markdown report from the JSON summary."""
+    t = summary["totals"]
+    root = os.path.basename(summary["root"].rstrip("/")) or summary["root"]
+    date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    flags = summary["flags"]
+
+    L: List[str] = []
+    L.append(f"# Verifier Bridge Audit — {root}")
+    L.append("")
+    L.append(f"> VLDMR Skills · `verifier-bridge-audit` v{_read_version()} · {date} (UTC)")
+    L.append("")
+    L.append(f"**Scope:** `{summary['root']}` · {summary['files_scanned']} Solidity file(s)")
+    L.append("")
+    L.append("## Summary")
+    L.append("")
+    L.append("| metric | value |")
+    L.append("| --- | ---: |")
+    L.append(f"| Proof-verifier contracts | {t['verifiers']} |")
+    L.append(f"| Verifier consumers | {t['consumers']} |")
+    L.append(f"| Verification call sites | {t['verification_call_sites']} |")
+    L.append(f"| **Leads** | **{t['flags']}** |")
+    L.append("")
+
+    verifiers = summary.get("verifier_contracts") or []
+    consumers = summary.get("consumer_contracts") or []
+    if verifiers:
+        L.append("**Verifiers:** " + ", ".join(f"`{os.path.basename(v)}`" for v in verifiers))
+        L.append("")
+    if consumers:
+        L.append("**Consumers:** " + ", ".join(f"`{os.path.basename(c)}`" for c in consumers))
+        L.append("")
+
+    L.append("## Integration guardrails")
+    L.append("")
+    L.append("For each verifier consumer, three classic ZK-EVM protections are checked.")
+    L.append("")
+    L.append("| Consumer | Replay/nullifier guard | Public-input binding |")
+    L.append("| --- | :---: | :---: |")
+    any_consumer = False
+    for fr in summary.get("files", []):
+        if not fr.get("consumer_calls"):
+            continue
+        any_consumer = True
+        guard = "yes" if (fr.get("has_nullifier_tracking") and fr.get("has_replay_guard")) else "**no**"
+        bind = "yes" if fr.get("binds_context") else "**no**"
+        L.append(f"| `{os.path.basename(fr['file'])}` | {guard} | {bind} |")
+    if not any_consumer:
+        L.append("| _(no verifier consumers found)_ | — | — |")
+    L.append("")
+
+    L.append("## Leads")
+    L.append("")
+    if not flags:
+        L.append("No integration leads. Every verifier consumer this scanner can see has "
+                 "replay tracking and binds public inputs to context. Confirm the binding "
+                 "actually covers the recipient/scope your protocol relies on.")
+    else:
+        L.append("Each row is a **lead** to confirm against the real data flow, not a finding.")
+        L.append("")
+        L.append("| # | Severity | Kind | Location | Note |")
+        L.append("| ---: | --- | --- | --- | --- |")
+        for i, f in enumerate(flags, 1):
+            sev = _SEVERITY.get(f["kind"], "Lead")
+            loc = f"{os.path.basename(f['file'])}:{f['line']}"
+            L.append(f"| {i} | {sev} | `{f['kind']}` | {loc} | {f['note']} |")
+    L.append("")
+    L.append("## Verdict")
+    L.append("")
+    L.append(_verdict(flags))
+    L.append("")
+    L.append("## Method & limits")
+    L.append("")
+    L.append("- Deterministic regex over comment-stripped Solidity (no compile, no network).")
+    L.append("- Binding is inferred from the *arguments* passed to `verifyProof`; a consumer "
+             "may still bind context in a way this scanner cannot see — confirm manually.")
+    L.append("- Verifier detection covers Groth16/PLONK templates and optimized Yul verifiers; "
+             "exotic custom verifiers may be missed.")
+    return "\n".join(L) + "\n"
+
+
+def _verdict(flags: List[dict]) -> str:
+    if not flags:
+        return ("**Clean surface.** No replay, unbound-input, or mutable-verifier leads were "
+                "detected across verifier consumers.")
+    crit = [f for f in flags if _SEVERITY.get(f["kind"]) in {"Critical", "High"}]
+    if crit:
+        return (f"**Review required.** {len(crit)} high-severity integration lead(s) "
+                "(replay / unbound public inputs / mutable verifier). Confirm before deployment.")
+    return f"**Leads to confirm.** {len(flags)} lead(s) to review."
+
 
 
 _BLOCK_COMMENT = re.compile(r"/\*.*?\*/", re.DOTALL)
@@ -260,7 +393,12 @@ def main(argv: List[str]) -> int:
     ap = argparse.ArgumentParser(description="Locate on-chain proof verifiers and audit their consumers.")
     ap.add_argument("path")
     ap.add_argument("--json")
+    ap.add_argument("--report", help="write a markdown audit report to this path")
+    ap.add_argument("--no-banner", action="store_true", help="suppress the banner")
     args = ap.parse_args(argv)
+
+    if not args.no_banner:
+        _print_banner("verifier-bridge-audit · on-chain proof integration")
 
     if not os.path.exists(args.path):
         print(f"error: path not found: {args.path}", file=sys.stderr)
@@ -296,6 +434,12 @@ def main(argv: List[str]) -> int:
               f"{summary['totals']['flags']} flags)")
     else:
         print(payload)
+
+    if args.report:
+        os.makedirs(os.path.dirname(os.path.abspath(args.report)), exist_ok=True)
+        with open(args.report, "w", encoding="utf-8") as fh:
+            fh.write(build_report(summary))
+        print(f"wrote {args.report}", file=sys.stderr)
     return 0
 
 

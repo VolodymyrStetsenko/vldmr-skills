@@ -41,14 +41,17 @@ Mark Phase 1 in progress, then determine scope:
 Run the enumerator (single Bash call, creating the output dir first):
 
 ```bash
-mkdir -p zk-review && python3 "$SKILL_DIR/scripts/enumerate_circuit.py" <scope-path> --json zk-review/enumeration.json && cat zk-review/enumeration.json
+mkdir -p zk-review && python3 "$SKILL_DIR/scripts/enumerate_circuit.py" <scope-path> --json zk-review/enumeration.json --report zk-review/scan-report.md && cat zk-review/enumeration.json
 ```
 
 The JSON gives you, per file: templates/functions, `inputs`, `outputs`,
 `intermediates`, constraint counts (`equality`, `assign`, `witness_only`), and a
 list of `flags` — deterministic leads the script already found (under-constrained
 witnesses, unconstrained outputs, unconstrained hint functions, gates without
-selectors). These flags are **starting points, not conclusions**.
+selectors). These flags are **starting points, not conclusions**. The script
+also writes `zk-review/scan-report.md` — an auto-generated, self-contained
+summary of the deterministic pass (banner and progress go to stderr; stdout
+stays machine-readable JSON).
 
 In the same message, preload the taxonomy so it is in context for Phase 2:
 

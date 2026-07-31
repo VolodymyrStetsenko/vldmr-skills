@@ -32,13 +32,15 @@ Mark Phase 1 in progress. Determine scope (user-specified path, else the
 contracts directory — `src/` or `contracts/`). Run the locator:
 
 ```bash
-mkdir -p bridge-audit && python3 "$SKILL_DIR/scripts/scan_verifier.py" <scope-path> --json bridge-audit/scan.json && cat bridge-audit/scan.json
+mkdir -p bridge-audit && python3 "$SKILL_DIR/scripts/scan_verifier.py" <scope-path> --json bridge-audit/scan.json --report bridge-audit/scan-report.md && cat bridge-audit/scan.json
 ```
 
 The JSON identifies `verifier_contracts` (proof checkers), `consumer_contracts`
 (callers of `verify`/`verifyProof`), each verification call site, and
 deterministic `flags`: `possible-proof-replay`, `unbound-public-inputs`,
-`mutable-verifier`. Treat flags as leads.
+`mutable-verifier`. Treat flags as leads. The script also writes
+`bridge-audit/scan-report.md` — an auto-generated summary of the deterministic
+pass (banner and progress go to stderr; stdout stays machine-readable JSON).
 
 In the same message, preload `$SKILL_DIR/references/integration-threats.md`.
 

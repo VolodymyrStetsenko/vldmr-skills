@@ -102,6 +102,12 @@ python3 evm-invariant-scan/scripts/enumerate_evm.py       <repo>/packages/contra
   and now additionally covers OWASP SC03 (oracle), SC04 (flash loan), and SC10
   (proxy/upgradeability).
 
+A second validation round (v1.2.0) extended real-protocol testing to
+**circomlib, World ID contracts, and Uniswap v4 core**. It exposed and fixed two
+false positives (single-line-loop `<--` target extraction; `reinitializer` and
+inline `msg.sender` auth not counted as access control). Unedited outputs and
+per-lead verification notes live in [examples/](../examples/README.md).
+
 These scripts are **deterministic pre-audit accelerators and lead generators**,
 not a replacement for professional review. Real-world audits combine static
 tools (Slither, Circomspect), fuzzers (Echidna/Medusa), formal verification

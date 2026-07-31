@@ -32,7 +32,122 @@ import os
 import re
 import sys
 from dataclasses import dataclass, field, asdict
+from datetime import datetime, timezone
 from typing import Dict, List, Optional
+
+
+# --------------------------------------------------------------------------- #
+# Branding & reporting
+# --------------------------------------------------------------------------- #
+
+_BANNER = r"""
+█   █  █      ████   █   █  ████
+█   █  █      █   █  ██ ██  █   █
+█   █  █      █   █  █ █ █  ████
+ █ █   █      █   █  █   █  █  █
+  █    █████  ████   █   █  █   █
+
+ ████  █   █  ███  █      █       ████
+█      █  █    █   █      █      █
+ ███   ███     █   █      █       ███
+    █  █  █    █   █      █          █
+████   █   █  ███  █████  █████  ████
+"""
+
+_SEVERITY = {
+    "unconstrained-output": "Critical",
+    "under-constrained-witness": "High",
+    "unconstrained-fn": "High",
+    "no-constraints": "High",
+    "unused-public-input": "Medium",
+    "advice-without-gate": "Medium",
+    "gate-without-selector": "Medium",
+}
+
+
+def _print_banner(subtitle: str) -> None:
+    """Print the VLDMR Skills banner to stderr (stdout stays machine-readable)."""
+    print(_BANNER, file=sys.stderr)
+    print(f"  VLDMR Skills · {subtitle}\n", file=sys.stderr)
+
+
+def _read_version() -> str:
+    try:
+        with open(os.path.join(os.path.dirname(__file__), "..", "VERSION")) as fh:
+            return fh.read().strip()
+    except OSError:
+        return "?"
+
+
+def build_report(summary: dict) -> str:
+    """Render a professional, minimalist markdown report from the JSON summary."""
+    t = summary["totals"]
+    root = os.path.basename(summary["root"].rstrip("/")) or summary["root"]
+    langs = ", ".join(summary.get("languages") or []) or "—"
+    date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    flags = summary["flags"]
+
+    L: List[str] = []
+    L.append(f"# ZK Circuit Review — {root}")
+    L.append("")
+    L.append(f"> VLDMR Skills · `zk-circuit-review` v{_read_version()} · {date} (UTC)")
+    L.append("")
+    L.append(f"**Scope:** `{summary['root']}` · {summary['files_scanned']} file(s) · "
+             f"languages: {langs}")
+    L.append("")
+    L.append("## Summary")
+    L.append("")
+    L.append("| metric | value |")
+    L.append("| --- | ---: |")
+    L.append(f"| Templates / functions | {t['templates']} |")
+    L.append(f"| Input signals | {t['inputs']} |")
+    L.append(f"| Output signals | {t['outputs']} |")
+    L.append(f"| Equality constraints (`===`/assert) | {t['equality_constraints']} |")
+    L.append(f"| Assign+constrain (`<==`) | {t['assign_constraints']} |")
+    L.append(f"| Witness-only assignments (`<--`) | {t['witness_only_assignments']} |")
+    L.append(f"| Unconstrained regions | {t['unconstrained_regions']} |")
+    L.append(f"| **Leads** | **{t['flags']}** |")
+    L.append("")
+    L.append("## Leads")
+    L.append("")
+    if not flags:
+        L.append("No heuristic leads. Every declared signal that this scanner can see is "
+                 "referenced by a constraint. This is *not* a proof of soundness — "
+                 "cryptographic-protocol checks (Fiat–Shamir, trusted setup) remain manual.")
+    else:
+        L.append("Each row is a **lead** to confirm against the circuit, not a final finding.")
+        L.append("")
+        L.append("| # | Severity | Kind | Signal | Location | Note |")
+        L.append("| ---: | --- | --- | --- | --- | --- |")
+        for i, f in enumerate(flags, 1):
+            sev = _SEVERITY.get(f["kind"], "Lead")
+            loc = f"{os.path.basename(f['file'])}:{f['line']}"
+            L.append(f"| {i} | {sev} | `{f['kind']}` | `{f['signal']}` | {loc} | {f['note']} |")
+    L.append("")
+    L.append("## Verdict")
+    L.append("")
+    L.append(_verdict(flags))
+    L.append("")
+    L.append("## Method & limits")
+    L.append("")
+    L.append("- Deterministic, comment-stripped source analysis (no proving, no network).")
+    L.append("- Leads are heuristic; confirm each with a concrete second witness or a "
+             "constraint trace before reporting as a finding.")
+    L.append("- Library sub-circuits imported from `node_modules`/`target` are not followed.")
+    return "\n".join(L) + "\n"
+
+
+def _verdict(flags: List[dict]) -> str:
+    if not flags:
+        return ("**Clean surface.** No under-constrained outputs, unused public inputs, or "
+                "unconstrained regions were detected by static enumeration.")
+    crit = [f for f in flags if _SEVERITY.get(f["kind"]) in {"Critical", "High"}]
+    if crit:
+        return (f"**Review required.** {len(crit)} high-severity lead(s) touch soundness "
+                "(unconstrained output / free witness). Confirm before any deployment.")
+    return (f"**Leads to confirm.** {len(flags)} lower-severity lead(s) (e.g. unused public "
+            "inputs). Confirm and either constrain or document.")
+
 
 
 # --------------------------------------------------------------------------- #
@@ -109,6 +224,13 @@ _CIRCOM_SIGNAL = re.compile(
 _CIRCOM_COMPONENT = re.compile(r"\bcomponent\s+[A-Za-z_]\w*")
 _IDENT = re.compile(r"[A-Za-z_]\w*")
 
+# The assignment target of a `<--` / `-->` is the signal reference directly
+# adjacent to the operator, ignoring array indices and member access. This is
+# robust to single-line `for` loops such as `for (i=0; i<256; i++) out[i] <-- x`
+# where the naive "first/last identifier" heuristics pick the loop variable.
+_WITNESS_LHS = re.compile(r"([A-Za-z_]\w*)\s*(?:\[[^\]]*\]\s*|\.[A-Za-z_]\w*\s*)*<--")
+_WITNESS_RHS = re.compile(r"-->\s*([A-Za-z_]\w*)")
+
 
 def _base_name(sig: str) -> str:
     """Strip array indexing so `in[3]` and `in[0]` map to the same signal `in`."""
@@ -164,17 +286,15 @@ def analyze_circom(path: str, src: str) -> FileReport:
         if "<--" in line:
             rep.witness_only_assign += 1
             rep.unconstrained_regions += 1
-            lhs = line.split("<--", 1)[0]
-            idents = _IDENT.findall(lhs)
-            if idents:
-                witness_assigned.setdefault(_base_name(idents[-1]), lineno)
+            m = _WITNESS_LHS.search(line)
+            if m:
+                witness_assigned.setdefault(_base_name(m.group(1)), lineno)
         elif "-->" in line:
             rep.witness_only_assign += 1
             rep.unconstrained_regions += 1
-            rhs = line.split("-->", 1)[1]
-            idents = _IDENT.findall(rhs)
-            if idents:
-                witness_assigned.setdefault(_base_name(idents[0]), lineno)
+            m = _WITNESS_RHS.search(line)
+            if m:
+                witness_assigned.setdefault(_base_name(m.group(1)), lineno)
 
     # Under-constrained heuristic: a signal assigned only via `<--`
     # and never appearing in a `===` / `<==` constraint is a classic
@@ -340,9 +460,14 @@ def main(argv: List[str]) -> int:
     ap = argparse.ArgumentParser(description="Enumerate ZK circuit signals and constraints.")
     ap.add_argument("path", help="file or directory to scan")
     ap.add_argument("--json", help="write JSON report to this path")
+    ap.add_argument("--report", help="write a markdown review report to this path")
     ap.add_argument("--lang", default="auto",
                     choices=["auto", "circom", "noir", "halo2"])
+    ap.add_argument("--no-banner", action="store_true", help="suppress the banner")
     args = ap.parse_args(argv)
+
+    if not args.no_banner:
+        _print_banner("zk-circuit-review · soundness & under-constraint review")
 
     if not os.path.exists(args.path):
         print(f"error: path not found: {args.path}", file=sys.stderr)
@@ -386,6 +511,12 @@ def main(argv: List[str]) -> int:
               f"{summary['totals']['flags']} flags)")
     else:
         print(payload)
+
+    if args.report:
+        os.makedirs(os.path.dirname(os.path.abspath(args.report)), exist_ok=True)
+        with open(args.report, "w", encoding="utf-8") as fh:
+            fh.write(build_report(summary))
+        print(f"wrote {args.report}", file=sys.stderr)
     return 0
 
 

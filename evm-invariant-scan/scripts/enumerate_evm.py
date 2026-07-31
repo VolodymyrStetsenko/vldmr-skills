@@ -29,7 +29,133 @@ import os
 import re
 import sys
 from dataclasses import dataclass, field, asdict
+from datetime import datetime, timezone
 from typing import List, Tuple
+
+
+# --------------------------------------------------------------------------- #
+# Branding & reporting
+# --------------------------------------------------------------------------- #
+
+_BANNER = r"""
+█   █  █      ████   █   █  ████
+█   █  █      █   █  ██ ██  █   █
+█   █  █      █   █  █ █ █  ████
+ █ █   █      █   █  █   █  █  █
+  █    █████  ████   █   █  █   █
+
+ ████  █   █  ███  █      █       ████
+█      █  █    █   █      █      █
+ ███   ███     █   █      █       ███
+    █  █  █    █   █      █          █
+████   █   █  ███  █████  █████  ████
+"""
+
+_SEVERITY = {
+    "unprotected-upgrade": "Critical",
+    "permissionless-config-setter": "High",
+    "external-call-no-reentrancy-guard": "High",
+    "spot-price-oracle": "High",
+    "balance-based-accounting": "High",
+    "initializer-not-guarded": "High",
+    "selfdestruct-present": "High",
+    "oracle-deprecated-feed": "Medium",
+    "oracle-missing-staleness-check": "Medium",
+    "flash-loan-callback": "Medium",
+    "unchecked-low-level-call": "Medium",
+}
+
+
+def _print_banner(subtitle: str) -> None:
+    """Print the VLDMR Skills banner to stderr (stdout stays machine-readable)."""
+    print(_BANNER, file=sys.stderr)
+    print(f"  VLDMR Skills · {subtitle}\n", file=sys.stderr)
+
+
+def _read_version() -> str:
+    try:
+        with open(os.path.join(os.path.dirname(__file__), "..", "VERSION")) as fh:
+            return fh.read().strip()
+    except OSError:
+        return "?"
+
+
+def build_report(summary: dict) -> str:
+    """Render a professional, minimalist markdown report from the JSON summary."""
+    t = summary["totals"]
+    root = os.path.basename(summary["root"].rstrip("/")) or summary["root"]
+    date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    flags = summary["flags"]
+
+    L: List[str] = []
+    L.append(f"# EVM Invariant Scan — {root}")
+    L.append("")
+    L.append(f"> VLDMR Skills · `evm-invariant-scan` v{_read_version()} · {date} (UTC)")
+    L.append("")
+    L.append(f"**Scope:** `{summary['root']}` · {summary['files_scanned']} Solidity file(s)")
+    L.append("")
+    L.append("## Summary")
+    L.append("")
+    L.append("| metric | value |")
+    L.append("| --- | ---: |")
+    L.append(f"| Contracts | {t['contracts']} |")
+    L.append(f"| Functions | {t['functions']} |")
+    L.append(f"| Entry points (external/public) | {t['entry_points']} |")
+    L.append(f"| Permissionless entry points | {t['permissionless_entry_points']} |")
+    L.append(f"| Conservation seeds (supply vs. balances) | {t['conservation_seeds']} |")
+    L.append(f"| **Leads** | **{t['flags']}** |")
+    L.append("")
+    L.append("## Leads")
+    L.append("")
+    if not flags:
+        L.append("No heuristic leads. No permissionless config setters, unguarded external "
+                 "calls, oracle/flash-loan/upgrade risks were detected. This is a surface "
+                 "map, not a proof of correctness — confirm invariants with fuzzing.")
+    else:
+        L.append("Each row is a **lead** to confirm against the code, not a final finding.")
+        L.append("")
+        L.append("| # | Severity | Kind | Function | Location | Note |")
+        L.append("| ---: | --- | --- | --- | --- | --- |")
+        for i, f in enumerate(flags, 1):
+            sev = _SEVERITY.get(f["kind"], "Lead")
+            fn = f.get("function") or "—"
+            loc = f"{os.path.basename(f['file'])}:{f['line']}"
+            L.append(f"| {i} | {sev} | `{f['kind']}` | `{fn}` | {loc} | {f['note']} |")
+    L.append("")
+    L.append("## Invariant seeds")
+    L.append("")
+    L.append("Suggested properties to encode for fuzzing / formal review:")
+    L.append("")
+    L.append(f"- **Access control:** {t['permissionless_entry_points']} permissionless entry "
+             "point(s) — confirm each is intentionally public.")
+    if t["conservation_seeds"]:
+        L.append(f"- **Value conservation:** {t['conservation_seeds']} contract(s) track a "
+                 "supply/total against per-account balances — assert sum(balances) == total.")
+    L.append("- **Monotonicity / solvency:** encode any documented \"never decreases\" or "
+             "\"assets ≥ liabilities\" property as an Echidna/Medusa invariant.")
+    L.append("")
+    L.append("## Verdict")
+    L.append("")
+    L.append(_verdict(flags))
+    L.append("")
+    L.append("## Method & limits")
+    L.append("")
+    L.append("- Deterministic regex over comment-stripped Solidity (no compile, no network).")
+    L.append("- Leads are structural; a flagged pattern is not proof of a bug, and an absent "
+             "flag is not proof of safety. Pair with fuzzing and manual review.")
+    return "\n".join(L) + "\n"
+
+
+def _verdict(flags: List[dict]) -> str:
+    if not flags:
+        return ("**Clean surface.** No permissionless-setter, reentrancy, oracle, flash-loan, "
+                "or upgrade leads were detected by static enumeration.")
+    crit = [f for f in flags if _SEVERITY.get(f["kind"]) in {"Critical", "High"}]
+    if crit:
+        return (f"**Review required.** {len(crit)} high-severity lead(s) "
+                "(upgrade / access-control / reentrancy / oracle). Confirm before deployment.")
+    return f"**Leads to confirm.** {len(flags)} lower-severity lead(s) to review."
+
 
 
 _BLOCK_COMMENT = re.compile(r"/\*.*?\*/", re.DOTALL)
@@ -87,6 +213,13 @@ EXTERNAL_CALL = re.compile(
 LOWLEVEL_CALL = re.compile(r"\.call\s*[\({]|\.delegatecall\s*\(")
 CHECKED_CALL = re.compile(r"\(\s*bool\s+\w+|\brequire\s*\(|=\s*\w+\.call")
 ACCESS_MODIFIER = re.compile(r"onlyOwner|onlyRole|onlyAdmin|only[A-Z]\w*|whenNotPaused")
+# Inline authorization inside the body: `require(msg.sender == owner)`,
+# `if (msg.sender != admin) revert ...`, etc. Common in codebases that avoid
+# modifiers (e.g. Uniswap v4). Treated as equivalent to an access modifier.
+INLINE_AUTH = re.compile(
+    r"require\s*\(\s*msg\.sender\s*==|"
+    r"if\s*\(\s*msg\.sender\s*[!=]=[^)]*\)[^;{]*revert|"
+    r"_checkOwner\s*\(|_checkRole\s*\(")
 REENTRANCY_GUARD = re.compile(r"nonReentrant|noReentrancy|reentrancyGuard", re.IGNORECASE)
 
 CONTRACT_DECL = re.compile(r"\b(contract|abstract\s+contract|library)\s+([A-Za-z_]\w*)")
@@ -117,6 +250,12 @@ SELF_BALANCE = re.compile(
 UPGRADE_FNS = {"upgradeTo", "upgradeToAndCall", "_authorizeUpgrade"}
 INIT_FN = re.compile(r"^(initialize|init|__\w+_init)$")
 INITIALIZER_MODS = re.compile(r"\binitializer\b|\breinitializer\s*\(")
+# An unguarded `initialize` is only an ownership-takeover risk in an
+# upgradeable/proxy context. `initialize(...)` on a plain contract (e.g. pool
+# creation in a DEX) is a legitimate permissionless action.
+_PROXY_CONTEXT = re.compile(
+    r"\bInitializable\b|\bUUPSUpgradeable\b|\bupgradeTo|\bproxiableUUID\b|"
+    r"\bdelegateInit\b|\b__gap\b|\bERC1967\b|\b_authorizeUpgrade\b", re.IGNORECASE)
 SELFDESTRUCT = re.compile(r"\bselfdestruct\s*\(|\bsuicide\s*\(")
 
 
@@ -261,11 +400,14 @@ def analyze(path: str) -> FileReport:
             modifiers=modifiers, writes_state=writes, external_call=ext,
             entry_point=entry))
 
-        has_access = bool(ACCESS_MODIFIER.search(attrs))
+        has_access = bool(ACCESS_MODIFIER.search(attrs)) or bool(INLINE_AUTH.search(body))
         has_guard = bool(REENTRANCY_GUARD.search(attrs))
+        has_init_guard = bool(INITIALIZER_MODS.search(attrs))
 
         # High-signal: a config/admin-style setter that anyone can call.
-        if entry and writes and not has_access and CONFIG_SETTER.match(name):
+        # An `initializer`/`reinitializer` modifier is a one-shot guard, so a
+        # guarded initializer is not a permissionless setter.
+        if entry and writes and not has_access and not has_init_guard and CONFIG_SETTER.match(name):
             rep.flags.append(Flag(
                 file=path, line=line, kind="permissionless-config-setter",
                 function=name,
@@ -328,7 +470,8 @@ def analyze(path: str) -> FileReport:
                 file=path, line=line, kind="unprotected-upgrade", function=name,
                 note="upgrade authorization path has no visible access control — confirm only "
                      "governance/owner can upgrade the implementation (OWASP SC10)"))
-        if INIT_FN.match(name) and entry and not INITIALIZER_MODS.search(attrs):
+        if (INIT_FN.match(name) and entry and not has_init_guard
+                and _PROXY_CONTEXT.search(src)):
             rep.flags.append(Flag(
                 file=path, line=line, kind="initializer-not-guarded", function=name,
                 note="initializer-style function without an `initializer`/`reinitializer` "
@@ -350,7 +493,12 @@ def main(argv: List[str]) -> int:
     ap = argparse.ArgumentParser(description="Enumerate EVM entry points, access control, and invariant seeds.")
     ap.add_argument("path")
     ap.add_argument("--json")
+    ap.add_argument("--report", help="write a markdown scan report to this path")
+    ap.add_argument("--no-banner", action="store_true", help="suppress the banner")
     args = ap.parse_args(argv)
+
+    if not args.no_banner:
+        _print_banner("evm-invariant-scan · entry points, access control & invariants")
 
     if not os.path.exists(args.path):
         print(f"error: path not found: {args.path}", file=sys.stderr)
@@ -387,6 +535,12 @@ def main(argv: List[str]) -> int:
               f"{summary['totals']['flags']} flags)")
     else:
         print(payload)
+
+    if args.report:
+        os.makedirs(os.path.dirname(os.path.abspath(args.report)), exist_ok=True)
+        with open(args.report, "w", encoding="utf-8") as fh:
+            fh.write(build_report(summary))
+        print(f"wrote {args.report}", file=sys.stderr)
     return 0
 
 

@@ -1,0 +1,49 @@
+{
+  "root": "/home/volodymyr-sec/projects/_audit-targets/semaphore/packages/contracts/contracts",
+  "files_scanned": 8,
+  "verifier_contracts": [
+    "/home/volodymyr-sec/projects/_audit-targets/semaphore/packages/contracts/contracts/base/SemaphoreVerifier.sol"
+  ],
+  "consumer_contracts": [
+    "/home/volodymyr-sec/projects/_audit-targets/semaphore/packages/contracts/contracts/Semaphore.sol"
+  ],
+  "totals": {
+    "verifiers": 1,
+    "consumers": 1,
+    "verification_call_sites": 1,
+    "flags": 0
+  },
+  "flags": [],
+  "files": [
+    {
+      "file": "/home/volodymyr-sec/projects/_audit-targets/semaphore/packages/contracts/contracts/Semaphore.sol",
+      "is_verifier": false,
+      "consumer_calls": [
+        {
+          "file": "/home/volodymyr-sec/projects/_audit-targets/semaphore/packages/contracts/contracts/Semaphore.sol",
+          "line": 180,
+          "receiver": "verifier",
+          "method": "verifyProof",
+          "args": "(\n                [proof.points[0], proof.points[1]],\n                [[proof.points[2], proof.points[3]], [proof.points[4], proof.points[5]]],\n                [proof.points[6], proof.points[7]],\n                [proof.merkleTreeRoot, proof.nullifier, _hash(proof.message), _hash(proof.scope)],\n                proof.merkleTreeDepth\n            )"
+        }
+      ],
+      "has_nullifier_tracking": true,
+      "has_replay_guard": true,
+      "binds_context": true,
+      "verifier_settable": false,
+      "verifier_immutable": false,
+      "flags": []
+    },
+    {
+      "file": "/home/volodymyr-sec/projects/_audit-targets/semaphore/packages/contracts/contracts/base/SemaphoreVerifier.sol",
+      "is_verifier": true,
+      "consumer_calls": [],
+      "has_nullifier_tracking": false,
+      "has_replay_guard": false,
+      "binds_context": false,
+      "verifier_settable": false,
+      "verifier_immutable": false,
+      "flags": []
+    }
+  ]
+}

@@ -4,6 +4,32 @@ All notable changes to this project are documented here. The format is based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the suite follows
 [Semantic Versioning](https://semver.org/) per skill.
 
+## [1.2.0] — 2026-07-31
+
+Field-tested release. All three skills were run against four real protocols —
+Semaphore (`4dbc39b`), circomlib (`35e54ea`), World ID contracts (`f959f72`),
+and Uniswap v4 core (`46c6834`) — with every lead spot-checked against the
+source. Unedited outputs live in [examples/](examples/).
+
+### Added
+
+- All skills — auto-generated markdown reports via a new `--report PATH` flag:
+  minimalist, professional summaries with severity-ranked leads, a verdict, and
+  a method-and-limits section. JSON on stdout is unchanged.
+- All skills — VLDMR Skills banner printed to stderr on start (suppressible
+  with `--no-banner`); stdout remains machine-readable.
+- `examples/` — real, reproducible reports from the four protocols above.
+
+### Fixed
+
+- `zk-circuit-review` 1.2.0 — the `<--` witness-target extractor no longer
+  picks the loop variable in single-line `for` loops (false positive found on
+  circomlib's `sha256compression.circom`).
+- `evm-invariant-scan` 1.2.0 — `reinitializer(…)` and inline `msg.sender`
+  authorization (`require(msg.sender == x)`, `if (msg.sender != x) revert…`)
+  now count as access control; unguarded `initialize` is only flagged in a
+  proxy/upgradeable context (false positives found on World ID and Uniswap v4).
+
 ## [1.1.0] — 2026-07-31
 
 Validation-driven precision upgrade. Each skill was re-tested against the

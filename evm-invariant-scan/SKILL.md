@@ -30,14 +30,17 @@ Mark Phase 1 in progress. Scope: user-specified path, else `src/` or
 `contracts/`. Run the enumerator:
 
 ```bash
-mkdir -p evm-scan && python3 "$SKILL_DIR/scripts/enumerate_evm.py" <scope-path> --json evm-scan/enumeration.json && cat evm-scan/enumeration.json
+mkdir -p evm-scan && python3 "$SKILL_DIR/scripts/enumerate_evm.py" <scope-path> --json evm-scan/enumeration.json --report evm-scan/scan-report.md && cat evm-scan/enumeration.json
 ```
 
 The JSON gives, per file: contracts, every function with visibility, mutability,
 access modifiers, whether it writes state and whether it makes an external call;
 plus `permissionless_entry_points`, `conservation_seeds`, and deterministic
 `flags` (`permissionless-config-setter`, `external-call-no-reentrancy-guard`,
-`unchecked-low-level-call`). Flags are leads.
+`unchecked-low-level-call`, oracle/flash-loan/upgrade leads). Flags are leads.
+The script also writes `evm-scan/scan-report.md` — an auto-generated summary of
+the deterministic pass (banner and progress go to stderr; stdout stays
+machine-readable JSON).
 
 In the same message, preload `$SKILL_DIR/references/invariant-taxonomy.md`.
 

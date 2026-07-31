@@ -1,0 +1,14 @@
+{
+  "root": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src",
+  "files_scanned": 46,
+  "verifier_contracts": [],
+  "consumer_contracts": [],
+  "totals": {
+    "verifiers": 0,
+    "consumers": 0,
+    "verification_call_sites": 0,
+    "flags": 0
+  },
+  "flags": [],
+  "files": []
+}

@@ -54,7 +54,12 @@ run evm-invariant-scan on the codebase
 
 Each skill writes its report into a dedicated output folder at the project root
 (`zk-review/`, `bridge-audit/`, `evm-scan/`) and cleans up its own scratch
-files. Nothing is written outside that folder.
+files. Nothing is written outside that folder. On start the scripts print the
+VLDMR Skills banner to stderr and, with `--report`, auto-generate a
+severity-ranked markdown summary alongside the JSON.
+
+Real, unedited runs against Semaphore, circomlib, World ID, and Uniswap v4 core
+are in [examples/](examples/README.md).
 
 ## Design principles
 
@@ -77,6 +82,7 @@ vldmr-skills/
 ├── zk-circuit-review/       # ZK circuit soundness & constraint review
 ├── verifier-bridge-audit/   # On-chain verifier and public-input binding audit
 ├── evm-invariant-scan/      # EVM entry-point & invariant pre-audit scan
+├── examples/                # Real reports from real protocols (unedited)
 ├── CONTRIBUTING.md
 ├── SECURITY.md
 ├── CODE_OF_CONDUCT.md
