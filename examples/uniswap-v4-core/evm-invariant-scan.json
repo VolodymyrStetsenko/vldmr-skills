@@ -1,5 +1,5 @@
 {
-  "root": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src",
+  "root": "/opt/audit-targets/v4-core/src",
   "files_scanned": 38,
   "totals": {
     "contracts": 36,
@@ -12,7 +12,7 @@
   "flags": [],
   "files": [
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/ERC6909.sol",
+      "file": "/opt/audit-targets/v4-core/src/ERC6909.sol",
       "contracts": [
         "ERC6909"
       ],
@@ -102,7 +102,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/ERC6909Claims.sol",
+      "file": "/opt/audit-targets/v4-core/src/ERC6909Claims.sol",
       "contracts": [
         "ERC6909Claims"
       ],
@@ -122,7 +122,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/Extsload.sol",
+      "file": "/opt/audit-targets/v4-core/src/Extsload.sol",
       "contracts": [
         "Extsload"
       ],
@@ -168,7 +168,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/Exttload.sol",
+      "file": "/opt/audit-targets/v4-core/src/Exttload.sol",
       "contracts": [
         "Exttload"
       ],
@@ -202,7 +202,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/NoDelegateCall.sol",
+      "file": "/opt/audit-targets/v4-core/src/NoDelegateCall.sol",
       "contracts": [
         "NoDelegateCall"
       ],
@@ -222,7 +222,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/PoolManager.sol",
+      "file": "/opt/audit-targets/v4-core/src/PoolManager.sol",
       "contracts": [
         "PoolManager"
       ],
@@ -470,7 +470,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/ProtocolFees.sol",
+      "file": "/opt/audit-targets/v4-core/src/ProtocolFees.sol",
       "contracts": [
         "ProtocolFees"
       ],
@@ -525,7 +525,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/libraries/BitMath.sol",
+      "file": "/opt/audit-targets/v4-core/src/libraries/BitMath.sol",
       "contracts": [
         "BitMath"
       ],
@@ -561,7 +561,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/libraries/CurrencyDelta.sol",
+      "file": "/opt/audit-targets/v4-core/src/libraries/CurrencyDelta.sol",
       "contracts": [
         "CurrencyDelta"
       ],
@@ -612,7 +612,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/libraries/CurrencyReserves.sol",
+      "file": "/opt/audit-targets/v4-core/src/libraries/CurrencyReserves.sol",
       "contracts": [
         "CurrencyReserves"
       ],
@@ -668,7 +668,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/libraries/CustomRevert.sol",
+      "file": "/opt/audit-targets/v4-core/src/libraries/CustomRevert.sol",
       "contracts": [
         "CustomRevert"
       ],
@@ -758,7 +758,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/libraries/FixedPoint128.sol",
+      "file": "/opt/audit-targets/v4-core/src/libraries/FixedPoint128.sol",
       "contracts": [
         "FixedPoint128"
       ],
@@ -767,7 +767,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/libraries/FixedPoint96.sol",
+      "file": "/opt/audit-targets/v4-core/src/libraries/FixedPoint96.sol",
       "contracts": [
         "FixedPoint96"
       ],
@@ -776,7 +776,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/libraries/FullMath.sol",
+      "file": "/opt/audit-targets/v4-core/src/libraries/FullMath.sol",
       "contracts": [
         "FullMath"
       ],
@@ -812,7 +812,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/libraries/Hooks.sol",
+      "file": "/opt/audit-targets/v4-core/src/libraries/Hooks.sol",
       "contracts": [
         "Hooks"
       ],
@@ -991,7 +991,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/libraries/LPFeeLibrary.sol",
+      "file": "/opt/audit-targets/v4-core/src/libraries/LPFeeLibrary.sol",
       "contracts": [
         "LPFeeLibrary"
       ],
@@ -1084,7 +1084,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/libraries/LiquidityMath.sol",
+      "file": "/opt/audit-targets/v4-core/src/libraries/LiquidityMath.sol",
       "contracts": [
         "LiquidityMath"
       ],
@@ -1107,7 +1107,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/libraries/Lock.sol",
+      "file": "/opt/audit-targets/v4-core/src/libraries/Lock.sol",
       "contracts": [
         "Lock"
       ],
@@ -1150,7 +1150,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/libraries/NonzeroDeltaCount.sol",
+      "file": "/opt/audit-targets/v4-core/src/libraries/NonzeroDeltaCount.sol",
       "contracts": [
         "NonzeroDeltaCount"
       ],
@@ -1193,7 +1193,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/libraries/ParseBytes.sol",
+      "file": "/opt/audit-targets/v4-core/src/libraries/ParseBytes.sol",
       "contracts": [
         "ParseBytes"
       ],
@@ -1242,7 +1242,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/libraries/Pool.sol",
+      "file": "/opt/audit-targets/v4-core/src/libraries/Pool.sol",
       "contracts": [
         "Pool"
       ],
@@ -1418,7 +1418,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/libraries/Position.sol",
+      "file": "/opt/audit-targets/v4-core/src/libraries/Position.sol",
       "contracts": [
         "Position"
       ],
@@ -1469,7 +1469,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/libraries/ProtocolFeeLibrary.sol",
+      "file": "/opt/audit-targets/v4-core/src/libraries/ProtocolFeeLibrary.sol",
       "contracts": [
         "ProtocolFeeLibrary"
       ],
@@ -1529,7 +1529,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/libraries/SafeCast.sol",
+      "file": "/opt/audit-targets/v4-core/src/libraries/SafeCast.sol",
       "contracts": [
         "SafeCast"
       ],
@@ -1616,7 +1616,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/libraries/SqrtPriceMath.sol",
+      "file": "/opt/audit-targets/v4-core/src/libraries/SqrtPriceMath.sol",
       "contracts": [
         "SqrtPriceMath"
       ],
@@ -1736,7 +1736,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/libraries/StateLibrary.sol",
+      "file": "/opt/audit-targets/v4-core/src/libraries/StateLibrary.sol",
       "contracts": [
         "StateLibrary"
       ],
@@ -1953,7 +1953,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/libraries/SwapMath.sol",
+      "file": "/opt/audit-targets/v4-core/src/libraries/SwapMath.sol",
       "contracts": [
         "SwapMath"
       ],
@@ -1995,7 +1995,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/libraries/TickBitmap.sol",
+      "file": "/opt/audit-targets/v4-core/src/libraries/TickBitmap.sol",
       "contracts": [
         "TickBitmap"
       ],
@@ -2058,7 +2058,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/libraries/TickMath.sol",
+      "file": "/opt/audit-targets/v4-core/src/libraries/TickMath.sol",
       "contracts": [
         "TickMath"
       ],
@@ -2118,7 +2118,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/libraries/TransientStateLibrary.sol",
+      "file": "/opt/audit-targets/v4-core/src/libraries/TransientStateLibrary.sol",
       "contracts": [
         "TransientStateLibrary"
       ],
@@ -2188,7 +2188,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/libraries/UnsafeMath.sol",
+      "file": "/opt/audit-targets/v4-core/src/libraries/UnsafeMath.sol",
       "contracts": [
         "UnsafeMath"
       ],
@@ -2224,7 +2224,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/types/BalanceDelta.sol",
+      "file": "/opt/audit-targets/v4-core/src/types/BalanceDelta.sol",
       "contracts": [
         "BalanceDeltaLibrary"
       ],
@@ -2321,7 +2321,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/types/BeforeSwapDelta.sol",
+      "file": "/opt/audit-targets/v4-core/src/types/BeforeSwapDelta.sol",
       "contracts": [
         "BeforeSwapDeltaLibrary"
       ],
@@ -2370,7 +2370,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/types/Currency.sol",
+      "file": "/opt/audit-targets/v4-core/src/types/Currency.sol",
       "contracts": [
         "CurrencyLibrary"
       ],
@@ -2498,7 +2498,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/types/PoolId.sol",
+      "file": "/opt/audit-targets/v4-core/src/types/PoolId.sol",
       "contracts": [
         "PoolIdLibrary"
       ],
@@ -2521,7 +2521,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src/types/Slot0.sol",
+      "file": "/opt/audit-targets/v4-core/src/types/Slot0.sol",
       "contracts": [
         "Slot0Library"
       ],

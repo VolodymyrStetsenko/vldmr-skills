@@ -1,5 +1,5 @@
 {
-  "root": "/home/volodymyr-sec/projects/_audit-targets/v4-core/src",
+  "root": "/opt/audit-targets/v4-core/src",
   "files_scanned": 46,
   "verifier_contracts": [],
   "consumer_contracts": [],

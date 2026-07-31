@@ -46,6 +46,29 @@ python3 evm-invariant-scan/scripts/enumerate_evm.py <solidity-scope> \
 JSON records the deterministic enumeration. Markdown summarizes the same JSON
 content. Report dates and absolute paths vary by environment.
 
+## Publication Policy
+
+`examples/` is intended to be publicly publishable. Before publishing generated
+artifacts from another environment, sanitize machine-specific absolute paths
+and usernames.
+
+Required checks:
+
+1. No user-home or workstation-specific roots (for example `/home/<user>/...`
+  or `C:\\Users\\...`).
+2. Paths in JSON `root` and `file` fields are replaced with neutral repository
+  roots (for example `/opt/audit-targets/<repo>/...`).
+3. Matching scope lines in markdown summaries are sanitized to the same neutral
+  root.
+
+A practical pre-publish check:
+
+```bash
+rg -n '/home/|/Users/|C:\\' examples
+```
+
+No matches indicates no obvious machine-path leakage in examples.
+
 ## Interpretation
 
 A generated flag is represented as an analysis observation until verified

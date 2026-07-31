@@ -59,6 +59,37 @@ For an Agent Skills-compatible runtime, install or reference the required
 top-level component directory. Components do not depend on files from another
 component.
 
+## First-Time Quick Start
+
+The following flow is intended for first-time users who want a deterministic
+run and a clear interpretation path.
+
+1. Clone this repository and open a terminal in `vldmr-skills`.
+2. Run the local security gate:
+
+```bash
+python3 tools/validate_skill_security.py
+python3 tests/run_security_validation.py
+```
+
+3. Clone a target protocol at a pinned commit and switch to that commit.
+4. Execute one or more scanners from this repository against target source:
+
+```bash
+python3 zk-circuit-review/scripts/enumerate_circuit.py <path> --json out.json --report out.md --no-banner
+python3 verifier-bridge-audit/scripts/scan_verifier.py <path> --json out.json --report out.md --no-banner
+python3 evm-invariant-scan/scripts/enumerate_evm.py <path> --json out.json --report out.md --no-banner
+```
+
+5. Interpret output using strict terminology:
+  - `flags` in JSON are machine-detected source patterns;
+  - analysis observations are unverified conditions from flags or manual review;
+  - findings require confirmed security-property violation evidence.
+6. Preserve reproduction metadata in your report: repository URL, exact commit,
+  command line, UTC run date, and scanner version.
+
+For CLI and JSON contract details see [`docs/INTERFACES.md`](docs/INTERFACES.md).
+
 ## Command-Line Interface
 
 The deterministic analysis stage can be invoked directly:

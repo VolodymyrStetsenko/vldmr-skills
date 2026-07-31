@@ -2,7 +2,7 @@
 
 > VLDMR Skills · `zk-circuit-review` v1.0.0 · 2026-07-31 (UTC)
 
-**Scope:** `/home/volodymyr-sec/projects/_audit-targets/semaphore/packages/circuits/src` · 1 file(s) · languages: circom
+**Scope:** `/opt/audit-targets/semaphore/packages/circuits/src` · 1 file(s) · languages: circom
 
 ## Summary
 

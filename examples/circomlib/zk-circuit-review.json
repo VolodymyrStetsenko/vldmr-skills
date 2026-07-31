@@ -1,5 +1,5 @@
 {
-  "root": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits",
+  "root": "/opt/audit-targets/circomlib/circuits",
   "files_scanned": 57,
   "languages": [
     "circom"
@@ -16,21 +16,21 @@
   },
   "flags": [
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/smt/smtprocessorlevel.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/smt/smtprocessorlevel.circom",
       "line": 49,
       "kind": "unused-public-input",
       "signal": "st_na",
       "note": "declared `signal input` but never used in any constraint or expression \u2014 Circom optimizes it away, so it binds nothing (0xPARC class 5: unused public inputs optimized out)"
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/smt/smtverifierlevel.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/smt/smtverifierlevel.circom",
       "line": 43,
       "kind": "unused-public-input",
       "signal": "st_i0",
       "note": "declared `signal input` but never used in any constraint or expression \u2014 Circom optimizes it away, so it binds nothing (0xPARC class 5: unused public inputs optimized out)"
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/smt/smtverifierlevel.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/smt/smtverifierlevel.circom",
       "line": 46,
       "kind": "unused-public-input",
       "signal": "st_na",
@@ -39,7 +39,7 @@
   ],
   "files": [
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/aliascheck.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/aliascheck.circom",
       "language": "circom",
       "templates": [
         "AliasCheck"
@@ -59,7 +59,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/babyjub.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/babyjub.circom",
       "language": "circom",
       "templates": [
         "BabyAdd",
@@ -100,7 +100,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/binsub.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/binsub.circom",
       "language": "circom",
       "templates": [
         "BinSub"
@@ -124,7 +124,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/binsum.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/binsum.circom",
       "language": "circom",
       "templates": [
         "BinSum"
@@ -146,7 +146,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/bitify.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/bitify.circom",
       "language": "circom",
       "templates": [
         "Bits2Num",
@@ -172,7 +172,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/comparators.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/comparators.circom",
       "language": "circom",
       "templates": [
         "ForceEqualIfEnabled",
@@ -203,7 +203,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/compconstant.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/compconstant.circom",
       "language": "circom",
       "templates": [
         "CompConstant"
@@ -228,7 +228,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/eddsa.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/eddsa.circom",
       "language": "circom",
       "templates": [
         "EdDSAVerifier"
@@ -256,7 +256,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/eddsamimc.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/eddsamimc.circom",
       "language": "circom",
       "templates": [
         "EdDSAMiMCVerifier"
@@ -282,7 +282,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/eddsamimcsponge.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/eddsamimcsponge.circom",
       "language": "circom",
       "templates": [
         "EdDSAMiMCSpongeVerifier"
@@ -308,7 +308,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/eddsaposeidon.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/eddsaposeidon.circom",
       "language": "circom",
       "templates": [
         "EdDSAPoseidonVerifier"
@@ -334,7 +334,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/escalarmul.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/escalarmul.circom",
       "language": "circom",
       "templates": [
         "EscalarMul",
@@ -359,7 +359,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/escalarmulany.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/escalarmulany.circom",
       "language": "circom",
       "templates": [
         "BitElementMulAny",
@@ -392,7 +392,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/escalarmulfix.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/escalarmulfix.circom",
       "language": "circom",
       "templates": [
         "EscalarMulFix",
@@ -420,7 +420,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/escalarmulw4table.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/escalarmulw4table.circom",
       "language": "circom",
       "templates": [],
       "inputs": [],
@@ -436,7 +436,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/gates.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/gates.circom",
       "language": "circom",
       "templates": [
         "AND",
@@ -466,7 +466,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/mimc.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/mimc.circom",
       "language": "circom",
       "templates": [
         "MiMC7",
@@ -497,7 +497,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/mimcsponge.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/mimcsponge.circom",
       "language": "circom",
       "templates": [
         "MiMCFeistel",
@@ -530,7 +530,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/montgomery.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/montgomery.circom",
       "language": "circom",
       "templates": [
         "Edwards2Montgomery",
@@ -560,7 +560,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/multiplexer.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/multiplexer.circom",
       "language": "circom",
       "templates": [
         "Decoder",
@@ -590,7 +590,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/mux1.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/mux1.circom",
       "language": "circom",
       "templates": [
         "MultiMux1",
@@ -614,7 +614,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/mux2.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/mux2.circom",
       "language": "circom",
       "templates": [
         "MultiMux2",
@@ -644,7 +644,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/mux3.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/mux3.circom",
       "language": "circom",
       "templates": [
         "MultiMux3",
@@ -678,7 +678,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/mux4.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/mux4.circom",
       "language": "circom",
       "templates": [
         "MultiMux4",
@@ -723,7 +723,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/pedersen.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/pedersen.circom",
       "language": "circom",
       "templates": [
         "Pedersen",
@@ -749,7 +749,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/pedersen_old.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/pedersen_old.circom",
       "language": "circom",
       "templates": [
         "Pedersen"
@@ -771,7 +771,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/pointbits.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/pointbits.circom",
       "language": "circom",
       "templates": [
         "Bits2Point",
@@ -796,7 +796,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/poseidon.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/poseidon.circom",
       "language": "circom",
       "templates": [
         "Ark",
@@ -829,7 +829,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/poseidon_constants.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/poseidon_constants.circom",
       "language": "circom",
       "templates": [],
       "inputs": [],
@@ -845,7 +845,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/poseidon_constants_old.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/poseidon_constants_old.circom",
       "language": "circom",
       "templates": [],
       "inputs": [],
@@ -861,7 +861,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/poseidon_old.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/poseidon_old.circom",
       "language": "circom",
       "templates": [
         "Ark",
@@ -890,7 +890,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/sha256/ch.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/sha256/ch.circom",
       "language": "circom",
       "templates": [
         "Ch_t"
@@ -914,7 +914,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/sha256/constants.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/sha256/constants.circom",
       "language": "circom",
       "templates": [
         "H",
@@ -935,7 +935,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/sha256/main.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/sha256/main.circom",
       "language": "circom",
       "templates": [
         "Main"
@@ -958,7 +958,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/sha256/maj.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/sha256/maj.circom",
       "language": "circom",
       "templates": [
         "Maj_t"
@@ -984,7 +984,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/sha256/rotate.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/sha256/rotate.circom",
       "language": "circom",
       "templates": [
         "RotR"
@@ -1006,7 +1006,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/sha256/sha256.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/sha256/sha256.circom",
       "language": "circom",
       "templates": [
         "Sha256"
@@ -1030,7 +1030,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/sha256/sha256_2.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/sha256/sha256_2.circom",
       "language": "circom",
       "templates": [
         "Sha256_2"
@@ -1053,7 +1053,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/sha256/sha256compression.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/sha256/sha256compression.circom",
       "language": "circom",
       "templates": [
         "Sha256compression"
@@ -1086,7 +1086,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/sha256/sha256compression_function.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/sha256/sha256compression_function.circom",
       "language": "circom",
       "templates": [],
       "inputs": [],
@@ -1102,7 +1102,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/sha256/shift.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/sha256/shift.circom",
       "language": "circom",
       "templates": [
         "ShR"
@@ -1124,7 +1124,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/sha256/sigma.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/sha256/sigma.circom",
       "language": "circom",
       "templates": [
         "BigSigma",
@@ -1147,7 +1147,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/sha256/sigmaplus.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/sha256/sigmaplus.circom",
       "language": "circom",
       "templates": [
         "SigmaPlus"
@@ -1172,7 +1172,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/sha256/t1.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/sha256/t1.circom",
       "language": "circom",
       "templates": [
         "T1"
@@ -1199,7 +1199,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/sha256/t2.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/sha256/t2.circom",
       "language": "circom",
       "templates": [
         "T2"
@@ -1223,7 +1223,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/sha256/xor3.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/sha256/xor3.circom",
       "language": "circom",
       "templates": [
         "Xor3"
@@ -1249,7 +1249,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/sign.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/sign.circom",
       "language": "circom",
       "templates": [
         "Sign"
@@ -1271,7 +1271,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/smt/smthash_mimc.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/smt/smthash_mimc.circom",
       "language": "circom",
       "templates": [
         "SMTHash1",
@@ -1297,7 +1297,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/smt/smthash_poseidon.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/smt/smthash_poseidon.circom",
       "language": "circom",
       "templates": [
         "SMTHash1",
@@ -1323,7 +1323,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/smt/smtlevins.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/smt/smtlevins.circom",
       "language": "circom",
       "templates": [
         "SMTLevIns"
@@ -1348,7 +1348,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/smt/smtprocessor.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/smt/smtprocessor.circom",
       "language": "circom",
       "templates": [
         "SMTProcessor"
@@ -1379,7 +1379,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/smt/smtprocessorlevel.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/smt/smtprocessorlevel.circom",
       "language": "circom",
       "templates": [
         "SMTProcessorLevel"
@@ -1414,7 +1414,7 @@
       "advice_assignments": 0,
       "flags": [
         {
-          "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/smt/smtprocessorlevel.circom",
+          "file": "/opt/audit-targets/circomlib/circuits/smt/smtprocessorlevel.circom",
           "line": 49,
           "kind": "unused-public-input",
           "signal": "st_na",
@@ -1423,7 +1423,7 @@
       ]
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/smt/smtprocessorsm.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/smt/smtprocessorsm.circom",
       "language": "circom",
       "templates": [
         "SMTProcessorSM"
@@ -1462,7 +1462,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/smt/smtverifier.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/smt/smtverifier.circom",
       "language": "circom",
       "templates": [
         "SMTVerifier"
@@ -1490,7 +1490,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/smt/smtverifierlevel.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/smt/smtverifierlevel.circom",
       "language": "circom",
       "templates": [
         "SMTVerifierLevel"
@@ -1522,14 +1522,14 @@
       "advice_assignments": 0,
       "flags": [
         {
-          "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/smt/smtverifierlevel.circom",
+          "file": "/opt/audit-targets/circomlib/circuits/smt/smtverifierlevel.circom",
           "line": 43,
           "kind": "unused-public-input",
           "signal": "st_i0",
           "note": "declared `signal input` but never used in any constraint or expression \u2014 Circom optimizes it away, so it binds nothing (0xPARC class 5: unused public inputs optimized out)"
         },
         {
-          "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/smt/smtverifierlevel.circom",
+          "file": "/opt/audit-targets/circomlib/circuits/smt/smtverifierlevel.circom",
           "line": 46,
           "kind": "unused-public-input",
           "signal": "st_na",
@@ -1538,7 +1538,7 @@
       ]
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/smt/smtverifiersm.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/smt/smtverifiersm.circom",
       "language": "circom",
       "templates": [
         "SMTVerifierSM"
@@ -1574,7 +1574,7 @@
       "flags": []
     },
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits/switcher.circom",
+      "file": "/opt/audit-targets/circomlib/circuits/switcher.circom",
       "language": "circom",
       "templates": [
         "Switcher"

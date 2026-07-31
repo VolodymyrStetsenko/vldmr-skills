@@ -2,7 +2,7 @@
 
 > VLDMR Skills · `evm-invariant-scan` v1.0.0 · 2026-07-31 (UTC)
 
-**Scope:** `/home/volodymyr-sec/projects/_audit-targets/world-id-contracts/src` · 19 Solidity file(s)
+**Scope:** `/opt/audit-targets/world-id-contracts/src` · 19 Solidity file(s)
 
 ## Summary
 

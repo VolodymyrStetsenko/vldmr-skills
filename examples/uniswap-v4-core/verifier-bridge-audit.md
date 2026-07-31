@@ -2,7 +2,7 @@
 
 > VLDMR Skills · `verifier-bridge-audit` v1.0.0 · 2026-07-31 (UTC)
 
-**Scope:** `/home/volodymyr-sec/projects/_audit-targets/v4-core/src` · 46 Solidity file(s)
+**Scope:** `/opt/audit-targets/v4-core/src` · 46 Solidity file(s)
 
 ## Summary
 

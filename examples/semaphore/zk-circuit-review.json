@@ -1,5 +1,5 @@
 {
-  "root": "/home/volodymyr-sec/projects/_audit-targets/semaphore/packages/circuits/src",
+  "root": "/opt/audit-targets/semaphore/packages/circuits/src",
   "files_scanned": 1,
   "languages": [
     "circom"
@@ -17,7 +17,7 @@
   "flags": [],
   "files": [
     {
-      "file": "/home/volodymyr-sec/projects/_audit-targets/semaphore/packages/circuits/src/semaphore.circom",
+      "file": "/opt/audit-targets/semaphore/packages/circuits/src/semaphore.circom",
       "language": "circom",
       "templates": [
         "Semaphore"
