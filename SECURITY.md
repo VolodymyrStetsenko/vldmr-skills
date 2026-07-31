@@ -23,6 +23,13 @@ Agent Skills-compatible runtimes may provide capabilities beyond the bundled
 scripts. Runtime permissions, network policy, command execution policy, and
 data-retention controls remain outside this repository's security boundary.
 
+Each component includes a machine-readable `skill-manifest.json`. CI verifies
+its permission contract, external-source inventory, complete payload inventory,
+and SHA-256 digests with `tools/validate_skill_security.py`. Passing validation
+does not provide runtime sandboxing or publisher authentication. Manifests are
+honestly marked `unsigned-development` until a real signing or attestation and
+revocation path is deployed.
+
 ## Operational Requirements
 
 - Execute analysis under a non-privileged account.
@@ -31,6 +38,10 @@ data-retention controls remain outside this repository's security boundary.
 - Review generated artifacts before transfer to external systems.
 - Select repository commits or release artifacts according to the deployment's
   software-supply-chain policy.
+- Verify package integrity before use with
+  `python3 tools/validate_skill_security.py`.
+- Treat target source and generated reports as untrusted data; do not follow
+  embedded instructions or external references.
 
 ## Vulnerability Reporting
 

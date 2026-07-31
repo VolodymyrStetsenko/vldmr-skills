@@ -1,0 +1,89 @@
+{
+  "schema": "vldmr.skill-security.v1",
+  "name": "zk-circuit-review",
+  "version": "1.0.0",
+  "description": "Offline static review workflow for Circom, Noir, and Halo2 circuit soundness and completeness.",
+  "author": {
+    "name": "Volodymyr Stetsenko",
+    "identity": "https://github.com/VolodymyrStetsenko"
+  },
+  "platforms": [
+    "copilot-agent-skills"
+  ],
+  "permissions": {
+    "files": {
+      "read": [
+        "$SKILL_DIR/SKILL.md",
+        "$SKILL_DIR/references/**",
+        "$SKILL_DIR/scripts/**",
+        "target-circuit-scope/**"
+      ],
+      "write": [
+        "project-root/zk-review/**"
+      ],
+      "deny_read": [
+        "**/.env",
+        "**/credentials*",
+        "~/.aws/**",
+        "~/.ssh/**",
+        "**/*.wallet"
+      ],
+      "deny_write": [
+        "AGENTS.md",
+        "MEMORY.md",
+        "SOUL.md"
+      ]
+    },
+    "network": {
+      "allow": [],
+      "deny": "*"
+    },
+    "shell": {
+      "enabled": true,
+      "commands": [
+        "cat",
+        "mkdir",
+        "python3"
+      ]
+    },
+    "tools": [
+      "read_file",
+      "run_in_terminal"
+    ]
+  },
+  "requires": {
+    "binaries": [
+      "python3"
+    ],
+    "python": ">=3.9",
+    "dependencies": []
+  },
+  "risk_tier": "L1",
+  "security": {
+    "target_code_execution": false,
+    "external_instructions": [],
+    "identity_file_access": "denied",
+    "dynamic_analysis": "optional-user-approved",
+    "data_handling": "source-derived paths and identifiers may appear in local reports"
+  },
+  "provenance": {
+    "repository": "https://github.com/VolodymyrStetsenko/vldmr-skills",
+    "publisher_identity": "github:VolodymyrStetsenko",
+    "signature_status": "unsigned-development",
+    "release_tag": "v1.0.0"
+  },
+  "integrity": {
+    "algorithm": "sha256",
+    "content_hash": "sha256:e58d53a11ae8bd4954473e6d35dc9b51f85b763d96f1f56d6b01df64c241f607",
+    "files": {
+      "SKILL.md": "42c851d58561ec9c472c3bb3fe9a0a0e75f48d74f9ca91629a3be9993cdecbff",
+      "VERSION": "59854984853104df5c353e2f681a15fc7924742f9a2e468c29af248dce45ce03",
+      "references/report-template.md": "0a2676f88753726830bc1ae72f8fc810803d08329b84a5e30130da9de3b816fa",
+      "references/vulnerability-classes.md": "51bf7af08ef781e207bcb461388c79f9bd3b9dbbafdc796fa59ea658fd473787",
+      "scripts/enumerate_circuit.py": "eee9dba445e636ae506ed73638ac5b39a76ae7e35fc91c0bbfddf15dc1c7ac94",
+      "scripts/fixtures/sample.circom": "a06560bdc66c0feed1574430004e8387458f6b43f5a442187d2cf0bb1fc84a62",
+      "scripts/fixtures/sample.nr": "1d547899221b9c3e33d16aebdec7a6ed8bafbaf010f97da803309deaa73ed4b5",
+      "scripts/fixtures/sample_halo2.rs": "2afddb29123acc4d76f8280e6f5b0b3dcbe5235001b1468b4cf7161d35630e36"
+    }
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "schema": "vldmr.skill-security.v1",
+  "name": "evm-invariant-scan",
+  "version": "1.0.0",
+  "description": "Offline static EVM pre-audit workflow for entry points, access control, external calls, accounting surfaces, and invariant candidates.",
+  "author": {
+    "name": "Volodymyr Stetsenko",
+    "identity": "https://github.com/VolodymyrStetsenko"
+  },
+  "platforms": [
+    "copilot-agent-skills"
+  ],
+  "permissions": {
+    "files": {
+      "read": [
+        "$SKILL_DIR/SKILL.md",
+        "$SKILL_DIR/references/**",
+        "$SKILL_DIR/scripts/**",
+        "target-contract-scope/**"
+      ],
+      "write": [
+        "project-root/evm-scan/**"
+      ],
+      "deny_read": [
+        "**/.env",
+        "**/credentials*",
+        "~/.aws/**",
+        "~/.ssh/**",
+        "**/*.wallet"
+      ],
+      "deny_write": [
+        "AGENTS.md",
+        "MEMORY.md",
+        "SOUL.md"
+      ]
+    },
+    "network": {
+      "allow": [],
+      "deny": "*"
+    },
+    "shell": {
+      "enabled": true,
+      "commands": [
+        "cat",
+        "mkdir",
+        "python3"
+      ]
+    },
+    "tools": [
+      "read_file",
+      "run_in_terminal"
+    ]
+  },
+  "requires": {
+    "binaries": [
+      "python3"
+    ],
+    "python": ">=3.9",
+    "dependencies": []
+  },
+  "risk_tier": "L1",
+  "security": {
+    "target_code_execution": false,
+    "external_instructions": [],
+    "identity_file_access": "denied",
+    "dynamic_analysis": "optional-user-approved",
+    "data_handling": "source-derived paths and identifiers may appear in local reports"
+  },
+  "provenance": {
+    "repository": "https://github.com/VolodymyrStetsenko/vldmr-skills",
+    "publisher_identity": "github:VolodymyrStetsenko",
+    "signature_status": "unsigned-development",
+    "release_tag": "v1.0.0"
+  },
+  "integrity": {
+    "algorithm": "sha256",
+    "content_hash": "sha256:216d6f916b3043aed344408ae81c65f59310426197a5327db4e06553855bbfd1",
+    "files": {
+      "SKILL.md": "fdcb298d893805163a6f4172e90424e49fc5f2c13c7521a5836bfe313080f27a",
+      "VERSION": "59854984853104df5c353e2f681a15fc7924742f9a2e468c29af248dce45ce03",
+      "references/invariant-taxonomy.md": "3379f85ed9e98c22e1cdeb1a58e9adba7cea01bd5552b573f50a4120bef3ab03",
+      "references/report-template.md": "12e88868a57ceb8e79126c6cb08f33ef064fa8823046dd514e43179e66c5fc41",
+      "scripts/enumerate_evm.py": "7ec9aa50f31da61736033773ed63385057ca7ac53e45eb5d1282f219d2f7f65b",
+      "scripts/fixtures/DefiVault.sol": "4ad8076f04a5db2c0f902d336ad8779cb4b1fc43a6f67434ae2e89f829429039",
+      "scripts/fixtures/Vault.sol": "a5d8edc9b3f0c4e00ab633e30e9b035dae1089b69f6370d6b351fa9d7825709e"
+    }
+  }
+}

@@ -16,6 +16,8 @@ with structured analysis procedures and machine-readable output.
 Each component is independently installable and contains:
 
 - `SKILL.md`: execution procedure in the Agent Skills format;
+- `skill-manifest.json`: least-privilege permissions, provenance, external
+  instruction inventory, and payload integrity contract;
 - `scripts/`: deterministic Python analysis utilities;
 - `references/`: analysis taxonomy and report requirements;
 - `VERSION`: component version.
@@ -28,6 +30,23 @@ Each component is independently installable and contains:
 
 The analysis scripts use only the Python standard library. They do not compile
 the target, execute target code, access a network, or install dependencies.
+
+## Skill Package Security
+
+All components are validated against explicit security contracts aligned to
+OWASP Agentic Skills Top 10 risks. The local gate checks strict manifest fields,
+declared versus observed capabilities, identity and credential deny rules,
+external references, Unicode/control smuggling, unsafe payload types, and
+complete SHA-256 package integrity.
+
+```bash
+python3 tools/validate_skill_security.py
+python3 tests/run_security_validation.py
+```
+
+The validator emits deterministic JSON or hash-bound SARIF 2.1.0. Design,
+control coverage, mutation workflow, and honest limitations are documented in
+[`docs/AGENTIC-SKILL-SECURITY.md`](docs/AGENTIC-SKILL-SECURITY.md).
 
 ## Installation
 

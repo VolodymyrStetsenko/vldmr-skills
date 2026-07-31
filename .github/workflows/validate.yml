@@ -26,6 +26,42 @@ jobs:
           zk-circuit-review/scripts/enumerate_circuit.py
           verifier-bridge-audit/scripts/scan_verifier.py
           evm-invariant-scan/scripts/enumerate_evm.py
+          tools/validate_skill_security.py
           tests/run_validation.py
+          tests/run_security_validation.py
       - name: Run regression suite
         run: python tests/run_validation.py
+      - name: Run adversarial skill security suite
+        run: python tests/run_security_validation.py
+
+  security-report:
+    name: Skill security evidence
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+      - name: Generate JSON and SARIF evidence
+        run: |
+          mkdir -p security-reports
+          python tools/validate_skill_security.py \
+            --output security-reports/vldmr-skills.json
+          python tools/validate_skill_security.py \
+            --format sarif \
+            --output security-reports/vldmr-skills.sarif
+      - name: Upload security evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: skill-security-evidence
+          path: security-reports/
+      - name: Upload SARIF to code scanning
+        if: >-
+          github.event_name != 'pull_request' ||
+          github.event.pull_request.head.repo.full_name == github.repository
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: security-reports/vldmr-skills.sarif

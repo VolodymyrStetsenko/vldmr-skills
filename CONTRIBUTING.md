@@ -17,6 +17,9 @@ interface stability, test coverage, and documentation quality.
   unauthorized source material.
 7. Update the affected `VERSION`, `CHANGELOG.md`, interface documentation, and
   examples when behavior or output changes.
+8. Preserve the affected `skill-manifest.json` permission contract. New file,
+  network, shell, tool, dependency, or external-instruction capabilities require
+  explicit security review.
 
 ## Validation Requirements
 
@@ -31,6 +34,11 @@ Before submitting a change:
 5. Test at least one representative external codebase for changes to detection
   logic with material false-positive or false-negative risk.
 6. Document known detection limitations introduced or modified by the change.
+7. Run `python3 tools/validate_skill_security.py --refresh` and review the
+  pre-mutation receipt. For intentional payload changes, apply the update with
+  `--refresh --apply`.
+8. Run `python3 tools/validate_skill_security.py` and
+  `python3 tests/run_security_validation.py`.
 
 ## Pull Request Content
 

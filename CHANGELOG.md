@@ -7,6 +7,18 @@ This document records externally observable changes. The project uses
 
 Initial public release.
 
+### Agentic skill security hardening
+
+- Added an explicit least-privilege and provenance `skill-manifest.json` for
+  every component without changing component version `1.0.0`.
+- Added complete per-file and aggregate SHA-256 payload integrity validation,
+  strict metadata allowlists, external-reference inventory, Unicode/control
+  smuggling checks, and unsafe binary/archive detection.
+- Added target-content instruction isolation rules to every `SKILL.md`.
+- Added deterministic JSON and hash-bound SARIF 2.1.0 security evidence.
+- Added a pre-mutation receipt and explicit apply gate for integrity refreshes.
+- Added adversarial AST01-AST10 regression coverage and CI enforcement.
+
 ### Components
 
 - `zk-circuit-review`: deterministic enumeration of Circom, Noir, and Halo2
