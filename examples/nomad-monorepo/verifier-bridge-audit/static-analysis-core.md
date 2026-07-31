@@ -1,8 +1,8 @@
-# Verifier Bridge Audit — src
+# Verifier Bridge Audit — contracts
 
-> VLDMR Skills · `verifier-bridge-audit` v1.0.0 · 2026-07-31 (UTC)
+> VLDMR Skills · `verifier-bridge-audit` v2.0.0 · 2026-07-31 (UTC)
 
-**Scope:** `/opt/audit-targets/v4-core/src` · 46 Solidity file(s)
+**Scope:** `/opt/audit-targets/nomad-monorepo/packages/contracts-core/contracts` · 19 Solidity file(s)
 
 ## Summary
 

@@ -1,0 +1,1753 @@
+{
+  "root": "/opt/audit-targets/nomad-monorepo/packages/contracts-core/contracts",
+  "files_scanned": 17,
+  "totals": {
+    "contracts": 19,
+    "functions": 130,
+    "entry_points": 38,
+    "permissionless_entry_points": 13,
+    "conservation_seeds": 0,
+    "flags": 1
+  },
+  "flags": [
+    {
+      "file": "packages/contracts-core/contracts/Replica.sol",
+      "line": 130,
+      "kind": "permissionless-config-setter",
+      "function": "update",
+      "note": "a configuration function writes state without a recognized access modifier or inline authorization check"
+    }
+  ],
+  "files": [
+    {
+      "file": "packages/contracts-core/contracts/Home.sol",
+      "contracts": [
+        "Home",
+        "updaterManager"
+      ],
+      "functions": [
+        {
+          "name": "initialize",
+          "line": 115,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "initializer"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "setUpdater",
+          "line": 147,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyUpdaterManager"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "setUpdaterManager",
+          "line": 161,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyOwner"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "dispatch",
+          "line": 175,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "notFailed"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "update",
+          "line": 221,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "notFailed"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "suggestUpdate",
+          "line": 246,
+          "visibility": "external",
+          "mutability": "view",
+          "modifiers": [
+            "bytes32",
+            "_committedRoot",
+            "bytes32",
+            "_new"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "doubleUpdate",
+          "line": 268,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "notFailed"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "homeDomainHash",
+          "line": 289,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "bytes32"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "improperUpdate",
+          "line": 320,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "notFailed",
+            "bool"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "_setUpdaterManager",
+          "line": 348,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_fail",
+          "line": 361,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_destinationAndNonce",
+          "line": 377,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "uint64"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "packages/contracts-core/contracts/Merkle.sol",
+      "contracts": [
+        "MerkleTreeManager"
+      ],
+      "functions": [
+        {
+          "name": "root",
+          "line": 29,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "bytes32"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "count",
+          "line": 36,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "uint256"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "packages/contracts-core/contracts/NomadBase.sol",
+      "contracts": [
+        "NomadBase"
+      ],
+      "functions": [
+        {
+          "name": "__NomadBase_initialize",
+          "line": 82,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "initializer"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_homeDomainHash",
+          "line": 101,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "bytes32"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_setUpdater",
+          "line": 113,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_isUpdaterSignature",
+          "line": 126,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "bool"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "renounceOwnership",
+          "line": 143,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyOwner"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "packages/contracts-core/contracts/Queue.sol",
+      "contracts": [
+        "QueueManager"
+      ],
+      "functions": [
+        {
+          "name": "__QueueManager_initialize",
+          "line": 28,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "initializer"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "queueLength",
+          "line": 37,
+          "visibility": "external",
+          "mutability": "view",
+          "modifiers": [
+            "uint256"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "queueContains",
+          "line": 44,
+          "visibility": "external",
+          "mutability": "view",
+          "modifiers": [
+            "bool"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "queueEnd",
+          "line": 51,
+          "visibility": "external",
+          "mutability": "view",
+          "modifiers": [
+            "bytes32"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "packages/contracts-core/contracts/Replica.sol",
+      "contracts": [
+        "Replica"
+      ],
+      "functions": [
+        {
+          "name": "initialize",
+          "line": 103,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "initializer"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "update",
+          "line": 130,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "proveAndProcess",
+          "line": 162,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "process",
+          "line": 186,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "bool",
+            "_success"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "setOptimisticTimeout",
+          "line": 220,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyOwner"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "setUpdater",
+          "line": 233,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyOwner"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "setConfirmation",
+          "line": 244,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyOwner"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "acceptableRoot",
+          "line": 262,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "bool"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "prove",
+          "line": 287,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "bool"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "homeDomainHash",
+          "line": 311,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "bytes32"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_setOptimisticTimeout",
+          "line": 322,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_beforeUpdate",
+          "line": 339,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": [
+        {
+          "file": "packages/contracts-core/contracts/Replica.sol",
+          "line": 130,
+          "kind": "permissionless-config-setter",
+          "function": "update",
+          "note": "a configuration function writes state without a recognized access modifier or inline authorization check"
+        }
+      ]
+    },
+    {
+      "file": "packages/contracts-core/contracts/UpdaterManager.sol",
+      "contracts": [
+        "UpdaterManager",
+        "home"
+      ],
+      "functions": [
+        {
+          "name": "setHome",
+          "line": 66,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyOwner"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "setUpdater",
+          "line": 78,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyOwner"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "slashUpdater",
+          "line": 89,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyHome"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "updater",
+          "line": 101,
+          "visibility": "external",
+          "mutability": "view",
+          "modifiers": [
+            "address"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "renounceOwnership",
+          "line": 110,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyOwner"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "packages/contracts-core/contracts/Version0.sol",
+      "contracts": [
+        "Version0"
+      ],
+      "functions": [],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "packages/contracts-core/contracts/XAppConnectionManager.sol",
+      "contracts": [
+        "XAppConnectionManager"
+      ],
+      "functions": [
+        {
+          "name": "unenrollReplica",
+          "line": 76,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "setHome",
+          "line": 106,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyOwner"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "ownerEnrollReplica",
+          "line": 115,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyOwner"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "ownerUnenrollReplica",
+          "line": 131,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyOwner"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "setWatcherPermission",
+          "line": 141,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyOwner"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "localDomain",
+          "line": 154,
+          "visibility": "external",
+          "mutability": "view",
+          "modifiers": [
+            "uint32"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "watcherPermission",
+          "line": 164,
+          "visibility": "external",
+          "mutability": "view",
+          "modifiers": [
+            "bool"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "isReplica",
+          "line": 179,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "bool"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_unenrollReplica",
+          "line": 189,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_recoverWatcherFromSig",
+          "line": 200,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "address"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "renounceOwnership",
+          "line": 220,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyOwner"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "packages/contracts-core/contracts/governance/GovernanceMessage.sol",
+      "contracts": [
+        "GovernanceMessage"
+      ],
+      "functions": [
+        {
+          "name": "messageType",
+          "line": 49,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "Types"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "identifier",
+          "line": 54,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "uint8"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "formatBatch",
+          "line": 78,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "bytes"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "serializeCall",
+          "line": 87,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "bytes29"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "getBatchHash",
+          "line": 94,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "bytes32"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "isValidBatch",
+          "line": 110,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "bool"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "isBatch",
+          "line": 116,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "bool"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "tryAsBatch",
+          "line": 120,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "bytes29"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "mustBeBatch",
+          "line": 127,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "bytes29"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "batchHash",
+          "line": 132,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "bytes32"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "formatTransferGovernor",
+          "line": 145,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "bytes",
+            "_msg"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "isValidTransferGovernor",
+          "line": 159,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "bool"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "isTransferGovernor",
+          "line": 169,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "bool"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "tryAsTransferGovernor",
+          "line": 175,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "bytes29"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "mustBeTransferGovernor",
+          "line": 186,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "bytes29"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "domain",
+          "line": 195,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "uint32"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "governor",
+          "line": 200,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "bytes32"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "packages/contracts-core/contracts/governance/GovernanceRouter.sol",
+      "contracts": [
+        "GovernanceRouter"
+      ],
+      "functions": [
+        {
+          "name": "initialize",
+          "line": 192,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "initializer"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "handle",
+          "line": 222,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyReplica",
+            "onlyGovernorRouter",
+            "_origin",
+            "_sender"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "executeGovernanceActions",
+          "line": 254,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyGovernorOrRecoveryManager"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "_callRemote",
+          "line": 284,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyGovernor",
+            "onlyNotInRecovery"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "transferGovernor",
+          "line": 305,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyGovernor",
+            "onlyNotInRecovery"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "transferRecoveryManager",
+          "line": 336,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyRecoveryManager"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "setRouterGlobal",
+          "line": 350,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyGovernor",
+            "onlyNotInRecovery"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "_setRouterGlobal",
+          "line": 358,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "setRouterLocal",
+          "line": 392,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyGovernorOrRecoveryManager"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "setXAppConnectionManager",
+          "line": 405,
+          "visibility": "public",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyGovernorOrRecoveryManager"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "initiateRecoveryTimelock",
+          "line": 416,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyNotInRecovery",
+            "onlyRecoveryManager"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "exitRecovery",
+          "line": 431,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyRecoveryManager"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "inRecovery",
+          "line": 443,
+          "visibility": "public",
+          "mutability": "view",
+          "modifiers": [
+            "bool"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_handleBatch",
+          "line": 460,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "typeAssert",
+            "_msg",
+            "GovernanceMessage",
+            "Types",
+            "Batch"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "executeCallBatch",
+          "line": 474,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "_handleTransferGovernor",
+          "line": 493,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "typeAssert",
+            "_msg",
+            "GovernanceMessage",
+            "Types",
+            "TransferGovernor"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_sendToAllRemoteRouters",
+          "line": 507,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_callLocal",
+          "line": 522,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "bytes",
+            "_ret"
+          ],
+          "writes_state": false,
+          "external_call": true,
+          "entry_point": false
+        },
+        {
+          "name": "_transferGovernor",
+          "line": 540,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_setRouter",
+          "line": 565,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_addDomain",
+          "line": 593,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_removeDomain",
+          "line": 601,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_isGovernorRouter",
+          "line": 618,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "bool"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_isLocalDomain",
+          "line": 631,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "bool"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_mustHaveRouter",
+          "line": 640,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "bytes32",
+            "_router"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "packages/contracts-core/contracts/libs/Merkle.sol",
+      "contracts": [
+        "MerkleLib"
+      ],
+      "functions": [
+        {
+          "name": "insert",
+          "line": 29,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "rootWithCtx",
+          "line": 53,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "bytes32",
+            "_current"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "root",
+          "line": 72,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "bytes32"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "zeroHashes",
+          "line": 78,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "bytes32",
+            "TREE_DEPTH",
+            "_zeroes"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "branchRoot",
+          "line": 125,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "bytes32",
+            "_current"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "packages/contracts-core/contracts/libs/Message.sol",
+      "contracts": [
+        "Message"
+      ],
+      "functions": [
+        {
+          "name": "formatMessage",
+          "line": 30,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "bytes"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "messageHash",
+          "line": 59,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "bytes32"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "origin",
+          "line": 81,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "uint32"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "sender",
+          "line": 86,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "bytes32"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "nonce",
+          "line": 91,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "uint32"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "destination",
+          "line": 96,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "uint32"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "recipient",
+          "line": 101,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "bytes32"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "recipientAddress",
+          "line": 106,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "address"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "body",
+          "line": 115,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "bytes29"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "leaf",
+          "line": 119,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "bytes32"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "packages/contracts-core/contracts/libs/Queue.sol",
+      "contracts": [
+        "QueueLib"
+      ],
+      "functions": [
+        {
+          "name": "initialize",
+          "line": 27,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "enqueue",
+          "line": 38,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "uint128",
+            "_last"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "dequeue",
+          "line": 55,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "bytes32",
+            "_item"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "enqueue",
+          "line": 72,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "uint128",
+            "_last"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "dequeue",
+          "line": 93,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "bytes32"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "contains",
+          "line": 119,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "bool"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "lastItem",
+          "line": 134,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "bytes32"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "peek",
+          "line": 140,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "bytes32",
+            "_item"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "isEmpty",
+          "line": 146,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "bool"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "length",
+          "line": 151,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint256"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_length",
+          "line": 159,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "uint256"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "packages/contracts-core/contracts/libs/TypeCasts.sol",
+      "contracts": [
+        "TypeCasts"
+      ],
+      "functions": [
+        {
+          "name": "coerceBytes32",
+          "line": 10,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "bytes32",
+            "_b"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "coerceString",
+          "line": 19,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "string",
+            "_newStr"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "addressToBytes32",
+          "line": 39,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "bytes32"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "bytes32ToAddress",
+          "line": 44,
+          "visibility": "internal",
+          "mutability": "pure",
+          "modifiers": [
+            "address"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "packages/contracts-core/contracts/upgrade/UpgradeBeacon.sol",
+      "contracts": [
+        "UpgradeBeacon"
+      ],
+      "functions": [
+        {
+          "name": "_setImplementation",
+          "line": 86,
+          "visibility": "private",
+          "mutability": "nonpayable",
+          "modifiers": [],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "packages/contracts-core/contracts/upgrade/UpgradeBeaconController.sol",
+      "contracts": [
+        "UpgradeBeaconController"
+      ],
+      "functions": [
+        {
+          "name": "upgrade",
+          "line": 31,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyOwner"
+          ],
+          "writes_state": false,
+          "external_call": true,
+          "entry_point": true
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "packages/contracts-core/contracts/upgrade/UpgradeBeaconProxy.sol",
+      "contracts": [
+        "UpgradeBeaconProxy"
+      ],
+      "functions": [
+        {
+          "name": "_initialize",
+          "line": 85,
+          "visibility": "private",
+          "mutability": "nonpayable",
+          "modifiers": [],
+          "writes_state": false,
+          "external_call": true,
+          "entry_point": false
+        },
+        {
+          "name": "_fallback",
+          "line": 103,
+          "visibility": "private",
+          "mutability": "nonpayable",
+          "modifiers": [],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_delegate",
+          "line": 115,
+          "visibility": "private",
+          "mutability": "nonpayable",
+          "modifiers": [],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_getImplementation",
+          "line": 148,
+          "visibility": "private",
+          "mutability": "view",
+          "modifiers": [
+            "address",
+            "_implementation"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_getImplementation",
+          "line": 164,
+          "visibility": "private",
+          "mutability": "view",
+          "modifiers": [
+            "address",
+            "_implementation"
+          ],
+          "writes_state": true,
+          "external_call": true,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    }
+  ]
+}

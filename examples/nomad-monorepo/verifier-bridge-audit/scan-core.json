@@ -1,6 +1,6 @@
 {
-  "root": "/opt/audit-targets/v4-core/src",
-  "files_scanned": 46,
+  "root": "/opt/audit-targets/nomad-monorepo/packages/contracts-core/contracts",
+  "files_scanned": 19,
   "verifier_contracts": [],
   "consumer_contracts": [],
   "totals": {

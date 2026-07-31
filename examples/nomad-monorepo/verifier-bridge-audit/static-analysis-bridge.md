@@ -1,21 +1,17 @@
 # Verifier Bridge Audit — contracts
 
-> VLDMR Skills · `verifier-bridge-audit` v1.0.0 · 2026-07-31 (UTC)
+> VLDMR Skills · `verifier-bridge-audit` v2.0.0 · 2026-07-31 (UTC)
 
-**Scope:** `/opt/audit-targets/semaphore/packages/contracts/contracts` · 8 Solidity file(s)
+**Scope:** `/opt/audit-targets/nomad-monorepo/packages/contracts-bridge/contracts` · 11 Solidity file(s)
 
 ## Summary
 
 | metric | value |
 | --- | ---: |
-| Proof-verifier contracts | 1 |
-| Verifier consumers | 1 |
-| Verification call sites | 1 |
+| Proof-verifier contracts | 0 |
+| Verifier consumers | 0 |
+| Verification call sites | 0 |
 | **Flags** | **0** |
-
-**Verifiers:** `SemaphoreVerifier.sol`
-
-**Consumers:** `Semaphore.sol`
 
 ## Integration guardrails
 
@@ -23,7 +19,7 @@ For each verifier consumer, three classic ZK-EVM protections are checked.
 
 | Consumer | Replay/nullifier guard | Public-input binding |
 | --- | :---: | :---: |
-| `Semaphore.sol` | yes | yes |
+| _(no verifier consumers found)_ | — | — |
 
 ## Analysis observations
 

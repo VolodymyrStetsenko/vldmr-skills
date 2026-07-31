@@ -1,80 +1,118 @@
-# Reference Analysis Artifacts
+# Reference Audit — Worked Example (v2.0.0)
 
-This directory contains generated JSON analysis output and corresponding
-markdown summaries for selected public repositories. Artifacts are retained to
-document output structure, detector behavior, and validation scope for release
-`1.0.0`.
+This directory contains a **complete, real audit** produced by the autonomous
+`2.0.0` skill workflows, kept so anyone evaluating the tool can see exactly what
+it does and what it produces — end to end, on a real protocol.
 
-## Source Revisions
+The example target is the **Nomad optics-style cross-chain bridge** at its
+pre-incident revision. In August 2022 this codebase suffered a ~$190M exploit
+whose root cause was a *zero committed root* that made unproven messages
+acceptable. These artifacts show the skills **independently rediscovering that
+exact bug from source alone** — no exploit write-ups, no test execution, no
+prior knowledge — as a demonstration of the workflow and its evidence
+discipline.
+
+> Earlier releases shipped only deterministic scanner output (enumeration JSON +
+> a markdown restatement). Those v1 artifacts have been removed. This example
+> shows the full v2 workflow: deterministic enumeration → independent reasoning
+> lanes → evidence-lattice challenge → mandatory report.
+
+## Target revision
 
 | Target | Repository | Commit |
 | --- | --- | --- |
-| Semaphore | `semaphore-protocol/semaphore` | `4dbc39b` |
-| circomlib | `iden3/circomlib` | `35e54ea` |
-| World ID contracts | `worldcoin/world-id-contracts` | `f959f72` |
-| Uniswap v4 core | `Uniswap/v4-core` | `46c6834` |
+| Nomad monorepo | `nomad-xyz/monorepo` | `e7246ea1f17ab49e81d39f199bb17153d3f950d2` |
 
-## Artifact Index
+Scope: `packages/contracts-core/contracts`, `packages/contracts-bridge/contracts`,
+`packages/contracts-router/contracts` (tests, mocks, and harnesses excluded).
 
-| Directory | Component | JSON | Markdown |
-| --- | --- | --- | --- |
-| `circomlib/` | `zk-circuit-review` | `zk-circuit-review.json` | `zk-circuit-review.md` |
-| `semaphore/` | `zk-circuit-review` | `zk-circuit-review.json` | `zk-circuit-review.md` |
-| `semaphore/` | `verifier-bridge-audit` | `verifier-bridge-audit.json` | `verifier-bridge-audit.md` |
-| `semaphore/` | `evm-invariant-scan` | `evm-invariant-scan.json` | `evm-invariant-scan.md` |
-| `world-id-contracts/` | `verifier-bridge-audit` | `verifier-bridge-audit.json` | `verifier-bridge-audit.md` |
-| `world-id-contracts/` | `evm-invariant-scan` | `evm-invariant-scan.json` | `evm-invariant-scan.md` |
-| `uniswap-v4-core/` | `verifier-bridge-audit` | `verifier-bridge-audit.json` | `verifier-bridge-audit.md` |
-| `uniswap-v4-core/` | `evm-invariant-scan` | `evm-invariant-scan.json` | `evm-invariant-scan.md` |
+## What the tool found
 
-## Reproduction Procedure
+Two skills were run against the same protocol and **both independently reached
+the same root cause** by different routes:
 
-Check out the recorded target revision and execute the applicable command from
-the repository root:
+| Skill | Headline result | Route |
+| --- | --- | --- |
+| `evm-invariant-scan` | **High (critical impact)** — zero committed root makes the empty root acceptable, so any unproven message is processable | State/lifecycle lanes → shortest public `process()` path |
+| `verifier-bridge-audit` | **High** — zero-root sentinel not rejected in `acceptableRoot`; unproven-message acceptance re-enabled by an unguarded `confirmAt[0]` | Optimistic Merkle-proof message boundary |
 
-```bash
-python3 zk-circuit-review/scripts/enumerate_circuit.py <circuit-scope> \
-  --json <output>.json --report <output>.md --no-banner
+Root cause in one line: `Replica.initialize` runs `confirmAt[_committedRoot] = 1`
+with no `require(_committedRoot != 0)` guard. Because `messages[hash]` defaults
+to `bytes32(0)` for any never-proven message and `acceptableRoot(0)` has no
+zero-root short-circuit, the empty root is treated as confirmed and
+`process(arbitraryMessage)` dispatches attacker-controlled messages to
+`BridgeRouter` / `GovernanceRouter`.
 
-python3 verifier-bridge-audit/scripts/scan_verifier.py <solidity-scope> \
-  --json <output>.json --report <output>.md --no-banner
+Both findings are recorded at evidence level **E2** (a complete adversarial
+trace), the level the workflow requires before anything is called a finding.
 
-python3 evm-invariant-scan/scripts/enumerate_evm.py <solidity-scope> \
-  --json <output>.json --report <output>.md --no-banner
+## Artifact index
+
+Each skill run writes the same artifact set. Read them in order to follow the
+reasoning from raw enumeration to the confirmed finding.
+
+| Read order | File | What it is |
+| --- | --- | --- |
+| 1 | `scope.md` | pinned revision, included/excluded paths, exact commands, scanner flags |
+| 2 | `static-analysis-*.md` | human-readable restatement of the deterministic enumeration |
+| 3 | `enumeration-*.json` / `scan-*.json` | machine-readable enumeration (the evidence input, **not** the assessment) |
+| 4 | `review-ledger.md` | every scanner flag and reasoning candidate with one disposition (Finding / Observation / Rejected) |
+| 5 | `report.md` | the mandatory final report: threat model, access map, findings with E2 proof, invariant catalog, completeness declaration |
+
+```
+nomad-monorepo/
+├── evm-invariant-scan/
+│   ├── report.md              ← start here (the finding + proof)
+│   ├── review-ledger.md
+│   ├── scope.md
+│   ├── static-analysis-core.md, static-analysis-bridge.md, static-analysis-router.md
+│   └── enumeration-core.json, enumeration-bridge.json, enumeration-router.json
+└── verifier-bridge-audit/
+    ├── report.md
+    ├── review-ledger.md
+    ├── scope.md
+    ├── static-analysis-core.md, static-analysis-bridge.md
+    └── scan-core.json, scan-bridge.json
 ```
 
-JSON records the deterministic enumeration. Markdown summarizes the same JSON
-content. Report dates and absolute paths vary by environment.
+## Reproduce it
 
-## Publication Policy
-
-`examples/` is intended to be publicly publishable. Before publishing generated
-artifacts from another environment, sanitize machine-specific absolute paths
-and usernames.
-
-Required checks:
-
-1. No user-home or workstation-specific roots (for example `/home/<user>/...`
-  or `C:\\Users\\...`).
-2. Paths in JSON `root` and `file` fields are replaced with neutral repository
-  roots (for example `/opt/audit-targets/<repo>/...`).
-3. Matching scope lines in markdown summaries are sanitized to the same neutral
-  root.
-
-A practical pre-publish check:
+The autonomous workflow is driven by an agent that reads the skill's `SKILL.md`
+and executes its phases. The deterministic Phase-1 enumeration — the reproducible
+evidence base under every report — can be regenerated directly:
 
 ```bash
-rg -n '/home/|/Users/|C:\\' examples --glob '!README.md'
+# from the checked-out target repository root, at the revision above
+python3 evm-invariant-scan/scripts/enumerate_evm.py packages/contracts-core/contracts \
+  --json enumeration-core.json --report static-analysis-core.md --no-banner
+
+python3 verifier-bridge-audit/scripts/scan_verifier.py packages/contracts-core/contracts \
+  --json scan-core.json --report static-analysis-core.md --no-banner
 ```
 
-No matches indicates no obvious machine-path leakage in examples.
+The reasoning lanes, evidence-lattice challenge, and `report.md` are produced by
+the agent following `SKILL.md`; see each skill's `references/reasoning-workflow.md`
+for the evidence rules (E0–E3) that gate a finding. The JSON records the
+deterministic enumeration; report dates and absolute paths vary by environment.
 
-## Interpretation
+## Honest-scope notes
 
-A generated flag is represented as an analysis observation until verified
-against source control flow, system architecture, and intended security
-properties. Zero flags indicates only that no implemented source pattern
-matched within the selected scope.
+- `verifier-bridge-audit` was run on a protocol with **no ZK/SNARK verifier**; its
+  ZK-specific lanes are recorded as *not applicable* (scope adaptation), never as
+  passes. The skill still audited the optimistic Merkle-proof message boundary.
+- These reports are static, source-only (no compilation or execution, per the
+  security contract). Each report lists ready-to-run Foundry/Echidna/Halmos
+  properties to drive the finding to an executable proof (E3).
 
-Detailed coverage, observations, and limitations are recorded in
-[`docs/VALIDATION.md`](../docs/VALIDATION.md).
+## Publication policy
+
+`examples/` is publicly publishable. Generated artifacts here have been
+sanitized: machine-specific absolute paths and usernames were replaced with a
+neutral repository root (`/opt/audit-targets/nomad-monorepo`).
+
+Before publishing artifacts from another environment:
+
+1. Remove user-home or workstation-specific roots (for example `/home/<user>/...`
+   or `C:\Users\...`).
+2. Replace paths in JSON `root`/`file` fields and report `Scope` lines with a
+   neutral repository root.

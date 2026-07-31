@@ -1,0 +1,132 @@
+{
+  "root": "/opt/audit-targets/nomad-monorepo/packages/contracts-router/contracts",
+  "files_scanned": 2,
+  "totals": {
+    "contracts": 2,
+    "functions": 8,
+    "entry_points": 2,
+    "permissionless_entry_points": 0,
+    "conservation_seeds": 0,
+    "flags": 0
+  },
+  "flags": [],
+  "files": [
+    {
+      "file": "packages/contracts-router/contracts/Router.sol",
+      "contracts": [
+        "Router"
+      ],
+      "functions": [
+        {
+          "name": "enrollRemoteRouter",
+          "line": 34,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyOwner"
+          ],
+          "writes_state": true,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "_isRemoteRouter",
+          "line": 56,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "bool"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_mustHaveRemote",
+          "line": 69,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "bytes32",
+            "_remote"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    },
+    {
+      "file": "packages/contracts-router/contracts/XAppConnectionClient.sol",
+      "contracts": [
+        "XAppConnectionClient"
+      ],
+      "functions": [
+        {
+          "name": "__XAppConnectionClient_initialize",
+          "line": 27,
+          "visibility": "internal",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "initializer"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "setXAppConnectionManager",
+          "line": 41,
+          "visibility": "external",
+          "mutability": "nonpayable",
+          "modifiers": [
+            "onlyOwner"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": true
+        },
+        {
+          "name": "_home",
+          "line": 54,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "Home"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_isReplica",
+          "line": 63,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "bool"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        },
+        {
+          "name": "_localDomain",
+          "line": 75,
+          "visibility": "internal",
+          "mutability": "view",
+          "modifiers": [
+            "uint32"
+          ],
+          "writes_state": false,
+          "external_call": false,
+          "entry_point": false
+        }
+      ],
+      "conservation_seed": false,
+      "flags": []
+    }
+  ]
+}
