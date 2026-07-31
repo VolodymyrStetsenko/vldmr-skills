@@ -27,7 +27,7 @@ import os
 import re
 import sys
 from dataclasses import dataclass, field, asdict
-from typing import Dict, List
+from typing import List
 
 
 _BLOCK_COMMENT = re.compile(r"/\*.*?\*/", re.DOTALL)
