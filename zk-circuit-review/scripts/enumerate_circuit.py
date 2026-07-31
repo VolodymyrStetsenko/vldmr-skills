@@ -198,6 +198,25 @@ def analyze_circom(path: str, src: str) -> FileReport:
                      "the proof does not bind this public output to the computation",
             ))
 
+    # 0xPARC class 5 — "unused public inputs optimized out". A `signal input`
+    # that never appears in any expression or constraint is silently removed by
+    # the Circom compiler, so the binding it was meant to enforce disappears. A
+    # signal whose base name occurs only once in the source (its own
+    # declaration) is such an unused input.
+    for inp in rep.inputs:
+        occ = len(re.findall(r"\b" + re.escape(inp) + r"\b", clean))
+        if occ <= 1:
+            decl_line = next(
+                (i for i, raw in enumerate(clean.splitlines(), 1)
+                 if re.search(r"\bsignal\s+input\b[^;]*\b" + re.escape(inp) + r"\b", raw)),
+                1)
+            rep.flags.append(Flag(
+                file=path, line=decl_line, kind="unused-public-input", signal=inp,
+                note="declared `signal input` but never used in any constraint or "
+                     "expression — Circom optimizes it away, so it binds nothing "
+                     "(0xPARC class 5: unused public inputs optimized out)",
+            ))
+
     return rep
 
 

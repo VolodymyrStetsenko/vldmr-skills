@@ -139,3 +139,31 @@ re-validate on-chain what the circuit does not guarantee.
   malleability with byte-keyed de-dup not yet exploited, timelock too short.
 - **Low** — hardening: undocumented input ordering, event/telemetry gaps.
 - **Lead** — a boundary weakness you could not turn into a concrete tx sequence.
+
+---
+
+## Detector coverage & limits (`scan_verifier.py`)
+
+What the static scanner recognizes, so a reviewer knows where manual work
+begins:
+
+- **Verifier detection.** Both classic snarkjs / hand-written Solidity templates
+  (`Pairing`, `snark_scalar_field`, hex precompile `0x08`) **and** modern
+  optimized Yul verifiers that inline the precompiles with decimal ids
+  (`staticcall(..., 8, ...)`, `pPairing`/`checkPairing`). A file is treated as a
+  verifier when ≥2 markers match.
+- **Replay guard (threat 1).** Recognized idioms: `require(!used[x])`; custom
+  errors (`revert AlreadyUsed()/...Twice/...Spent`); conditional reverts
+  (`if (nullifiers[x]) revert/require`); and consume-writes
+  (`nullifiers[x] = true`, `.nullifiers[x] = true`). Missing tracking **or**
+  missing guard raises `possible-proof-replay`.
+- **Context binding (threat 2).** A proof is considered bound when its public
+  arguments to `verifyProof(...)` commit to caller/recipient/scope/domain data
+  (`msg.sender`, `nullifier`, `scope`, `recipient`, `domain*`, `chainid`,
+  `address(this)`), or the enclosing function explicitly checks `msg.sender`. A
+  term that merely appears elsewhere in the body (e.g. a `recipient` parameter
+  **not** passed into the proof) does not count — that is the case that raises
+  `unbound-public-inputs`.
+- **Limits.** The scanner does not follow public-input *ordering* (threat 3),
+  point malleability (threat 5), or transcript/Fiat–Shamir soundness — these
+  remain manual. Every flag is a lead to confirm against the real data flow.

@@ -57,13 +57,20 @@ def iter_sol_files(root: str) -> List[str]:
 # Signal patterns
 # --------------------------------------------------------------------------- #
 
-# A file is a *verifier* if it looks like a generated or hand-written proof checker.
+# A file is a *verifier* if it looks like a generated or hand-written proof
+# checker. Two families are covered: (a) the classic snarkjs / hand-written
+# Solidity templates that reference the bn254 scalar field and a `Pairing`
+# library, and (b) modern optimized Yul verifiers (snarkjs >=0.7, Semaphore's
+# SemaphoreVerifier) that inline the precompile calls with decimal ids.
 VERIFIER_MARKERS = [
     re.compile(r"\bfunction\s+verifyProof\s*\("),
     re.compile(r"\bfunction\s+verify\s*\([^)]*proof", re.IGNORECASE),
     re.compile(r"\bPairing\b"),
     re.compile(r"\bscalar_field\b|\bsnark_scalar_field\b"),
-    re.compile(r"\bstaticcall\s*\(\s*sub\s*\(\s*gas|0x08\b"),   # bn254 pairing precompile
+    re.compile(r"\bstaticcall\s*\(\s*sub\s*\(\s*gas|0x08\b"),    # pairing precompile (hex id)
+    re.compile(r"\bstaticcall\s*\([^,;{]*,\s*8\s*,"),            # pairing precompile (decimal id 8)
+    re.compile(r"\bstaticcall\s*\([^,;{]*,\s*[67]\s*,"),         # ecAdd(6) / ecMul(7) precompiles
+    re.compile(r"\bpPairing\b|\bcheckPairing\b"),               # optimized Yul verifier idioms
     re.compile(r"\bvk\.\w+|\bVerifyingKey\b|\balphax?1\b|\bgamma2\b|\bdelta2\b", re.IGNORECASE),
 ]
 
@@ -75,12 +82,32 @@ INTERNAL_VERIFY = re.compile(r"\b(verifyProof|_verifyProof)\s*\(")
 NULLIFIER_MARKERS = re.compile(
     r"nullifier|nullifierHash|usedProof|proofUsed|_used\b|spent|isSpent|"
     r"consumed|commitments?\[", re.IGNORECASE)
-REPLAY_GUARD = re.compile(
-    r"require\s*\(\s*!|revert\s+\w*Already|revert\s+\w*Used|revert\s+\w*Spent", re.IGNORECASE)
 
-# Public-input-to-caller binding.
+# A replay guard exists if the code rejects a previously-seen proof/nullifier or
+# marks it consumed. We accept the several idioms seen in production verifiers,
+# not only `require(!used[x])`:
+#   - require(!used[x])                              (boolean-map negation)
+#   - revert AlreadyUsed() / ...Twice / ...Spent     (custom errors)
+#   - if (nullifiers[x]) revert / require            (conditional revert)
+#   - nullifiers[x] = true  /  .nullifiers[x] = true (mark consumed)
+REPLAY_GUARD_PATTERNS = [
+    re.compile(r"require\s*\(\s*!"),
+    re.compile(r"revert\s+\w*(Already|Used|Spent|Twice|Duplicate|Replay|Known|Seen)", re.IGNORECASE),
+    re.compile(r"if\s*\([^)]*(nullifier|nullifierhash|used|spent|consumed|commitment|known|seen)[^)]*\)\s*\{?\s*(revert|require)", re.IGNORECASE),
+    re.compile(r"(nullifier|nullifierhash|used|spent|consumed|commitment)\w*\s*\[[^\]]*\]\s*=\s*true", re.IGNORECASE),
+    re.compile(r"\.\s*(nullifiers?|used|spent|consumed|commitments?)\s*\[[^\]]*\]\s*=\s*true", re.IGNORECASE),
+]
+
+# Proof-to-context binding. A proof is safely bound if its *public inputs* commit
+# to caller/recipient/scope/domain data, so it cannot be replayed by or
+# front-run for a different actor. We look for these terms (a) inside the public
+# arguments actually passed to the verify call, and (b) as an explicit
+# msg.sender check in the enclosing function body.
 MSG_SENDER = re.compile(r"\bmsg\.sender\b")
-PUBLIC_INPUT_ARR = re.compile(r"\b(uint256|uint)\s*\[\s*\d*\s*\]\s*(memory\s+)?\w*input", re.IGNORECASE)
+BINDING_TERMS = re.compile(
+    r"\bmsg\.sender\b|\bnullifier|\bscope\b|\bexternalNullifier\b|\bsignalHash\b|"
+    r"\brecipient\b|\breceiver\b|\bdomainSeparator\b|\bdomain\b|\bchainid\b|"
+    r"address\s*\(\s*this\s*\)", re.IGNORECASE)
 
 # Verifying-key / verifier-address mutability.
 SETTER = re.compile(r"\bfunction\s+set\w*(Verifier|VerifyingKey|VK)\w*\s*\(", re.IGNORECASE)
@@ -101,6 +128,7 @@ class CallSite:
     line: int
     receiver: str
     method: str
+    args: str = ""
 
 
 @dataclass
@@ -110,7 +138,7 @@ class FileReport:
     consumer_calls: List[CallSite] = field(default_factory=list)
     has_nullifier_tracking: bool = False
     has_replay_guard: bool = False
-    binds_msg_sender: bool = False
+    binds_context: bool = False
     verifier_settable: bool = False
     verifier_immutable: bool = False
     flags: List[Flag] = field(default_factory=list)
@@ -118,6 +146,19 @@ class FileReport:
 
 def _line_of(src: str, idx: int) -> int:
     return src.count("\n", 0, idx) + 1
+
+
+def _match_paren(src: str, open_idx: int) -> int:
+    """Return index just past the matching close paren for the '(' at open_idx."""
+    depth = 0
+    for i in range(open_idx, len(src)):
+        if src[i] == "(":
+            depth += 1
+        elif src[i] == ")":
+            depth -= 1
+            if depth == 0:
+                return i + 1
+    return len(src)
 
 
 def _enclosing_body(src: str, idx: int) -> str:
@@ -150,28 +191,39 @@ def analyze(path: str) -> FileReport:
     rep.is_verifier = sum(1 for p in VERIFIER_MARKERS if p.search(src)) >= 2
 
     call_indices: List[int] = []
+    call_args: List[str] = []
     for m in CONSUMER_CALL.finditer(src):
         recv = m.group(1)
         if recv in {"this", "super"}:
             continue
+        paren_open = src.index("(", m.end() - 1)
+        args = src[paren_open:_match_paren(src, paren_open)]
         call_indices.append(m.start())
+        call_args.append(args)
         rep.consumer_calls.append(
             CallSite(file=path, line=_line_of(src, m.start()),
-                     receiver=recv, method=m.group(2)))
+                     receiver=recv, method=m.group(2), args=args))
 
     rep.has_nullifier_tracking = bool(NULLIFIER_MARKERS.search(src))
-    rep.has_replay_guard = bool(REPLAY_GUARD.search(src))
+    rep.has_replay_guard = any(p.search(src) for p in REPLAY_GUARD_PATTERNS)
     rep.verifier_settable = bool(SETTER.search(src))
     rep.verifier_immutable = bool(IMMUTABLE_VK.search(src))
 
-    # Public-input binding is only meaningful *on the verification path*, so we
-    # inspect the enclosing function body of each verification call rather than
-    # the whole file (an unrelated `onlyOwner` check must not mask a missing
-    # binding in `withdraw`).
-    for idx in call_indices:
-        if MSG_SENDER.search(_enclosing_body(src, idx)):
-            rep.binds_msg_sender = True
+    # Proof-to-context binding is only meaningful *on the verification path*.
+    # A proof is bound if its public-input arguments commit to caller/recipient/
+    # scope/domain data, or the enclosing function explicitly checks msg.sender.
+    # A term merely appearing elsewhere in the body (e.g. a `recipient` parameter
+    # that is NOT passed into the proof) does not count — we require it inside
+    # the verify call's arguments.
+    for args in call_args:
+        if BINDING_TERMS.search(args):
+            rep.binds_context = True
             break
+    if not rep.binds_context:
+        for idx in call_indices:
+            if MSG_SENDER.search(_enclosing_body(src, idx)):
+                rep.binds_context = True
+                break
 
     # --- Flags: only meaningful on consumer contracts (not pure verifiers) --- #
     if rep.consumer_calls and not rep.is_verifier:
@@ -184,12 +236,14 @@ def analyze(path: str) -> FileReport:
                       "guard was found in this file — a valid proof may be replayable. "
                       "Confirm where the proof/nullifier is marked consumed.")))
 
-        if not rep.binds_msg_sender:
+        if not rep.binds_context:
             rep.flags.append(Flag(
                 file=path, line=first_line, kind="unbound-public-inputs",
-                note=("no reference to msg.sender near the verification path — confirm "
-                      "the public inputs bind the proof to the intended caller/recipient, "
-                      "otherwise a proof can be front-run or reused by another actor.")))
+                note=("the proof's public inputs do not appear to commit to caller/"
+                      "recipient/scope/domain data (no msg.sender, nullifier, scope, "
+                      "recipient or domain-separator on the verification path) — a valid "
+                      "proof may be front-run or reused by another actor; confirm the "
+                      "binding.")))
 
         if rep.verifier_settable and not rep.verifier_immutable:
             m = SETTER.search(src)

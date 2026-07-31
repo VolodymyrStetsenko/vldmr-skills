@@ -94,6 +94,31 @@ MAPPING_BALANCE = re.compile(r"mapping\s*\(\s*address\s*=>\s*uint\d*\s*\)[^;]*(b
 SUPPLY_VAR = re.compile(r"\buint\d*\b[^;=]*(totalSupply|totalShares|totalDeposits|totalAssets)", re.IGNORECASE)
 CONFIG_SETTER = re.compile(r"^(set|update|change|configure|upgrade|migrate|pause|unpause|initialize|grant|revoke|admin|withdrawAll|rescue)", re.IGNORECASE)
 
+# --- OWASP Smart Contract Top 10 (2026) coverage extensions ----------------- #
+# SC03 — price-oracle manipulation.
+SPOT_ORACLE = re.compile(
+    r"\.getReserves\s*\(|\.slot0\s*\(|\.getAmountsOut\s*\(|"
+    r"\.price0CumulativeLast\b|\.price1CumulativeLast\b")
+CHAINLINK_ROUND = re.compile(r"latestRoundData\s*\(")
+CHAINLINK_STALE = re.compile(r"updatedAt|answeredInRound")
+CHAINLINK_DEPRECATED = re.compile(r"\.latestAnswer\s*\(|\.latestRound\s*\(")
+
+# SC04 — flash-loan-facilitated attacks.
+FLASHLOAN_CALLBACKS = {
+    "onFlashLoan", "receiveFlashLoan", "executeOperation", "uniswapV2Call",
+    "pancakeCall", "uniswapV3FlashCallback", "flashCallback", "DPPFlashLoanCall",
+    "BEP20FlashLoanCall", "callFunction",
+}
+SELF_BALANCE = re.compile(
+    r"balanceOf\s*\(\s*address\s*\(\s*this\s*\)\s*\)|"
+    r"\baddress\s*\(\s*this\s*\)\s*\.balance\b|\bselfbalance\s*\(")
+
+# SC10 — proxy / upgradeability.
+UPGRADE_FNS = {"upgradeTo", "upgradeToAndCall", "_authorizeUpgrade"}
+INIT_FN = re.compile(r"^(initialize|init|__\w+_init)$")
+INITIALIZER_MODS = re.compile(r"\binitializer\b|\breinitializer\s*\(")
+SELFDESTRUCT = re.compile(r"\bselfdestruct\s*\(|\bsuicide\s*\(")
+
 
 @dataclass
 class Flag:
@@ -265,6 +290,59 @@ def analyze(path: str) -> FileReport:
                     note="low-level .call/.delegatecall return value may be unchecked — "
                          "confirm the success boolean is handled"))
                 break
+
+        # SC03 — price-oracle manipulation leads.
+        if SPOT_ORACLE.search(body):
+            rep.flags.append(Flag(
+                file=path, line=line, kind="spot-price-oracle", function=name,
+                note="reads an AMM spot price (getReserves/slot0/getAmountsOut) — spot prices "
+                     "are manipulable within a block via flash loans; prefer a TWAP or a "
+                     "validated Chainlink feed (OWASP SC03)"))
+        if CHAINLINK_DEPRECATED.search(body):
+            rep.flags.append(Flag(
+                file=path, line=line, kind="oracle-deprecated-feed", function=name,
+                note="uses latestAnswer()/latestRound() — deprecated Chainlink API with no "
+                     "round/staleness data; use latestRoundData() and validate it (OWASP SC03)"))
+        elif CHAINLINK_ROUND.search(body) and not CHAINLINK_STALE.search(body):
+            rep.flags.append(Flag(
+                file=path, line=line, kind="oracle-missing-staleness-check", function=name,
+                note="calls latestRoundData() without checking updatedAt/answeredInRound — a "
+                     "stale price may be accepted (OWASP SC03)"))
+
+        # SC04 — flash-loan-facilitated attack leads.
+        if name in FLASHLOAN_CALLBACKS:
+            rep.flags.append(Flag(
+                file=path, line=line, kind="flash-loan-callback", function=name,
+                note="flash-loan callback — verify caller/initiator authentication and that no "
+                     "price/share math inside can be manipulated mid-callback (OWASP SC04)"))
+        if SELF_BALANCE.search(body) and "/" in body:
+            rep.flags.append(Flag(
+                file=path, line=line, kind="balance-based-accounting", function=name,
+                note="derives a value from the contract's own live balance and divides — share/"
+                     "price math from balanceOf(this) is inflatable by a donation or flash loan; "
+                     "track accounted balances instead (OWASP SC04)"))
+
+        # SC10 — proxy / upgradeability leads.
+        if name in UPGRADE_FNS and not has_access and not ACCESS_MODIFIER.search(body):
+            rep.flags.append(Flag(
+                file=path, line=line, kind="unprotected-upgrade", function=name,
+                note="upgrade authorization path has no visible access control — confirm only "
+                     "governance/owner can upgrade the implementation (OWASP SC10)"))
+        if INIT_FN.match(name) and entry and not INITIALIZER_MODS.search(attrs):
+            rep.flags.append(Flag(
+                file=path, line=line, kind="initializer-not-guarded", function=name,
+                note="initializer-style function without an `initializer`/`reinitializer` "
+                     "modifier — may be callable again to re-take ownership (OWASP SC10)"))
+
+    # SC10 — self-destruct present anywhere in the file.
+    sd = SELFDESTRUCT.search(src)
+    if sd:
+        rep.flags.append(Flag(
+            file=path, line=_line_of(src, sd.start()), kind="selfdestruct-present",
+            function="(file)",
+            note="selfdestruct/suicide present — in a proxy or shared contract this can brick "
+                 "the implementation or drain funds; confirm it is unreachable by untrusted "
+                 "callers (OWASP SC10)"))
     return rep
 
 

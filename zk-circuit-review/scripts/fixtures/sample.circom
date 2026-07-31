@@ -21,6 +21,10 @@ template BadRange() {
     signal input value;
     signal output ok;
 
+    // BUG (intentional): `unusedTag` is a public input that is never used in any
+    // constraint, so the compiler optimizes it away (0xPARC class 5).
+    signal input unusedTag;
+
     // BUG (intentional): `ok` is only witness-assigned, never constrained.
     // A malicious prover can set `ok` to any field element.
     ok <-- value < 100 ? 1 : 0;

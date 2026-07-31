@@ -30,6 +30,31 @@ precede interactions.
 `.call`/`.delegatecall` whose success boolean is ignored, silently swallowing
 failures (lost funds, desynced state). Confirm the return is truly unhandled.
 
+### A4. Price-oracle manipulation (OWASP SC03)
+`spot-price-oracle` — an AMM spot price (`getReserves`, `slot0`, `getAmountsOut`)
+read into pricing/collateral logic; manipulable within a block by a flash loan.
+`oracle-deprecated-feed` — `latestAnswer()`/`latestRound()` with no round data.
+`oracle-missing-staleness-check` — `latestRoundData()` used without validating
+`updatedAt`/`answeredInRound`. **Critical/High** when the price drives minting,
+liquidation, or collateral valuation. Confirm by tracing the price into a
+value-moving decision; prefer a TWAP or a validated feed with heartbeat + bounds.
+
+### A5. Flash-loan-facilitated attacks (OWASP SC04)
+`flash-loan-callback` — a known borrower callback (`onFlashLoan`,
+`uniswapV2Call`, `executeOperation`, …); verify the initiator/lender is
+authenticated and that no price/share math inside can be manipulated mid-call.
+`balance-based-accounting` — share/price math derived from `balanceOf(this)` (or
+`address(this).balance`) and a division; inflatable by a donation or flash loan.
+Track accounted balances in storage instead of reading live balances.
+
+### A6. Proxy & upgradeability (OWASP SC10)
+`unprotected-upgrade` — `upgradeTo`/`_authorizeUpgrade` reachable with no visible
+access control (anyone can swap the implementation). `initializer-not-guarded` —
+an `initialize`-style function lacking an `initializer`/`reinitializer` modifier
+(re-initialization / ownership re-take). `selfdestruct-present` — a reachable
+`selfdestruct` that can brick a proxy implementation. **Critical** for any of
+these on a live upgrade or init path; confirm the guard and storage layout.
+
 ---
 
 ## B. Invariant classes (derive and classify On-chain Yes/No)
