@@ -12,7 +12,7 @@ If you discover a security issue in a skill or its scripts — for example a scr
 that could be coerced into executing untrusted input, writing outside its output
 directory, or leaking data — please report it privately.
 
-- Open a [GitHub security advisory](https://github.com/VolodymyrSkills/vldmr-skills/security/advisories/new), or
+- Open a [GitHub security advisory](https://github.com/VolodymyrStetsenko/vldmr-skills/security/advisories/new), or
 - Contact the maintainer directly before public disclosure.
 
 Please include:

@@ -4,7 +4,7 @@
 
 **AI-driven security skills for zero-knowledge circuits, EVM smart contracts, and the fragile seam between them.**
 
-Authored and maintained by **Volodymyr Stetsenko** ([@VolodymyrSkills](https://github.com/VolodymyrSkills))
+Authored and maintained by **Volodymyr Stetsenko** ([@VolodymyrStetsenko](https://github.com/VolodymyrStetsenko))
 
 [Skills](#skills) · [Install & Run](#install--run) · [Design principles](#design-principles) · [Security](SECURITY.md) · [License](LICENSE)
 
@@ -47,7 +47,7 @@ convention and work with any agent runtime that reads `SKILL.md` files —
 Point your agent at this repository, then ask in natural language:
 
 ```
-Install https://github.com/VolodymyrSkills/vldmr-skills and run zk-circuit-review on ./circuits
+Install https://github.com/VolodymyrStetsenko/vldmr-skills and run zk-circuit-review on ./circuits
 run verifier-bridge-audit on the on-chain verifier and its consuming contracts
 run evm-invariant-scan on the codebase
 ```
