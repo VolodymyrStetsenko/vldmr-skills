@@ -55,7 +55,7 @@ A pull request must identify:
 A new component requires:
 
 - valid Agent Skills frontmatter and an executable procedure in `SKILL.md`;
-- a `VERSION` initialized to `1.0.0`;
+- a SemVer `VERSION` consistent with `SKILL.md` and `skill-manifest.json`;
 - deterministic analysis utilities where source enumeration is required;
 - a documented input and output interface;
 - a threat taxonomy and report specification under `references/`;

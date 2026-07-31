@@ -1,5 +1,5 @@
 {
-  "schema": "vldmr.skill-security.v1",
+  "schema": "vldmr.skill-security.v2",
   "name": "zk-circuit-review",
   "version": "2.0.0",
   "description": "Autonomous evidence-gated ZK circuit review with constraint modeling, independent attack lanes, challenge, and mandatory reporting.",

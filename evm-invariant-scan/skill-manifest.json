@@ -1,5 +1,5 @@
 {
-  "schema": "vldmr.skill-security.v1",
+  "schema": "vldmr.skill-security.v2",
   "name": "evm-invariant-scan",
   "version": "2.0.0",
   "description": "Autonomous evidence-gated EVM review with deterministic inventory, independent reasoning lanes, adversarial challenge, and mandatory reporting.",
