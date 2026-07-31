@@ -73,8 +73,10 @@ measure of false-positive or false-negative rates.
 | Uniswap v4 core | `46c6834` | `evm-invariant-scan` | 38 | 0 |
 | Uniswap v4 core | `46c6834` | `verifier-bridge-audit` | 38 | 0 verifiers, 0 flags |
 
-Generated JSON and markdown artifacts are stored under `examples/`. Absolute
-paths in artifacts reflect the validation environment.
+Generated JSON and markdown artifacts are stored under `examples/`. Before
+publication, environment-specific absolute paths are replaced with neutral
+roots such as `/opt/audit-targets/`; source revisions and relative paths remain
+recorded for reproducibility.
 
 ## Observations
 
@@ -112,3 +114,6 @@ paths in artifacts reflect the validation environment.
 - No claim is made regarding vulnerability absence when no flag is produced.
 - External repository results apply only to the recorded commit and selected
   source scope.
+- The generated markdown produced by `--report` is a Phase 1 representation of
+  deterministic flags, not the final manually adjudicated `report.md` required
+  by each skill procedure.

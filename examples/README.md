@@ -64,7 +64,7 @@ Required checks:
 A practical pre-publish check:
 
 ```bash
-rg -n '/home/|/Users/|C:\\' examples
+rg -n '/home/|/Users/|C:\\' examples --glob '!README.md'
 ```
 
 No matches indicates no obvious machine-path leakage in examples.

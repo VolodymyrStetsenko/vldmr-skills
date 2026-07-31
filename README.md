@@ -90,6 +90,29 @@ python3 evm-invariant-scan/scripts/enumerate_evm.py <path> --json out.json --rep
 
 For CLI and JSON contract details see [`docs/INTERFACES.md`](docs/INTERFACES.md).
 
+## Analysis Lifecycle
+
+Each skill separates deterministic detection from security judgment:
+
+1. **Phase 1 — static enumeration.** The Python script reads supported source
+  files and writes machine-readable JSON plus a generated markdown summary.
+  The `--report` option creates this generated summary; it does not create a
+  final audit verdict.
+2. **Phase 2 — source-level adjudication.** A reviewer traces every relevant
+  flag through imports, inheritance, internal calls, state transitions, and
+  intended protocol behavior. Flags may become findings, remain analysis
+  observations, or be rejected as false positives.
+3. **Phase 3 — final report and optional dynamic validation.** The reviewer
+  writes the component's final `report.md` using its report specification.
+  When a suspected issue requires execution, this phase may include a
+  compiler, tests, fuzzing, symbolic execution, or a reproducible PoC under a
+  separately authorized environment.
+
+The bundled scripts implement Phase 1. The full `SKILL.md` procedures define
+Phases 1–3, including evidence requirements and limitations. A successful
+script exit or zero flags means only that static enumeration completed; it does
+not establish that the target is free of vulnerabilities.
+
 ## Command-Line Interface
 
 The deterministic analysis stage can be invoked directly:

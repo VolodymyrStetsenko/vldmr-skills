@@ -141,6 +141,35 @@ def validate_unwritable_output(output_dir: Path) -> None:
         raise AssertionError("output failure is not reported as a controlled diagnostic")
 
 
+def validate_documentation() -> None:
+    markdown_files = (
+        sorted(ROOT.glob("*.md"))
+        + sorted((ROOT / "docs").glob("*.md"))
+        + sorted((ROOT / "examples").rglob("*.md"))
+    )
+    link_pattern = re.compile(r"\[[^]]*\]\(([^)]+)\)")
+    missing_links: list[str] = []
+    for document in markdown_files:
+        for target in link_pattern.findall(document.read_text(encoding="utf-8")):
+            target = target.split("#", 1)[0]
+            if not target or "://" in target or target.startswith("mailto:"):
+                continue
+            if not (document.parent / target).resolve().exists():
+                missing_links.append(f"{document.relative_to(ROOT)} -> {target}")
+    if missing_links:
+        raise AssertionError(f"broken relative documentation links: {missing_links}")
+
+    machine_path_pattern = re.compile(r"/home/|/Users/|C:\\\\")
+    leaked_paths = []
+    for artifact in sorted((ROOT / "examples").rglob("*")):
+        if not artifact.is_file() or artifact == ROOT / "examples/README.md":
+            continue
+        if machine_path_pattern.search(artifact.read_text(encoding="utf-8")):
+            leaked_paths.append(str(artifact.relative_to(ROOT)))
+    if leaked_paths:
+        raise AssertionError(f"machine-specific paths in example artifacts: {leaked_paths}")
+
+
 def main() -> int:
     for component in COMPONENTS:
         validate_frontmatter(component)
@@ -154,6 +183,8 @@ def main() -> int:
             )
         validate_unwritable_output(output_dir)
         print("PASS controlled output failure")
+    validate_documentation()
+    print("PASS documentation links and publication paths")
     return 0
 
 
