@@ -1,0 +1,24 @@
+# Audit working artifacts produced by the skills at runtime
+**/zk-review/
+**/bridge-audit/
+**/evm-scan/
+.audit-*/
+*.audit.tmp
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Node / toolchains
+node_modules/
+out/
+cache/
+artifacts/
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
