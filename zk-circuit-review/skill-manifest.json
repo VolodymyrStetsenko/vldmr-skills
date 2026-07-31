@@ -1,8 +1,8 @@
 {
   "schema": "vldmr.skill-security.v1",
   "name": "zk-circuit-review",
-  "version": "1.0.0",
-  "description": "Offline static review workflow for Circom, Noir, and Halo2 circuit soundness and completeness.",
+  "version": "2.0.0",
+  "description": "Autonomous evidence-gated ZK circuit review with constraint modeling, independent attack lanes, challenge, and mandatory reporting.",
   "author": {
     "name": "Volodymyr Stetsenko",
     "identity": "https://github.com/VolodymyrStetsenko"
@@ -42,12 +42,14 @@
       "enabled": true,
       "commands": [
         "cat",
+        "git",
         "mkdir",
         "python3"
       ]
     },
     "tools": [
       "read_file",
+      "runSubagent",
       "run_in_terminal"
     ]
   },
@@ -58,7 +60,7 @@
     "python": ">=3.9",
     "dependencies": []
   },
-  "risk_tier": "L1",
+  "risk_tier": "L2",
   "security": {
     "target_code_execution": false,
     "external_instructions": [],
@@ -70,15 +72,16 @@
     "repository": "https://github.com/VolodymyrStetsenko/vldmr-skills",
     "publisher_identity": "github:VolodymyrStetsenko",
     "signature_status": "unsigned-development",
-    "release_tag": "v1.0.0"
+    "release_tag": "v2.0.0"
   },
   "integrity": {
     "algorithm": "sha256",
-    "content_hash": "sha256:e58d53a11ae8bd4954473e6d35dc9b51f85b763d96f1f56d6b01df64c241f607",
+    "content_hash": "sha256:ab45c5106dac5596b516f1cdd8a4f125b01d1efbd8e51bb245c3bddfffb4d629",
     "files": {
-      "SKILL.md": "42c851d58561ec9c472c3bb3fe9a0a0e75f48d74f9ca91629a3be9993cdecbff",
-      "VERSION": "59854984853104df5c353e2f681a15fc7924742f9a2e468c29af248dce45ce03",
-      "references/report-template.md": "0a2676f88753726830bc1ae72f8fc810803d08329b84a5e30130da9de3b816fa",
+      "SKILL.md": "7142e4fb723ae5c5138e31b1c489c06d5fa144278834d16d2afa09033eb56319",
+      "VERSION": "c28fcca53637bc88e124af1725df13cb98c69dedefd62fb3cdbe1cdb6b760624",
+      "references/reasoning-workflow.md": "17c8e79d2483080d4e0cc83568b14776f29b1cc4b3a9f671fc029913f5990a70",
+      "references/report-template.md": "9f9a1fe2576b1bd72a94b726bca5d9736a2f8282d82d37155409bd197b24864a",
       "references/vulnerability-classes.md": "51bf7af08ef781e207bcb461388c79f9bd3b9dbbafdc796fa59ea658fd473787",
       "scripts/enumerate_circuit.py": "eee9dba445e636ae506ed73638ac5b39a76ae7e35fc91c0bbfddf15dc1c7ac94",
       "scripts/fixtures/sample.circom": "a06560bdc66c0feed1574430004e8387458f6b43f5a442187d2cf0bb1fc84a62",

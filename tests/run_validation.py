@@ -85,6 +85,53 @@ def validate_frontmatter(component: Component) -> None:
             raise AssertionError(f"missing {required} in {skill}")
 
 
+def validate_agentic_workflow(component: Component) -> None:
+    skill_dir = ROOT / component.name
+    skill_text = (skill_dir / "SKILL.md").read_text(encoding="utf-8")
+    manifest = json.loads((skill_dir / "skill-manifest.json").read_text(encoding="utf-8"))
+    version = (skill_dir / "VERSION").read_text(encoding="utf-8").strip()
+    if version != "2.0.0" or manifest.get("version") != version:
+        raise AssertionError(f"{component.name}: inconsistent 2.0.0 package version")
+    metadata_version = re.search(r'^\s+version:\s+"([^"]+)"$', skill_text, re.MULTILINE)
+    if metadata_version is None or metadata_version.group(1) != version:
+        raise AssertionError(f"{component.name}: SKILL.md version is inconsistent")
+    if manifest.get("risk_tier") != "L2":
+        raise AssertionError(f"{component.name}: autonomous workflow must declare L2 risk")
+    if "runSubagent" not in manifest.get("permissions", {}).get("tools", []):
+        raise AssertionError(f"{component.name}: agent delegation is not declared")
+
+    required_workflow_terms = (
+        "## Autonomous execution contract",
+        "Independent reasoning lanes",
+        "Evidence lattice and challenge",
+        "review-ledger.md",
+        "Mandatory final report",
+        "report.md",
+        "E2",
+        "E3",
+    )
+    for term in required_workflow_terms:
+        if term not in skill_text:
+            raise AssertionError(f"{component.name}: workflow contract missing {term!r}")
+
+    report_text = (skill_dir / "references/report-template.md").read_text(encoding="utf-8")
+    for term in (
+        "Review-lane coverage",
+        "Candidate accounting",
+        "Evidence",
+        "Completeness declaration",
+    ):
+        if term not in report_text:
+            raise AssertionError(f"{component.name}: report contract missing {term!r}")
+
+    if component.name == "evm-invariant-scan":
+        reasoning_text = (skill_dir / "references/reasoning-workflow.md").read_text(encoding="utf-8")
+        normalized_reasoning = " ".join(reasoning_text.split())
+        for term in ("every read site", "shortest path", "direct consumer path"):
+            if term not in normalized_reasoning:
+                raise AssertionError(f"{component.name}: sentinel challenge missing {term!r}")
+
+
 def validate_component(component: Component, output_dir: Path) -> None:
     json_path = output_dir / f"{component.name}.json"
     report_path = output_dir / f"{component.name}.md"
@@ -173,6 +220,8 @@ def validate_documentation() -> None:
 def main() -> int:
     for component in COMPONENTS:
         validate_frontmatter(component)
+        validate_agentic_workflow(component)
+    print("PASS autonomous workflow and report contracts")
     with tempfile.TemporaryDirectory(prefix="vldmr-skills-") as temp_dir:
         output_dir = Path(temp_dir)
         for component in COMPONENTS:

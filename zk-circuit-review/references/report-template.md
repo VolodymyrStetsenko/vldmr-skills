@@ -1,7 +1,9 @@
 # ZK Circuit Review Report Specification
 
-Write the report to `zk-review/report.md`. Omit sections that have no applicable
-content.
+Write the report to `zk-review/report.md`. Assessment metadata, relation model,
+review coverage, candidate accounting, findings/observations, limitations, and
+completeness declaration are mandatory. Use `None` rather than omitting a
+required section.
 
 ```markdown
 # ZK Circuit Review — <project / scope>
@@ -33,12 +35,37 @@ Analysis incomplete>
 
 State whether witness-only assignments were traced to validating constraints.
 
-## Findings
+## 1. Witness-relation model
+
+| Public statement / output | Private inputs | Constraint dependency | Range / field assumptions | Composition assumptions |
+| --- | --- | --- | --- | --- |
+| <item> | <inputs> | <constraints/gates> | <explicit or unresolved> | <subcircuit/verifier/transcript> |
+
+## 2. Review-lane coverage
+
+| Lane | Reviewer | Scope completed | Candidates | Limitations |
+| --- | --- | --- | --- | --- |
+| Constraint graph | <agent or lead sequential pass> | yes/no | N | <none/details> |
+| Alternate witness | ... | ... | ... | ... |
+| Boundary/completeness | ... | ... | ... | ... |
+| Composition | ... | ... | ... | ... |
+| Independent challenge | ... | ... | ... | ... |
+
+## 3. Candidate accounting
+
+| ID | Origin | Location | Intended relation | Evidence | Disposition | Reason |
+| --- | --- | --- | --- | --- | --- | --- |
+| C-... | scanner/lane | `path:line` | <relation> | E0-E3 | Finding/Observation/Rejected | <constraint evidence> |
+
+Every scanner flag and reasoning candidate must appear exactly once.
+
+## 4. Findings
 
 ### [Critical] <title>
 
 - **Location:** `path:line` — `template/function`
 - **Class:** <taxonomy class #>
+- **Evidence:** <E2 / E3 and artifact, witness, or trace>
 - **Root cause:** <one sentence, code-level>
 - **Witness/PoC:** <a concrete alternate witness or rejected valid input that
   demonstrates the bug>
@@ -49,7 +76,7 @@ State whether witness-only assignments were traced to validating constraints.
 
 <repeat per finding, grouped by severity: Critical, High, Medium, Low>
 
-## Analysis observations
+## 5. Analysis observations
 
 For each observation, record the location, detected condition, unresolved question,
 and evidence required for classification.
@@ -61,6 +88,16 @@ and evidence required for classification.
 - Any component you could not fully trace, with the reason.
 - Any unavailable compiler, witness generator, trusted-setup artifact, or test;
   never report an unavailable check as passing.
+
+## Completeness declaration
+
+- Public outputs/statements traced: `<reviewed>/<in scope>`
+- Witness-only assignments reviewed: `<reviewed>/<total>`
+- Unconstrained regions and selector/gate families reviewed: `<reviewed>/<total>`
+- Scanner flags and reasoning candidates dispositioned: `<reviewed>/<total>`
+- Critical/High candidates independently challenged: `<reviewed>/<total>`
+- Lanes completed: `<completed>/<required>`
+- Final status basis: <why the status is supported; zero flags is not a basis>
 ```
 
 Limit the report to analysis-relevant content. Do not reproduce source except

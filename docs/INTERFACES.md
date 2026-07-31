@@ -2,9 +2,9 @@
 
 ## Applicability
 
-This document defines command-line and output contracts for release `1.0.0`.
-The Agent Skills procedures may perform additional source review, but they use
-these interfaces for deterministic enumeration.
+This document defines the unchanged command-line and output contracts used by
+release `2.0.0`. The Agent Skills procedures orchestrate autonomous source
+review and mandatory reporting around these deterministic Phase 1 interfaces.
 
 ## Runtime Requirements
 

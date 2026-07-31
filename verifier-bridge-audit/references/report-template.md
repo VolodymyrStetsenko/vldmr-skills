@@ -1,7 +1,9 @@
 # Verifier Bridge Audit Report Specification
 
-Write the report to `bridge-audit/report.md`. Omit sections that have no
-applicable content.
+Write the report to `bridge-audit/report.md`. Assessment metadata, statement and
+binding model, review coverage, candidate accounting, findings/observations,
+limitations, and completeness declaration are mandatory. Use `None` rather than
+omitting a required section.
 
 ```markdown
 # Verifier Bridge Audit — <project / scope>
@@ -20,18 +22,37 @@ Analysis incomplete>
 **Consumer contracts:** <files>
 **Reviewed:** <date>
 
-## Integration overview
+## 1. Statement and integration model
 
-| Consumer | Call site | Nullifier tracking | Input binding | VK source |
+| Consumer / effect | Call site | Ordered public inputs | Action fields | Uniqueness | Domain binding | Verifier / VK trust |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `Contract.fn` / <effect> | `file:line` | `[field0, ...]` | <recipient/amount/...> | <mechanism> | <chain/contract/version> | <immutable/settable/...> |
+
+## 2. Review-lane coverage
+
+| Lane | Reviewer | Scope completed | Candidates | Limitations |
 | --- | --- | --- | --- | --- |
-| `Contract.fn` | `file:line` | yes/no | bound/unbound (which fields) | immutable/settable |
+| Statement reconstruction | <agent or lead sequential pass> | yes/no | N | <none/details> |
+| Replay/ordering | ... | ... | ... | ... |
+| Trust/encoding | ... | ... | ... | ... |
+| Effect binding | ... | ... | ... | ... |
+| Independent challenge | ... | ... | ... | ... |
 
-## Findings
+## 3. Candidate accounting
+
+| ID | Origin | Location | Property | Evidence | Disposition | Reason |
+| --- | --- | --- | --- | --- | --- | --- |
+| C-... | scanner/lane | `path:line` | <property> | E0-E3 | Finding/Observation/Rejected | <specific evidence> |
+
+Every scanner flag and reasoning candidate must appear exactly once.
+
+## 4. Findings
 
 ### [Critical] <title>
 
 - **Location:** `path:line` — `function`
 - **Class:** <threat #>
+- **Evidence:** <E2 / E3 and artifact or trace>
 - **Root cause:** <one sentence>
 - **Attack trace:**
   1. Tx 1: <what the attacker submits>
@@ -44,7 +65,7 @@ Analysis incomplete>
 
 <repeat per finding, grouped by severity>
 
-## Analysis observations
+## 5. Analysis observations
 
 For each observation, record the location, detected condition, unresolved question,
 and evidence required for classification.
@@ -60,6 +81,16 @@ not be established. Never turn an unavailable check into a passing result.
 - Circuit-side concerns (e.g. is a public output actually constrained?) →
   `zk-circuit-review`.
 - Generic accounting / access-control issues → `evm-invariant-scan`.
+
+## Completeness declaration
+
+- Verifiers reviewed: `<reviewed>/<in scope>`
+- Consumers and proof-dependent effects reviewed: `<reviewed>/<in scope>`
+- Verification call sites field-mapped: `<reviewed>/<total>`
+- Scanner flags and reasoning candidates dispositioned: `<reviewed>/<total>`
+- Critical/High candidates independently challenged: `<reviewed>/<total>`
+- Lanes completed: `<completed>/<required>`
+- Final status basis: <why the status is supported; zero flags is not a basis>
 ```
 
 Limit the report to analysis-relevant content. Do not reproduce source except

@@ -6,9 +6,19 @@
 
 ## Executive verdict
 
-The three skills are valid, portable Agent Skills with deterministic standard-library analyzers, stable JSON interfaces, explicit flag/finding terminology, reproducible fixtures, and real-protocol evidence. They are suitable as pre-audit accelerators.
+The three skills are valid, portable Agent Skills with deterministic
+standard-library evidence generators, stable JSON interfaces, domain-specific
+independent reasoning lanes, evidence challenge, complete candidate accounting,
+mandatory final reports, reproducible fixtures, and real-protocol evidence.
+Release 2.0.0 upgrades them from script-centered pre-audit accelerators to
+autonomous source-review workflows.
 
-They are not a replacement for semantic analysis, compilation, fuzzing, formal verification, or senior review. No evidence supports an objective claim that they are "best in the world." The defensible goal is measurable: valid activation, deterministic execution, controlled failures, traceable reports, regression CI, known coverage, and reproducible findings.
+They are not a replacement for compilation, executable fuzzing, formal
+verification, cryptographic review, or accountable human sign-off. No evidence
+supports an objective claim that they are "best in the world." The defensible
+goal is measurable: valid activation, complete lane execution, evidence-gated
+findings, controlled failures, auditable candidate disposition, mandatory
+reports, regression CI, known coverage, and reproducible results.
 
 ## Evidence collected
 
@@ -26,6 +36,9 @@ They are not a replacement for semantic analysis, compilation, fuzzing, formal v
 | CI | Added | Python 3.9 and 3.14 regression matrix |
 | Semantic completeness | Not established | Regex analyzers do not resolve inheritance, aliases, or full call graphs |
 | Precision/recall measurement | Not established | Positive fixtures exist; labeled negative and mutation corpora are still needed |
+| Autonomous reasoning workflow | Added in 2.0.0 | Four domain-specific independent lanes plus lead synthesis |
+| Candidate/finding gate | Added in 2.0.0 | E0-E3 evidence lattice; E2+ finding threshold; challenge for Critical/High |
+| Mandatory final reporting | Added in 2.0.0 | Scope, lane coverage, full ledger, evidence, limitations, completeness declaration |
 
 ## Official conformance
 
@@ -55,10 +68,12 @@ For bridge-heavy protocols, future coverage should explicitly map to SCWE classe
 
 | Public source | Demonstrated strengths | VLDMR status |
 | --- | --- | --- |
-| Trail of Bits `trailofbits/skills` | Workflow entry/exit criteria, anti-rationalization guidance, validators, self-tests, broad CI, evidence gates, specialist workers/judges | Deterministic analyzers and evidence terminology are strong; orchestration, activation tests, negative corpora, and reviewer gates are less mature |
-| Pashov `pashov/skills` | Protocol x-ray, invariant synthesis, Foundry/Echidna/Medusa harness generation, campaign execution, deterministic repros, explicit build status | VLDMR is lighter and easier to run, but currently stops before automatic harness generation and campaign/repro production |
+| Trail of Bits public tools and guidance | Threat modeling, invariant-first testing, Slither static analysis, Echidna property fuzzing, evidence-oriented workflows | VLDMR 2.0 adopts threat/property modeling and evidence gates; it does not claim compiler-IR or fuzz coverage when those tools are unavailable |
+| Pashov `pashov/skills` | Parallel specialist reviewers, attacker framing, concrete proof requirements, deduplication, fuzz-harness workflows | VLDMR 2.0 uses its own domain-specific Evidence-Lattice design: four lanes per niche, complete candidate ledger, E2+ findings, challenge, and mandatory reports |
 | OpenZeppelin public materials | Mature secure-development guidance, upgradeability tooling, role and proxy patterns, audit reports | No public Agent Skills repository was identified in this review; compare methodology and reports, not unavailable internal automation |
 | CertiK public materials | Public vulnerability research, audit reports, and security products | No public Agent Skills repository was identified in this review; internal workflow parity cannot be verified |
+| Spearbit/Cantina public materials | Independent specialist review and domain-expert collaboration | VLDMR separates domain lanes and requires independent challenge for high-impact candidates |
+| Consensys Diligence public tools/research | Fuzzing, formal methods, and ZK-focused testing research | VLDMR records dynamic validation as an evidence upgrade, never as completed when unavailable |
 
 Public GitHub content does not expose the complete internal process of any audit company. Claims about private tooling or company-wide quality would be speculation.
 
@@ -67,9 +82,9 @@ Public GitHub content does not expose the complete internal process of any audit
 1. **Activation tests:** verify direct slash invocation and implicit trigger selection in an actual VS Code/Copilot runtime.
 2. **Negative and adversarial corpora:** add guarded safe examples, inherited access-control examples, custom proxy patterns, multiline constructs, and near-miss verifier/circuit fixtures.
 3. **Precision/recall accounting:** maintain labeled expected flags and expected non-flags; report regressions by detector kind.
-4. **Semantic backends:** optionally consume compiler AST/build-info, Slither, or language-specific IR while retaining the dependency-free fallback.
+4. **Semantic backends:** optionally consume compiler AST/build-info, Slither, or language-specific IR while retaining the dependency-free evidence fallback.
 5. **Dynamic handoff:** generate Foundry invariant skeletons from catalog entries, compile them, and record build/run status.
-6. **Finding gate:** require reachability, attacker control, violated property, impact, confidence, and reproduction before severity classification.
+6. **Reasoning benchmark corpus:** measure whether complete skill runs identify labeled cross-function bugs such as default-value aliasing, not only whether scripts emit flags.
 7. **Coverage manifest:** map every detector to OWASP SCSVS/SCWE, known limitations, fixtures, and real-repository evidence.
 8. **Release assurance:** validate with `skills-ref`, pin CI actions by commit, add release provenance, and publish immutable version tags.
 
@@ -80,6 +95,8 @@ Public GitHub content does not expose the complete internal process of any audit
 - Every detector has one positive, one negative, and one adversarial fixture.
 - CI fails when zero fixtures are discovered.
 - Reports include target revision, tool version, scope, evidence basis, limitations, confidence, fix validation, and clear flag/finding separation.
+- Full skill runs produce `scope.md`, `review-ledger.md`, and `report.md`, and account for every scanner flag and reasoning candidate.
+- Critical/High benchmark candidates receive a recorded independent challenge.
 - A generated Foundry invariant harness compiles and runs on at least one real protocol.
 - Real-protocol outputs are pinned to target commits and reproducible from documented commands.
 
@@ -91,3 +108,9 @@ Public GitHub content does not expose the complete internal process of any audit
 - OWASP Smart Contract Security, `https://scs.owasp.org/`
 - Trail of Bits public skills, `https://github.com/trailofbits/skills`
 - Pashov Audit Group public skills, `https://github.com/pashov/skills`
+- Trail of Bits Echidna, `https://github.com/crytic/echidna`
+- Trail of Bits Slither, `https://github.com/crytic/slither`
+- OpenZeppelin Contracts, `https://github.com/OpenZeppelin/openzeppelin-contracts`
+- Spearbit portfolio, `https://github.com/spearbit/portfolio`
+- Consensys Diligence, `https://diligence.security/`
+- CertiK, `https://www.certik.com/`

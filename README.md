@@ -1,9 +1,10 @@
 # VLDMR Security Skills
 
-VLDMR Security Skills is a collection of Agent Skills for static security
-analysis of zero-knowledge circuits, on-chain proof-verifier integrations, and
-EVM smart contracts. The repository combines deterministic source enumeration
-with structured analysis procedures and machine-readable output.
+VLDMR Security Skills is a collection of autonomous Agent Skills for security
+review of zero-knowledge circuits, on-chain proof-verifier integrations, and EVM
+smart contracts. Each skill combines deterministic source enumeration with
+independent reasoning lanes, adversarial evidence challenge, candidate
+accounting, and a mandatory final report.
 
 ## Components
 
@@ -73,7 +74,8 @@ python3 tests/run_security_validation.py
 ```
 
 3. Clone a target protocol at a pinned commit and switch to that commit.
-4. Execute one or more scanners from this repository against target source:
+4. For deterministic Phase 1 evidence only, execute one or more scanners from
+this repository against target source:
 
 ```bash
 python3 zk-circuit-review/scripts/enumerate_circuit.py <path> --json out.json --report out.md --no-banner
@@ -81,11 +83,14 @@ python3 verifier-bridge-audit/scripts/scan_verifier.py <path> --json out.json --
 python3 evm-invariant-scan/scripts/enumerate_evm.py <path> --json out.json --report out.md --no-banner
 ```
 
-5. Interpret output using strict terminology:
+5. To perform the full autonomous review, invoke the installed Agent Skill by
+name (for example, "run an EVM invariant scan on `<path>`"). The agent executes
+all required reasoning lanes and writes the final report automatically.
+6. Interpret output using strict terminology:
   - `flags` in JSON are machine-detected source patterns;
   - analysis observations are unverified conditions from flags or manual review;
   - findings require confirmed security-property violation evidence.
-6. Preserve reproduction metadata in your report: repository URL, exact commit,
+7. Preserve reproduction metadata in your report: repository URL, exact commit,
   command line, UTC run date, and scanner version.
 
 For CLI and JSON contract details see [`docs/INTERFACES.md`](docs/INTERFACES.md).
@@ -98,18 +103,21 @@ Each skill separates deterministic detection from security judgment:
   files and writes machine-readable JSON plus a generated markdown summary.
   The `--report` option creates this generated summary; it does not create a
   final audit verdict.
-2. **Phase 2 — source-level adjudication.** A reviewer traces every relevant
-  flag through imports, inheritance, internal calls, state transitions, and
-  intended protocol behavior. Flags may become findings, remain analysis
-  observations, or be rejected as false positives.
-3. **Phase 3 — final report and optional dynamic validation.** The reviewer
-  writes the component's final `report.md` using its report specification.
+2. **Phase 2 — independent agent reasoning.** Domain-specific reasoning lanes
+  inspect the complete source scope, derive properties, and attack them across
+  imports, inheritance, internal calls, state transitions, and trust
+  boundaries. This phase is not limited to scanner flags.
+3. **Phase 3 — evidence challenge and final report.** Every candidate receives
+  a recorded disposition, Critical/High candidates receive an independent
+  challenge, and the lead agent writes the mandatory final `report.md` using
+  the component's report specification.
   When a suspected issue requires execution, this phase may include a
   compiler, tests, fuzzing, symbolic execution, or a reproducible PoC under a
   separately authorized environment.
 
-The bundled scripts implement Phase 1. The full `SKILL.md` procedures define
-Phases 1–3, including evidence requirements and limitations. A successful
+The bundled scripts implement Phase 1. The full `SKILL.md` procedures automate
+all phases through the Agent Skills runtime, including reasoning, challenge,
+candidate accounting, evidence requirements, and final reporting. A successful
 script exit or zero flags means only that static enumeration completed; it does
 not establish that the target is free of vulnerabilities.
 

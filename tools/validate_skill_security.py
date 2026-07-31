@@ -59,6 +59,7 @@ PROCESS_CODE_RE = re.compile(
 )
 DYNAMIC_CODE_RE = re.compile(r"\b(?:eval|exec)\s*\(")
 SKILL_NAME_RE = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
+SEMVER_RE = re.compile(r"(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)")
 SKILL_FRONTMATTER_KEYS = {
     "name",
     "description",
@@ -276,8 +277,13 @@ def _validate_schema(manifest: dict[str, Any], skill_name: str, findings: list[F
         _finding(findings, "AST04", "high", f"schema must be {SCHEMA_VERSION}", manifest_path)
     if manifest.get("name") != skill_name:
         _finding(findings, "AST04", "high", "manifest name does not match directory", manifest_path)
-    if manifest.get("version") != "1.0.0":
-        _finding(findings, "AST07", "medium", "version must match the current 1.0.0 release", manifest_path)
+    version = manifest.get("version")
+    version_path = ROOT / skill_name / "VERSION"
+    package_version = version_path.read_text(encoding="utf-8").strip() if version_path.is_file() else None
+    if not isinstance(version, str) or SEMVER_RE.fullmatch(version) is None:
+        _finding(findings, "AST07", "medium", "version must be a semantic version", manifest_path)
+    elif package_version != version:
+        _finding(findings, "AST07", "medium", "manifest version must match VERSION", manifest_path)
     if not isinstance(manifest.get("description"), str) or not manifest.get("description"):
         _finding(findings, "AST04", "high", "description must be a non-empty string", manifest_path)
     if not _string_list(manifest.get("platforms")) or not manifest.get("platforms"):
@@ -396,13 +402,18 @@ def _validate_schema(manifest: dict[str, Any], skill_name: str, findings: list[F
         _require_keys(provenance, provenance_keys, provenance_keys, manifest_path, findings)
         if provenance.get("signature_status") not in {"unsigned-development", "verified"}:
             _finding(findings, "AST01", "critical", "invalid signature_status", manifest_path)
-        if provenance.get("release_tag") != "v1.0.0":
-            _finding(findings, "AST07", "medium", "release_tag must match version 1.0.0", manifest_path)
+        expected_release_tag = f"v{version}" if isinstance(version, str) else None
+        if provenance.get("release_tag") != expected_release_tag:
+            _finding(findings, "AST07", "medium", "release_tag must match the manifest version", manifest_path)
 
     skill_path = ROOT / skill_name / "SKILL.md"
     if skill_path.is_file():
         skill_text = skill_path.read_text(encoding="utf-8")
         _validate_skill_frontmatter(skill_name, skill_text, findings)
+        frontmatter, _ = _parse_skill_frontmatter(skill_text)
+        metadata = frontmatter.get("metadata") if isinstance(frontmatter, dict) else None
+        if isinstance(metadata, dict) and metadata.get("version") != version:
+            _finding(findings, "AST07", "medium", "SKILL.md metadata version must match manifest", manifest_path)
     else:
         _finding(findings, "AST10", "high", "skill package is missing SKILL.md", manifest_path)
 
