@@ -1,6 +1,11 @@
 ---
 name: verifier-bridge-audit
 description: "Audits the seam between a zero-knowledge proof and the EVM: the on-chain verifier contract and every contract that consumes a proof. Finds proof replay, unbound public inputs, verifying-key trust gaps, and malleability at the ZK-to-EVM boundary. Triggers on 'verifier audit', 'proof replay', 'zk bridge audit', 'public input binding', 'audit the verifier', 'nullifier check'."
+license: MIT
+compatibility: "Requires Python 3.9 or later. Static analysis uses the standard library only and does not require network access or target execution."
+metadata:
+   author: Volodymyr Stetsenko
+   version: "1.0.0"
 ---
 
 # Verifier Bridge Audit

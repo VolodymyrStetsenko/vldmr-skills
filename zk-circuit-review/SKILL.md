@@ -1,6 +1,11 @@
 ---
 name: zk-circuit-review
 description: "Reviews zero-knowledge circuits for soundness and completeness bugs. Enumerates every signal and constraint in Circom, Noir, or Halo2 code, then hunts under-constrained outputs, non-deterministic witnesses, missing range checks, and unsafe hint usage. Triggers on 'zk circuit review', 'audit this circuit', 'check soundness', 'under-constrained', 'circom audit', 'noir audit', 'halo2 audit'."
+license: MIT
+compatibility: "Requires Python 3.9 or later. Static analysis uses the standard library only and does not require network access or target execution."
+metadata:
+   author: Volodymyr Stetsenko
+   version: "1.0.0"
 ---
 
 # ZK Circuit Review

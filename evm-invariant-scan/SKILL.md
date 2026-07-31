@@ -1,6 +1,11 @@
 ---
 name: evm-invariant-scan
 description: "Pre-audit scan of an EVM/Solidity codebase. Maps entry points and access control, flags permissionless setters, unguarded external calls and unchecked low-level calls, and derives a machine-checkable invariant catalog to seed fuzzing and formal verification. Triggers on 'evm scan', 'pre-audit', 'invariant scan', 'entry points', 'access control map', 'audit prep', 'find invariants'."
+license: MIT
+compatibility: "Requires Python 3.9 or later. Static analysis uses the standard library only and does not require network access or target execution."
+metadata:
+   author: Volodymyr Stetsenko
+   version: "1.0.0"
 ---
 
 # EVM Invariant Scan

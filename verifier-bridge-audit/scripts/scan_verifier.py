@@ -391,6 +391,17 @@ def analyze(path: str) -> FileReport:
     return rep
 
 
+def _write_text(path: str, content: str) -> bool:
+    try:
+        os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as fh:
+            fh.write(content)
+    except OSError as exc:
+        print(f"error: failed to write {path}: {exc}", file=sys.stderr)
+        return False
+    return True
+
+
 def main(argv: List[str]) -> int:
     ap = argparse.ArgumentParser(description="Locate on-chain proof verifiers and audit their consumers.")
     ap.add_argument("path")
@@ -428,9 +439,8 @@ def main(argv: List[str]) -> int:
 
     payload = json.dumps(summary, indent=2)
     if args.json:
-        os.makedirs(os.path.dirname(os.path.abspath(args.json)), exist_ok=True)
-        with open(args.json, "w", encoding="utf-8") as fh:
-            fh.write(payload)
+        if not _write_text(args.json, payload):
+            return 2
         print(f"wrote {args.json}  ({summary['totals']['verifiers']} verifiers, "
               f"{summary['totals']['consumers']} consumers, "
               f"{summary['totals']['flags']} flags)")
@@ -438,9 +448,8 @@ def main(argv: List[str]) -> int:
         print(payload)
 
     if args.report:
-        os.makedirs(os.path.dirname(os.path.abspath(args.report)), exist_ok=True)
-        with open(args.report, "w", encoding="utf-8") as fh:
-            fh.write(build_report(summary))
+        if not _write_text(args.report, build_report(summary)):
+            return 2
         print(f"wrote {args.report}", file=sys.stderr)
     return 0
 

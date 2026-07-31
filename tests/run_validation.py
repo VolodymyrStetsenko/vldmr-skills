@@ -1,0 +1,161 @@
+#!/usr/bin/env python3
+"""Regression checks for VLDMR Agent Skills and deterministic analyzers."""
+
+from __future__ import annotations
+
+import json
+import re
+import subprocess
+import sys
+import tempfile
+from dataclasses import dataclass
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+@dataclass(frozen=True)
+class Component:
+    name: str
+    script: Path
+    fixture: Path
+    expected_files: int
+    expected_flags: int
+
+
+COMPONENTS = (
+    Component(
+        "zk-circuit-review",
+        ROOT / "zk-circuit-review/scripts/enumerate_circuit.py",
+        ROOT / "zk-circuit-review/scripts/fixtures/sample.circom",
+        1,
+        2,
+    ),
+    Component(
+        "verifier-bridge-audit",
+        ROOT / "verifier-bridge-audit/scripts/scan_verifier.py",
+        ROOT / "verifier-bridge-audit/scripts/fixtures",
+        2,
+        3,
+    ),
+    Component(
+        "evm-invariant-scan",
+        ROOT / "evm-invariant-scan/scripts/enumerate_evm.py",
+        ROOT / "evm-invariant-scan/scripts/fixtures",
+        2,
+        10,
+    ),
+)
+
+
+def run(*args: object, expected: int = 0) -> subprocess.CompletedProcess[str]:
+    result = subprocess.run(
+        [str(arg) for arg in args],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if result.returncode != expected:
+        raise AssertionError(
+            f"expected exit {expected}, got {result.returncode}: {' '.join(map(str, args))}\n"
+            f"stdout:\n{result.stdout}\nstderr:\n{result.stderr}"
+        )
+    return result
+
+
+def validate_frontmatter(component: Component) -> None:
+    skill = ROOT / component.name / "SKILL.md"
+    text = skill.read_text(encoding="utf-8")
+    if not text.startswith("---\n") or "\n---\n" not in text[4:]:
+        raise AssertionError(f"invalid frontmatter delimiters: {skill}")
+    header = text.split("---", 2)[1]
+    name_match = re.search(r"^name:\s*(.+)$", header, re.MULTILINE)
+    description_match = re.search(r'^description:\s*"(.*)"$', header, re.MULTILINE)
+    if not name_match or not description_match:
+        raise AssertionError(f"missing name or quoted description: {skill}")
+    name = name_match.group(1).strip()
+    description = description_match.group(1)
+    if name != component.name or not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", name):
+        raise AssertionError(f"invalid skill name: {name}")
+    if not (1 <= len(name) <= 64 and 1 <= len(description) <= 1024):
+        raise AssertionError(f"frontmatter field length violation: {skill}")
+    for required in ("license:", "compatibility:", "metadata:", "  author:", "  version:"):
+        if required not in header:
+            raise AssertionError(f"missing {required} in {skill}")
+
+
+def validate_component(component: Component, output_dir: Path) -> None:
+    json_path = output_dir / f"{component.name}.json"
+    report_path = output_dir / f"{component.name}.md"
+    run(
+        sys.executable,
+        component.script,
+        component.fixture,
+        "--json",
+        json_path,
+        "--report",
+        report_path,
+        "--no-banner",
+    )
+    data = json.loads(json_path.read_text(encoding="utf-8"))
+    actual = (data["files_scanned"], data["totals"]["flags"])
+    expected = (component.expected_files, component.expected_flags)
+    if actual != expected:
+        raise AssertionError(f"{component.name}: expected files/flags {expected}, got {actual}")
+
+    stdout_run = run(sys.executable, component.script, component.fixture, "--no-banner")
+    stdout_data = json.loads(stdout_run.stdout)
+    if stdout_data != data:
+        raise AssertionError(f"{component.name}: stdout and file JSON differ")
+
+    second_run = run(sys.executable, component.script, component.fixture, "--no-banner")
+    if stdout_run.stdout != second_run.stdout:
+        raise AssertionError(f"{component.name}: output is not deterministic")
+
+    missing = run(
+        sys.executable,
+        component.script,
+        output_dir / "does-not-exist",
+        "--no-banner",
+        expected=2,
+    )
+    if "path not found" not in missing.stderr or "Traceback" in missing.stderr:
+        raise AssertionError(f"{component.name}: invalid-path diagnostic is not controlled")
+
+
+def validate_unwritable_output(output_dir: Path) -> None:
+    component = COMPONENTS[-1]
+    blocked_parent = output_dir / "blocked"
+    blocked_parent.write_text("not a directory", encoding="utf-8")
+    result = run(
+        sys.executable,
+        component.script,
+        component.fixture,
+        "--json",
+        blocked_parent / "result.json",
+        "--no-banner",
+        expected=2,
+    )
+    if "failed to write" not in result.stderr or "Traceback" in result.stderr:
+        raise AssertionError("output failure is not reported as a controlled diagnostic")
+
+
+def main() -> int:
+    for component in COMPONENTS:
+        validate_frontmatter(component)
+    with tempfile.TemporaryDirectory(prefix="vldmr-skills-") as temp_dir:
+        output_dir = Path(temp_dir)
+        for component in COMPONENTS:
+            validate_component(component, output_dir)
+            print(
+                f"PASS {component.name}: "
+                f"{component.expected_files} files, {component.expected_flags} flags"
+            )
+        validate_unwritable_output(output_dir)
+        print("PASS controlled output failure")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -9,6 +9,13 @@ applicable content.
 **Status:** <No findings / Analysis observations identified / Findings identified /
 Analysis incomplete>
 
+> **Evidence classification:** Scanner flags are source-pattern matches, not
+> confirmed vulnerabilities. Promote a flag to a finding only after tracing the
+> verifier call, public-input binding, replay state, and reachable impact.
+
+**Target revision:** <commit or `not recorded`>
+**Tool:** `verifier-bridge-audit` <version>
+**Assessment basis:** <static enumeration / source review / tests / PoC>
 **Verifier contracts:** <files>
 **Consumer contracts:** <files>
 **Reviewed:** <date>
@@ -30,8 +37,10 @@ Analysis incomplete>
   1. Tx 1: <what the attacker submits>
   2. Tx 2 (or reentrant call): <how the same proof / unbound field is abused>
 - **Impact:** <funds drained / proof forged / griefing>
+- **Confidence:** <High / Medium / Low, with reason>
 - **Fix:** <minimal change — e.g. "record `nullifierHashes[nf] = true` before
   `transfer`, and add `recipient` to the public inputs">
+- **Validation:** <test, alternate witness, or reproduction required to verify the fix>
 
 <repeat per finding, grouped by severity>
 
@@ -39,6 +48,12 @@ Analysis incomplete>
 
 For each observation, record the location, detected condition, unresolved question,
 and evidence required for classification.
+
+## Limitations
+
+Record excluded paths, unresolved inheritance or call targets, unavailable
+circuit/public-input specifications, failed commands, and any claim that could
+not be established. Never turn an unavailable check into a passing result.
 
 ## Related analysis requirements
 

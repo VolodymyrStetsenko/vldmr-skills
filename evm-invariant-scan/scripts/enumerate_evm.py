@@ -28,10 +28,8 @@ import json
 import os
 import re
 import sys
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
-from typing import List, Tuple
-
 
 # --------------------------------------------------------------------------- #
 # Branding & reporting
@@ -87,7 +85,7 @@ def build_report(summary: dict) -> str:
     date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     flags = summary["flags"]
 
-    L: List[str] = []
+    L: list[str] = []
     L.append(f"# EVM Invariant Scan — {root}")
     L.append("")
     L.append(f"> VLDMR Skills · `evm-invariant-scan` v{_read_version()} · {date} (UTC)")
@@ -169,7 +167,7 @@ def build_report(summary: dict) -> str:
     return "\n".join(L) + "\n"
 
 
-def _verdict(flags: List[dict]) -> str:
+def _verdict(flags: list[dict]) -> str:
     if not flags:
         return ("**NO FLAGS.** No implemented access-control, external-call, oracle, "
                 "flash-loan, or upgradeability detection pattern matched the analyzed source.")
@@ -192,12 +190,12 @@ def strip_comments(src: str) -> str:
     return _LINE_COMMENT.sub("", _BLOCK_COMMENT.sub(_block_repl, src))
 
 
-def iter_sol_files(root: str) -> List[str]:
+def iter_sol_files(root: str) -> list[str]:
     skip = {"node_modules", "lib", ".git", "test", "tests", "mock", "mocks",
             "out", "cache", "script", "scripts"}
     if os.path.isfile(root):
         return [root] if root.endswith(".sol") else []
-    found: List[str] = []
+    found: list[str] = []
     for dp, dn, fn in os.walk(root):
         dn[:] = [d for d in dn if d not in skip]
         for n in fn:
@@ -298,7 +296,7 @@ class Func:
     line: int
     visibility: str
     mutability: str
-    modifiers: List[str]
+    modifiers: list[str]
     writes_state: bool
     external_call: bool
     entry_point: bool
@@ -307,10 +305,10 @@ class Func:
 @dataclass
 class FileReport:
     file: str
-    contracts: List[str] = field(default_factory=list)
-    functions: List[Func] = field(default_factory=list)
+    contracts: list[str] = field(default_factory=list)
+    functions: list[Func] = field(default_factory=list)
     conservation_seed: bool = False
-    flags: List[Flag] = field(default_factory=list)
+    flags: list[Flag] = field(default_factory=list)
 
 
 def _line_of(src: str, idx: int) -> int:
@@ -342,7 +340,7 @@ def _match_brace(src: str, open_idx: int) -> int:
     return len(src)
 
 
-def _extract_functions(src: str) -> List[Tuple[str, int, str, str]]:
+def _extract_functions(src: str) -> list[tuple[str, int, str, str]]:
     """Yield (name, line, signature_attrs, body) for each defined function."""
     out = []
     for m in re.finditer(r"\bfunction\s+([A-Za-z_]\w*)\s*\(", src):
@@ -513,7 +511,18 @@ def analyze(path: str) -> FileReport:
     return rep
 
 
-def main(argv: List[str]) -> int:
+def _write_text(path: str, content: str) -> bool:
+    try:
+        os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as fh:
+            fh.write(content)
+    except OSError as exc:
+        print(f"error: failed to write {path}: {exc}", file=sys.stderr)
+        return False
+    return True
+
+
+def main(argv: list[str]) -> int:
     ap = argparse.ArgumentParser(description="Enumerate EVM entry points, access control, and invariant seeds.")
     ap.add_argument("path")
     ap.add_argument("--json")
@@ -552,18 +561,16 @@ def main(argv: List[str]) -> int:
 
     payload = json.dumps(summary, indent=2)
     if args.json:
-        os.makedirs(os.path.dirname(os.path.abspath(args.json)), exist_ok=True)
-        with open(args.json, "w", encoding="utf-8") as fh:
-            fh.write(payload)
+        if not _write_text(args.json, payload):
+            return 2
         print(f"wrote {args.json}  ({summary['totals']['entry_points']} entry points, "
               f"{summary['totals']['flags']} flags)")
     else:
         print(payload)
 
     if args.report:
-        os.makedirs(os.path.dirname(os.path.abspath(args.report)), exist_ok=True)
-        with open(args.report, "w", encoding="utf-8") as fh:
-            fh.write(build_report(summary))
+        if not _write_text(args.report, build_report(summary)):
+            return 2
         print(f"wrote {args.report}", file=sys.stderr)
     return 0
 

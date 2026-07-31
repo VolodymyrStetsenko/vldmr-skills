@@ -9,7 +9,14 @@ content.
 **Status:** <No findings / Analysis observations identified / Findings identified /
 Analysis incomplete>
 
+> **Evidence classification:** Scanner flags are source-pattern matches, not
+> confirmed vulnerabilities. Promote a flag to a finding only after tracing the
+> reachable state transition and demonstrating a violated security property.
+
+**Target revision:** <commit or `not recorded`>
 **Scope:** <paths>
+**Tool:** `evm-invariant-scan` <version>
+**Assessment basis:** <static enumeration / source review / tests / PoC>
 **Contracts:** N   **Entry points:** N   **Permissionless:** N
 **Reviewed:** <date>
 
@@ -34,7 +41,9 @@ inherited code.
 - **Root cause:** <one sentence>
 - **Proof:** <statement-order trace, or the sequence of calls that breaks it>
 - **Impact:** <value at risk>
+- **Confidence:** <High / Medium / Low, with reason>
 - **Fix:** <minimal change>
+- **Validation:** <test, invariant, or reproduction required to verify the fix>
 
 <repeat, grouped by severity>
 
@@ -47,6 +56,12 @@ inherited code.
 
 For each On-chain=No invariant, include a ready-to-use property phrasing
 (Foundry/Echidna/Halmos) so it can be tested immediately.
+
+## Limitations
+
+Record excluded paths, unresolved inheritance or dynamic dispatch, unavailable
+tooling, failed commands, and any claim that could not be established. Never
+turn an unavailable check into a passing result.
 
 ## Related analysis requirements
 

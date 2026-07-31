@@ -455,6 +455,17 @@ def analyze_file(path: str, forced: str = "auto") -> FileReport | None:
     return None
 
 
+def _write_text(path: str, content: str) -> bool:
+    try:
+        os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as fh:
+            fh.write(content)
+    except OSError as exc:
+        print(f"error: failed to write {path}: {exc}", file=sys.stderr)
+        return False
+    return True
+
+
 def main(argv: list[str]) -> int:
     ap = argparse.ArgumentParser(description="Enumerate ZK circuit signals and constraints.")
     ap.add_argument("path", help="file or directory to scan")
@@ -503,18 +514,16 @@ def main(argv: list[str]) -> int:
 
     payload = json.dumps(summary, indent=2)
     if args.json:
-        os.makedirs(os.path.dirname(os.path.abspath(args.json)), exist_ok=True)
-        with open(args.json, "w", encoding="utf-8") as fh:
-            fh.write(payload)
+        if not _write_text(args.json, payload):
+            return 2
         print(f"wrote {args.json}  ({summary['files_scanned']} files, "
               f"{summary['totals']['flags']} flags)")
     else:
         print(payload)
 
     if args.report:
-        os.makedirs(os.path.dirname(os.path.abspath(args.report)), exist_ok=True)
-        with open(args.report, "w", encoding="utf-8") as fh:
-            fh.write(build_report(summary))
+        if not _write_text(args.report, build_report(summary)):
+            return 2
         print(f"wrote {args.report}", file=sys.stderr)
     return 0
 

@@ -1,0 +1,31 @@
+name: Validate skills
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    name: Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.14"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile analyzers
+        run: >-
+          python -m py_compile
+          zk-circuit-review/scripts/enumerate_circuit.py
+          verifier-bridge-audit/scripts/scan_verifier.py
+          evm-invariant-scan/scripts/enumerate_evm.py
+          tests/run_validation.py
+      - name: Run regression suite
+        run: python tests/run_validation.py
