@@ -1,136 +1,114 @@
-# Validation & Benchmarking
+# Validation Record
 
-This document records how the skills in this repository were benchmarked against
-authoritative, public vulnerability references, and how the deterministic
-enumerator scripts behave on a real, production-grade ZK + Solidity protocol.
+## Purpose
 
-The goal is **honest, evidence-based validation** — including the false
-positives, false negatives, and coverage gaps that were found. Nothing here
-claims the suite is "better" than mature industry tooling; it documents exactly
-what the suite does and does not do.
+This document records reference coverage, fixture validation, and external
+repository executions for release `1.0.0`. Results characterize implemented
+static detections; they do not establish complete vulnerability coverage.
 
-## 1. Reference standards used
+## Environment
 
-| Reference | What it provides | Link |
+| Parameter | Value |
+| --- | --- |
+| Operating system | Linux |
+| Python | 3.14.4 |
+| Dependencies | Python standard library only |
+| Network access during analysis | None |
+| Analysis mode | Static, comment-stripped source enumeration |
+
+## Reference Coverage
+
+### ZK vulnerability classes
+
+| Class | Coverage | Implementation |
 | --- | --- | --- |
-| 0xPARC ZK Bug Tracker | Canonical taxonomy of 8 ZK vulnerability classes + 27 real-world bugs | https://github.com/0xPARC/zk-bug-tracker |
-| Trail of Bits — building-secure-contracts | not-so-smart-contracts, program-analysis (Slither, Echidna, Medusa, Manticore) | https://github.com/crytic/building-secure-contracts |
-| OWASP Smart Contract Top 10 (2026) | SC01–SC10 industry-consensus EVM risk list | https://owasp.org/www-project-smart-contract-top-10/ |
+| Under-constrained circuits | Detected | `under-constrained-witness`, `unconstrained-output` |
+| Nondeterministic circuits | Partial | Witness-only assignment enumeration |
+| Arithmetic overflow or underflow | Manual analysis | Taxonomy procedure |
+| Mismatched bit lengths | Manual analysis | Taxonomy procedure |
+| Unused public inputs | Detected | `unused-public-input` |
+| Fiat-Shamir transcript weakness | Not detected | Manual cryptographic review required |
+| Trusted setup compromise | Not detected | Artifact provenance review required |
+| Assigned but unconstrained values | Detected | `<--` target absent from `===` and `<==` constraints |
 
-## 2. Coverage vs. the 0xPARC ZK vulnerability classes
+### OWASP Smart Contract Top 10 (2026)
 
-| # | 0xPARC class | Covered by `zk-circuit-review` | Notes |
-| --- | --- | --- | --- |
-| 1 | Under-constrained circuits | Yes | `under-constrained-witness`, `unconstrained-output` |
-| 2 | Nondeterministic circuits | Partial | Surfaced via witness-only assignment leads |
-| 3 | Arithmetic over/under-flow | Partial | Flagged as review lead, not proven |
-| 4 | Mismatching bit lengths | Partial | Reference taxonomy only |
-| 5 | Unused public inputs optimized out | **Yes** | `unused-public-input` detector (base name used only in its declaration) |
-| 6 | Frozen Heart (Fiat–Shamir forgery) | Reference only | Cryptographic-protocol level; documented as a required manual check (class 11) |
-| 7 | Trusted setup leak | Reference only | Documented in taxonomy, not statically detectable |
-| 8 | Assigned but not constrained | Yes | Core detector (`<--` target never appears in `===`/`<==`) |
-
-## 3. Coverage vs. OWASP Smart Contract Top 10 (2026)
-
-| Code | Risk | Covered by `evm-invariant-scan` |
+| Code | Coverage | Implementation |
 | --- | --- | --- |
-| SC01 | Access control | Yes (`permissionless-config-setter`) |
-| SC02 | Business logic | Partial (invariant seeds) |
-| SC03 | Price oracle manipulation | **Yes** (`spot-price-oracle`, `oracle-deprecated-feed`, `oracle-missing-staleness-check`) |
-| SC04 | Flash-loan-facilitated attacks | **Yes** (`flash-loan-callback`, `balance-based-accounting`) |
-| SC05 | Lack of input validation | Partial |
-| SC06 | Unchecked external calls | Yes (`unchecked-low-level-call`) |
-| SC07 | Arithmetic errors | Partial |
-| SC08 | Reentrancy | Yes (`external-call-no-reentrancy-guard`) |
-| SC09 | Integer overflow/underflow | Partial |
-| SC10 | Proxy & upgradeability | **Yes** (`unprotected-upgrade`, `initializer-not-guarded`, `selfdestruct-present`) |
+| SC01 Access control | Partial | Permissionless configuration setters; modifier and inline authorization recognition |
+| SC02 Business logic | Partial | Invariant derivation procedure |
+| SC03 Price oracle manipulation | Partial | Spot-price, deprecated-feed, and staleness detections |
+| SC04 Flash-loan attacks | Partial | Callback and balance-derived accounting detections |
+| SC05 Input validation | Manual analysis | Bounds and state-machine procedures |
+| SC06 Unchecked external calls | Detected | `unchecked-low-level-call` |
+| SC07 Arithmetic errors | Manual analysis | Accounting and bounds procedures |
+| SC08 Reentrancy | Partial | External-call and guard enumeration |
+| SC09 Integer overflow or underflow | Manual analysis | Arithmetic review procedure |
+| SC10 Proxy and upgradeability | Partial | Upgrade authorization, initializer, and self-destruction detections |
 
-## 4. Real-protocol test — Semaphore
+`Partial` indicates detection of defined source patterns, not full semantic
+coverage of the risk category.
 
-**Target:** `semaphore-protocol/semaphore`
-**Commit:** `4dbc39b83a4066bf5084fd7f5d336202aad2f815` (2026-07-08)
-**Runner:** Python 3.14.4, stdlib only, no network.
+## Fixture Validation
 
-```
-python3 zk-circuit-review/scripts/enumerate_circuit.py   <repo>/packages/circuits/src
-python3 verifier-bridge-audit/scripts/scan_verifier.py    <repo>/packages/contracts/contracts
-python3 evm-invariant-scan/scripts/enumerate_evm.py       <repo>/packages/contracts/contracts
-```
+| Component | Fixture scope | Expected flags | Observed flags |
+| --- | --- | ---: | ---: |
+| `zk-circuit-review` | `sample.circom` | 2 | 2 |
+| `verifier-bridge-audit` | `Verifier.sol`, `Withdrawer.sol` | 3 | 3 |
+| `evm-invariant-scan` | `Vault.sol`, `DefiVault.sol` | 10 | 10 |
 
-### 4.1 zk-circuit-review
-- Enumerated `semaphore.circom`: 1 template, 4 inputs, 1 output, constraints parsed.
-- **0 flags. 0 false positives.** The circuit uses `<==` throughout (fully
-  constrained), so the tool correctly stayed silent.
-- Limitation surfaced: only the top-level file was analyzed because the circuit's
-  sub-components are imported from `node_modules` (library packages), which the
-  scanner skips by design. Multi-package circuit graphs are not followed.
+The fixture set verifies supported positive detections. It is not a statistical
+measure of false-positive or false-negative rates.
 
-### 4.2 verifier-bridge-audit
-- Correctly identified `Semaphore.sol` as a proof **consumer** and
-  `SemaphoreVerifier.sol` as the **verifier**.
-- **0 flags. 0 false positives, 0 false negatives** after the heuristic upgrade:
-  - Verifier detection now recognizes Semaphore's optimized Yul verifier
-    (`staticcall(..., 8, ...)`, `pPairing`) — the earlier false negative is gone.
-  - The replay-guard check now recognizes the `if (nullifiers[x]) revert` /
-    `nullifiers[x] = true` idiom — the earlier `possible-proof-replay` false
-    positive is gone.
-  - The binding check now accepts proofs bound via `scope`/`nullifier` in the
-    public-input arguments — the earlier `unbound-public-inputs` false positive
-    is gone.
-- Fixture regression: the deliberately vulnerable `Withdrawer.sol` still raises
-  all three planted flags (`possible-proof-replay`, `unbound-public-inputs`,
-  `mutable-verifier`), confirming the relaxations did not blunt real detection.
+## External Repository Executions
 
-### 4.3 evm-invariant-scan
-- Enumerated 4 contracts / 32 functions / 11 entry points.
-- One flag: `permissionless-config-setter` on `updateMember` (`external override`,
-  no visibility-level modifier). This is a **lead, not a confirmed finding** —
-  exactly the evidence-over-assertion posture the skills mandate. Whether it is a
-  real issue depends on internal enforcement inside `_updateMember` (in the
-  `SemaphoreGroups` base), which a human must confirm. The tool correctly
-  surfaced it for review rather than asserting a vulnerability.
+| Target | Commit | Component | Files analyzed | Flags |
+| --- | --- | --- | ---: | ---: |
+| Semaphore | `4dbc39b` | `zk-circuit-review` | 1 | 0 |
+| Semaphore | `4dbc39b` | `verifier-bridge-audit` | 14 Solidity source files in selected scope | 0 |
+| Semaphore | `4dbc39b` | `evm-invariant-scan` | 14 Solidity source files in selected scope | 1 |
+| circomlib | `35e54ea` | `zk-circuit-review` | 57 | 3 |
+| World ID contracts | `f959f72` | `verifier-bridge-audit` | 25 | 8 |
+| World ID contracts | `f959f72` | `evm-invariant-scan` | 19 | 0 |
+| Uniswap v4 core | `46c6834` | `evm-invariant-scan` | 38 | 0 |
+| Uniswap v4 core | `46c6834` | `verifier-bridge-audit` | 38 | 0 verifiers, 0 flags |
 
-## 5. Honest verdict
+Generated JSON and markdown artifacts are stored under `examples/`. Absolute
+paths in artifacts reflect the validation environment.
 
-- The circuit scanner produced **zero false positives** on real, audited code and
-  behaved conservatively; it now also covers the "unused public input" class.
-- The verifier-bridge scanner, after the heuristic upgrade, produces **0 false
-  positives and 0 false negatives on Semaphore** while still catching all planted
-  fixture bugs. Verifier detection, replay-guard idioms, and context binding were
-  each broadened based on the evidence from this test.
-- The EVM scanner produced **one correct lead** with no assertion of a finding,
-  and now additionally covers OWASP SC03 (oracle), SC04 (flash loan), and SC10
-  (proxy/upgradeability).
+## Observations
 
-A second validation round (v1.2.0) extended real-protocol testing to
-**circomlib, World ID contracts, and Uniswap v4 core**. It exposed and fixed two
-false positives (single-line-loop `<--` target extraction; `reinitializer` and
-inline `msg.sender` auth not counted as access control). Unedited outputs and
-per-lead verification notes live in [examples/](../examples/README.md).
+1. circomlib produced three `unused-public-input` flags. The referenced input
+   identifiers occur only at their declarations in the analyzed template files.
+   Parent-template composition and deployment relevance require separate review.
+2. Semaphore produced one `permissionless-config-setter` flag for
+   `updateMember`. Authorization is delegated through inherited implementation;
+  the static pattern is retained as an analysis observation.
+3. World ID verifier consumers produced replay, binding, and mutable-verifier
+   flags. These require system-level review of identity-state transitions,
+   verifier governance, and replay semantics before classification.
+4. Uniswap v4 served as a negative control for verifier detection and for
+   initializer/access-control heuristics.
 
-These scripts are **deterministic pre-audit accelerators and lead generators**,
-not a replacement for professional review. Real-world audits combine static
-tools (Slither, Circomspect), fuzzers (Echidna/Medusa), formal verification
-(Certora, Picus/Ecne), and expert manual review. This suite is complementary
-and is strongest at the ZK↔EVM boundary that general-purpose tools do not model.
+## Detection Corrections Identified During Validation
 
-## 6. Improvement roadmap
+- Circuit witness-target extraction now selects the signal adjacent to `<--` in
+  single-line loops instead of selecting the loop variable.
+- EVM access-control analysis recognizes `initializer`/`reinitializer` modifiers
+  and common inline `msg.sender` authorization patterns.
+- EVM initializer detection requires proxy or upgradeability context.
+- Verifier detection recognizes optimized Yul pairing-precompile patterns.
+- Replay detection recognizes conditional-revert and consume-write nullifier
+  idioms.
 
-All five items from the first validation pass are now **implemented and
-regression-tested** (see the fixtures under each skill's `scripts/fixtures/` and
-the re-test in section 4):
+## Limitations
 
-1. **verifier-bridge replay guard** — done: recognizes `if (...map[nullifier]...)
-   revert`, custom-error, and consume-write idioms.
-2. **verifier-bridge binding** — done: treats `scope`/`nullifier`/domain binding
-   in the public-input arguments as valid, not only `msg.sender`.
-3. **verifier detection** — done: markers for decimal precompile `8`,
-   `pPairing`/`checkPairing`, optimized Yul `staticcall(..., 8, ...)` verifiers.
-4. **zk class 5** — done: `unused-public-input` lead for inputs that never
-   influence a constraint.
-5. **evm OWASP gaps** — done: SC03 (oracle), SC04 (flash loans), SC10
-   (proxy/upgradeability) detectors.
-
-Future (research-grade, out of scope for static regex): Fiat–Shamir/transcript
-soundness (documented as manual class 11), public-input ordering diffing against
-circuit artifacts, and point/scalar malleability.
+- Imported circuit dependency graphs under excluded vendor directories are not
+  traversed.
+- Solidity inheritance, modifiers, storage aliases, and inter-contract calls are
+  not resolved semantically.
+- Public-input ordering, elliptic-curve point validation, subgroup checks,
+  transcript construction, and trusted-setup provenance require manual review.
+- No claim is made regarding vulnerability absence when no flag is produced.
+- External repository results apply only to the recorded commit and selected
+  source scope.

@@ -13,8 +13,8 @@ Supported inputs:
 
 The goal is a *reproducible* map of what the circuit declares versus what it
 actually constrains. It performs no proving, no compilation, and no network
-access — it reads source and emits JSON. Heuristic flags are leads for a human
-or agent to confirm, never final findings.
+access — it reads source and emits JSON. Flags are source-pattern matches that
+require verification before classification as findings.
 
 Usage:
   enumerate_circuit.py <path> [--json OUT] [--lang circom|noir|halo2|auto]
@@ -31,10 +31,8 @@ import json
 import os
 import re
 import sys
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
-from typing import Dict, List, Optional
-
 
 # --------------------------------------------------------------------------- #
 # Branding & reporting
@@ -80,14 +78,14 @@ def _read_version() -> str:
 
 
 def build_report(summary: dict) -> str:
-    """Render a professional, minimalist markdown report from the JSON summary."""
+    """Render the normative markdown summary for an enumeration result."""
     t = summary["totals"]
     root = os.path.basename(summary["root"].rstrip("/")) or summary["root"]
     langs = ", ".join(summary.get("languages") or []) or "—"
     date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     flags = summary["flags"]
 
-    L: List[str] = []
+    L: list[str] = []
     L.append(f"# ZK Circuit Review — {root}")
     L.append("")
     L.append(f"> VLDMR Skills · `zk-circuit-review` v{_read_version()} · {date} (UTC)")
@@ -106,47 +104,48 @@ def build_report(summary: dict) -> str:
     L.append(f"| Assign+constrain (`<==`) | {t['assign_constraints']} |")
     L.append(f"| Witness-only assignments (`<--`) | {t['witness_only_assignments']} |")
     L.append(f"| Unconstrained regions | {t['unconstrained_regions']} |")
-    L.append(f"| **Leads** | **{t['flags']}** |")
+    L.append(f"| **Flags** | **{t['flags']}** |")
     L.append("")
-    L.append("## Leads")
+    L.append("## Analysis observations")
     L.append("")
     if not flags:
-        L.append("No heuristic leads. Every declared signal that this scanner can see is "
-                 "referenced by a constraint. This is *not* a proof of soundness — "
-                 "cryptographic-protocol checks (Fiat–Shamir, trusted setup) remain manual.")
+        L.append("No implemented detection pattern matched the analyzed source. "
+                 "Fiat–Shamir transcript construction, trusted-setup provenance, and "
+                 "imported dependency graphs require separate assessment.")
     else:
-        L.append("Each row is a **lead** to confirm against the circuit, not a final finding.")
+        L.append("The following static-analysis observations require source-level "
+                 "verification before classification as findings.")
         L.append("")
         L.append("| # | Severity | Kind | Signal | Location | Note |")
         L.append("| ---: | --- | --- | --- | --- | --- |")
         for i, f in enumerate(flags, 1):
-            sev = _SEVERITY.get(f["kind"], "Lead")
+            sev = _SEVERITY.get(f["kind"], "Unrated")
             loc = f"{os.path.basename(f['file'])}:{f['line']}"
             L.append(f"| {i} | {sev} | `{f['kind']}` | `{f['signal']}` | {loc} | {f['note']} |")
     L.append("")
-    L.append("## Verdict")
+    L.append("## Analysis status")
     L.append("")
     L.append(_verdict(flags))
     L.append("")
     L.append("## Method & limits")
     L.append("")
     L.append("- Deterministic, comment-stripped source analysis (no proving, no network).")
-    L.append("- Leads are heuristic; confirm each with a concrete second witness or a "
-             "constraint trace before reporting as a finding.")
+    L.append("- Flags require verification with an alternate witness or a constraint "
+             "trace before classification as findings.")
     L.append("- Library sub-circuits imported from `node_modules`/`target` are not followed.")
     return "\n".join(L) + "\n"
 
 
-def _verdict(flags: List[dict]) -> str:
+def _verdict(flags: list[dict]) -> str:
     if not flags:
-        return ("**Clean surface.** No under-constrained outputs, unused public inputs, or "
-                "unconstrained regions were detected by static enumeration.")
+        return ("**NO FLAGS.** No implemented under-constraint or unused-input "
+                "detection pattern matched the analyzed source.")
     crit = [f for f in flags if _SEVERITY.get(f["kind"]) in {"Critical", "High"}]
     if crit:
-        return (f"**Review required.** {len(crit)} high-severity lead(s) touch soundness "
-                "(unconstrained output / free witness). Confirm before any deployment.")
-    return (f"**Leads to confirm.** {len(flags)} lower-severity lead(s) (e.g. unused public "
-            "inputs). Confirm and either constrain or document.")
+        return (f"**REVIEW REQUIRED.** {len(crit)} observation(s) are mapped to "
+                "high-impact soundness classes and require manual verification.")
+    return (f"**REVIEW REQUIRED.** {len(flags)} observation(s) require manual "
+        "verification and disposition.")
 
 
 
@@ -169,9 +168,9 @@ def strip_comments(src: str) -> str:
     return src
 
 
-def iter_source_files(root: str, extensions: List[str]) -> List[str]:
+def iter_source_files(root: str, extensions: list[str]) -> list[str]:
     skip_dirs = {"node_modules", "lib", "target", ".git", "test", "tests", "mock", "mocks"}
-    found: List[str] = []
+    found: list[str] = []
     if os.path.isfile(root):
         return [root] if os.path.splitext(root)[1] in extensions else []
     for dirpath, dirnames, filenames in os.walk(root):
@@ -199,10 +198,10 @@ class Flag:
 class FileReport:
     file: str
     language: str
-    templates: List[str] = field(default_factory=list)
-    inputs: List[str] = field(default_factory=list)
-    outputs: List[str] = field(default_factory=list)
-    intermediates: List[str] = field(default_factory=list)
+    templates: list[str] = field(default_factory=list)
+    inputs: list[str] = field(default_factory=list)
+    outputs: list[str] = field(default_factory=list)
+    intermediates: list[str] = field(default_factory=list)
     components: int = 0
     constraints_equality: int = 0        # ===  (circom) / assert (noir)
     constraints_assign: int = 0          # <==  (assign + constrain)
@@ -210,7 +209,7 @@ class FileReport:
     unconstrained_regions: int = 0       # noir `unconstrained fn` / circom `<--`
     gates: int = 0                       # halo2 create_gate
     advice_assignments: int = 0          # halo2 assign_advice
-    flags: List[Flag] = field(default_factory=list)
+    flags: list[Flag] = field(default_factory=list)
 
 
 # --------------------------------------------------------------------------- #
@@ -259,7 +258,7 @@ def analyze_circom(path: str, src: str) -> FileReport:
 
     # Constraint operators. Order matters: match <== and <-- before < / =.
     # Collect, per line, the LHS signal being written and how.
-    witness_assigned: Dict[str, int] = {}   # base signal -> first line seen
+    witness_assigned: dict[str, int] = {}   # base signal -> first line seen
     constrained: set = set()                 # base signals appearing in === or <==
 
     for lineno, raw in enumerate(clean.splitlines(), start=1):
@@ -402,7 +401,7 @@ def analyze_halo2(path: str, src: str) -> FileReport:
     rep.constraints_equality = len(_HALO2_CONSTRAIN_EQ.findall(clean))
     enables = len(_HALO2_ENABLE.findall(clean))
 
-    # Advice cells assigned but a suspiciously low gate/enable count is a lead:
+    # Advice cells assigned with a low gate/enable count require review:
     # cells may be assigned into the trace without a selector enabling any gate
     # over them.
     if rep.advice_assignments > 0 and rep.gates == 0:
@@ -429,7 +428,7 @@ def analyze_halo2(path: str, src: str) -> FileReport:
 # Dispatch
 # --------------------------------------------------------------------------- #
 
-def detect_language(path: str, src: str) -> Optional[str]:
+def detect_language(path: str, src: str) -> str | None:
     ext = os.path.splitext(path)[1]
     if ext == ".circom":
         return "circom"
@@ -440,7 +439,7 @@ def detect_language(path: str, src: str) -> Optional[str]:
     return None
 
 
-def analyze_file(path: str, forced: str = "auto") -> Optional[FileReport]:
+def analyze_file(path: str, forced: str = "auto") -> FileReport | None:
     try:
         with open(path, "r", encoding="utf-8", errors="replace") as fh:
             src = fh.read()
@@ -456,7 +455,7 @@ def analyze_file(path: str, forced: str = "auto") -> Optional[FileReport]:
     return None
 
 
-def main(argv: List[str]) -> int:
+def main(argv: list[str]) -> int:
     ap = argparse.ArgumentParser(description="Enumerate ZK circuit signals and constraints.")
     ap.add_argument("path", help="file or directory to scan")
     ap.add_argument("--json", help="write JSON report to this path")
@@ -477,7 +476,7 @@ def main(argv: List[str]) -> int:
                   "auto": [".circom", ".nr", ".rs"]}[args.lang]
     files = iter_source_files(args.path, extensions)
 
-    reports: List[FileReport] = []
+    reports: list[FileReport] = []
     for f in files:
         rep = analyze_file(f, args.lang)
         if rep is not None:

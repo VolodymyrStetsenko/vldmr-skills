@@ -1,19 +1,19 @@
-# bridge-audit Report Template
+# Verifier Bridge Audit Report Specification
 
-Write the report to `bridge-audit/report.md`. Evidence-backed only. Omit empty
-sections.
+Write the report to `bridge-audit/report.md`. Omit sections that have no
+applicable content.
 
 ```markdown
 # Verifier Bridge Audit — <project / scope>
 
-**Verdict (one line):** <e.g. "Withdrawals are replayable and the recipient is
-unbound — two Critical findings; verifier is admin-swappable without delay.">
+**Status:** <No findings / Analysis observations identified / Findings identified /
+Analysis incomplete>
 
 **Verifier contracts:** <files>
 **Consumer contracts:** <files>
 **Reviewed:** <date>
 
-## Seam overview
+## Integration overview
 
 | Consumer | Call site | Nullifier tracking | Input binding | VK source |
 | --- | --- | --- | --- | --- |
@@ -35,15 +35,17 @@ unbound — two Critical findings; verifier is admin-swappable without delay.">
 
 <repeat per finding, grouped by severity>
 
-## Leads (unconfirmed)
+## Analysis observations
 
-Location, suspicion, and the exact evidence needed to confirm.
+For each observation, record the location, detected condition, unresolved question,
+and evidence required for classification.
 
-## Handoffs
+## Related analysis requirements
 
 - Circuit-side concerns (e.g. is a public output actually constrained?) →
   `zk-circuit-review`.
 - Generic accounting / access-control issues → `evm-invariant-scan`.
 ```
 
-Keep under ~400 lines. The value is in the attack traces, not in restating code.
+Limit the report to analysis-relevant content. Do not reproduce source except
+where required to establish a finding.

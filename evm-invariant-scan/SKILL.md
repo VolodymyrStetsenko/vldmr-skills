@@ -5,50 +5,42 @@ description: "Pre-audit scan of an EVM/Solidity codebase. Maps entry points and 
 
 # EVM Invariant Scan
 
-Before a deep audit — or before writing a fuzz suite — you need a truthful map of
-the attack surface and a set of properties worth testing. This skill produces
-both: a deterministic enumeration of entry points and access control, and an
-invariant catalog phrased so it can be dropped into Foundry invariant tests,
-Echidna/Medusa, or Halmos/Certora.
+## Purpose
 
-`$SKILL_DIR` is the directory containing this file, resolved from the load path.
+Enumerate EVM entry points, access controls, state writes, external calls, and
+accounting surfaces. Derive invariant candidates suitable for implementation in
+Foundry, Echidna, Medusa, Halmos, or Certora.
 
-Output goes into an `evm-scan/` folder at the project root. Write nothing
-outside it.
+Resolve `$SKILL_DIR` to the directory containing this file.
 
-## Progress tracking (MANDATORY)
-
-Create these todos (all pending), one in progress at a time:
-
-1. `Phase 1: Enumerate entry points & access`
-2. `Phase 2: Derive invariants`
-3. `Phase 3: Write evm-scan report`
+Write analysis artifacts under `evm-scan/` at the project root. Do not modify
+target source.
 
 ## Phase 1 — Enumerate entry points & access
 
-Mark Phase 1 in progress. Scope: user-specified path, else `src/` or
+Use the user-specified scope or, when absent, `src/` or
 `contracts/`. Run the enumerator:
 
 ```bash
-mkdir -p evm-scan && python3 "$SKILL_DIR/scripts/enumerate_evm.py" <scope-path> --json evm-scan/enumeration.json --report evm-scan/scan-report.md && cat evm-scan/enumeration.json
+mkdir -p evm-scan && python3 "$SKILL_DIR/scripts/enumerate_evm.py" <scope-path> --json evm-scan/enumeration.json --report evm-scan/static-analysis.md && cat evm-scan/enumeration.json
 ```
 
 The JSON gives, per file: contracts, every function with visibility, mutability,
 access modifiers, whether it writes state and whether it makes an external call;
 plus `permissionless_entry_points`, `conservation_seeds`, and deterministic
 `flags` (`permissionless-config-setter`, `external-call-no-reentrancy-guard`,
-`unchecked-low-level-call`, oracle/flash-loan/upgrade leads). Flags are leads.
-The script also writes `evm-scan/scan-report.md` — an auto-generated summary of
-the deterministic pass (banner and progress go to stderr; stdout stays
-machine-readable JSON).
+`unchecked-low-level-call`, and oracle, flash-loan, or upgradeability flags).
+Flags require source-level verification.
+The script also writes `evm-scan/static-analysis.md`, a generated
+representation of the deterministic enumeration. It is an input to the manual
+analysis in Phase 2, not the final assessment. Operational output is written to
+standard error; standard output remains machine-readable JSON.
 
-In the same message, preload `$SKILL_DIR/references/invariant-taxonomy.md`.
-
-Mark Phase 1 complete.
+Read `$SKILL_DIR/references/invariant-taxonomy.md` before Phase 2.
 
 ## Phase 2 — Derive invariants
 
-Structure comes from the script; the properties come from reasoning. Walk the
+Apply the
 taxonomy in `references/invariant-taxonomy.md` against the enumeration. Read the
 relevant functions before asserting anything.
 
@@ -72,25 +64,30 @@ relevant functions before asserting anything.
 6. **State machine.** One-shot latches (`require(x == 0); x = v`) and monotonic
    counters are invariants — note any path that violates them.
 
-For each invariant, record: a stable ID, the property in plain terms, the
+For each invariant, record: a stable ID, the property, the
 variables/functions involved, and whether it is currently **enforced on-chain**
 (Yes/No) with the file:line evidence. On-chain=No invariants are the ones to fuzz
-first — they are candidate bugs.
-
-Mark Phase 2 complete.
+first. Classify them as analysis observations until a violating transition is
+demonstrated.
 
 ## Phase 3 — Write evm-scan report
 
 Write `evm-scan/report.md` per `$SKILL_DIR/references/report-template.md`. It has
 three parts: the entry-point/access map, the confirmed findings (ordered by
 severity), and the invariant catalog (with On-chain Yes/No and a ready-to-use
-phrasing for a fuzzer). No fabrication; mark anything unverified as a lead.
+phrasing for a verification tool). Classify unverified observations as analysis
+observations.
 
-Print the one-line verdict to the terminal at the end.
+Use `enumeration.json`, `static-analysis.md`, and Phase 2 source review as
+inputs. `report.md` is the final analytical deliverable.
+
+Print the report status line after writing the report.
 
 ## Constraints
 
-- Autonomous, single pass.
-- The enumerator is static; do not claim coverage or dynamic results.
-- ZK circuits and proof-verifier binding are out of scope here — hand those to
-  `zk-circuit-review` and `verifier-bridge-audit`.
+- Execute all phases without user interaction unless scope is ambiguous or a
+   required source path is unavailable.
+- The enumerator performs static source analysis only. Do not attribute dynamic
+   execution or complete semantic coverage to its output.
+- ZK circuit soundness and proof-verifier integration are outside scope;
+   identify the corresponding analysis dependency when applicable.

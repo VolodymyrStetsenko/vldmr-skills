@@ -12,7 +12,7 @@ by itself, falsifiable. The valuable output is the invariant whose enforcement i
 
 ---
 
-## A. Flag classes (confirm the enumerator's leads)
+## A. Flag classes
 
 ### A1. Permissionless config setter
 A state-changing setter with no access modifier. **Critical** if the state
@@ -27,8 +27,8 @@ external call precedes the state update that should have closed the position
 precede interactions.
 
 ### A3. Unchecked low-level call
-`.call`/`.delegatecall` whose success boolean is ignored, silently swallowing
-failures (lost funds, desynced state). Confirm the return is truly unhandled.
+`.call`/`.delegatecall` whose success boolean is ignored, allowing execution to
+continue after a failed call. Verify whether the return value is handled.
 
 ### A4. Price-oracle manipulation (OWASP SC03)
 `spot-price-oracle` — an AMM spot price (`getReserves`, `slot0`, `getAmountsOut`)
@@ -49,8 +49,9 @@ Track accounted balances in storage instead of reading live balances.
 
 ### A6. Proxy & upgradeability (OWASP SC10)
 `unprotected-upgrade` — `upgradeTo`/`_authorizeUpgrade` reachable with no visible
-access control (anyone can swap the implementation). `initializer-not-guarded` —
-an `initialize`-style function lacking an `initializer`/`reinitializer` modifier
+access control, permitting unauthorized implementation replacement.
+`initializer-not-guarded` — an `initialize`-style function lacking an
+`initializer`/`reinitializer` modifier
 (re-initialization / ownership re-take). `selfdestruct-present` — a reachable
 `selfdestruct` that can brick a proxy implementation. **Critical** for any of
 these on a live upgrade or init path; confirm the guard and storage layout.
@@ -122,4 +123,5 @@ not already guarantee.
 - **Medium** — an incomplete bound with no current exploit, an unchecked call on
   a non-critical path.
 - **Low** — hardening and defense-in-depth.
-- **Lead** — a suspected invariant break you could not yet demonstrate.
+- **Analysis observation** — a suspected invariant violation without a
+  demonstrated state transition.

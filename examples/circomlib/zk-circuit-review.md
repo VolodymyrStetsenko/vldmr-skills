@@ -1,6 +1,6 @@
 # ZK Circuit Review — circuits
 
-> VLDMR Skills · `zk-circuit-review` v1.2.0 · 2026-07-31 (UTC)
+> VLDMR Skills · `zk-circuit-review` v1.0.0 · 2026-07-31 (UTC)
 
 **Scope:** `/home/volodymyr-sec/projects/_audit-targets/circomlib/circuits` · 57 file(s) · languages: circom
 
@@ -15,11 +15,11 @@
 | Assign+constrain (`<==`) | 918 |
 | Witness-only assignments (`<--`) | 17 |
 | Unconstrained regions | 17 |
-| **Leads** | **3** |
+| **Flags** | **3** |
 
-## Leads
+## Analysis observations
 
-Each row is a **lead** to confirm against the circuit, not a final finding.
+The following static-analysis observations require source-level verification before classification as findings.
 
 | # | Severity | Kind | Signal | Location | Note |
 | ---: | --- | --- | --- | --- | --- |
@@ -27,12 +27,12 @@ Each row is a **lead** to confirm against the circuit, not a final finding.
 | 2 | Medium | `unused-public-input` | `st_i0` | smtverifierlevel.circom:43 | declared `signal input` but never used in any constraint or expression — Circom optimizes it away, so it binds nothing (0xPARC class 5: unused public inputs optimized out) |
 | 3 | Medium | `unused-public-input` | `st_na` | smtverifierlevel.circom:46 | declared `signal input` but never used in any constraint or expression — Circom optimizes it away, so it binds nothing (0xPARC class 5: unused public inputs optimized out) |
 
-## Verdict
+## Analysis status
 
-**Leads to confirm.** 3 lower-severity lead(s) (e.g. unused public inputs). Confirm and either constrain or document.
+**REVIEW REQUIRED.** 3 observation(s) require manual verification and disposition.
 
 ## Method & limits
 
 - Deterministic, comment-stripped source analysis (no proving, no network).
-- Leads are heuristic; confirm each with a concrete second witness or a constraint trace before reporting as a finding.
+- Flags require verification with an alternate witness or a constraint trace before classification as findings.
 - Library sub-circuits imported from `node_modules`/`target` are not followed.

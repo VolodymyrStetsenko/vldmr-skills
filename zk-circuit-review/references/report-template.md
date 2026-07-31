@@ -1,13 +1,13 @@
-# zk-review Report Template
+# ZK Circuit Review Report Specification
 
-Write the report to `zk-review/report.md`. Keep it factual and evidence-backed.
-Omit any section with no content rather than padding it.
+Write the report to `zk-review/report.md`. Omit sections that have no applicable
+content.
 
 ```markdown
 # ZK Circuit Review — <project / scope>
 
-**Verdict (one line):** <e.g. "One critical under-constrained output allows proof
-forgery; two completeness leads pending confirmation.">
+**Status:** <No findings / Analysis observations identified / Findings identified /
+Analysis incomplete>
 
 **Scope:** <paths reviewed>
 **Languages:** <circom / noir / halo2>
@@ -24,8 +24,7 @@ forgery; two completeness leads pending confirmation.">
 | Assign+constrain (`<==`) | N |
 | Witness-only assignments (`<--` / hints) | N |
 
-A high witness-only-to-constraint ratio is itself a signal; call it out if
-present.
+State whether witness-only assignments were traced to validating constraints.
 
 ## Findings
 
@@ -41,10 +40,10 @@ present.
 
 <repeat per finding, grouped by severity: Critical, High, Medium, Low>
 
-## Leads (unconfirmed)
+## Analysis observations
 
-For each: location, why it is suspicious, and exactly what evidence would confirm
-or refute it. Leads are honest calibration, not filler.
+For each observation, record the location, detected condition, unresolved question,
+and evidence required for classification.
 
 ## Out of scope / assumptions
 
@@ -53,5 +52,5 @@ or refute it. Leads are honest calibration, not filler.
 - Any component you could not fully trace, with the reason.
 ```
 
-Keep the whole report under ~400 lines. Depth belongs in the findings, not in
-restating the source.
+Limit the report to analysis-relevant content. Do not reproduce source except
+where required to establish a finding.

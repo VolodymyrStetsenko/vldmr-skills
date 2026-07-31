@@ -1,6 +1,6 @@
 # Verifier Bridge Audit — src
 
-> VLDMR Skills · `verifier-bridge-audit` v1.2.0 · 2026-07-31 (UTC)
+> VLDMR Skills · `verifier-bridge-audit` v1.0.0 · 2026-07-31 (UTC)
 
 **Scope:** `/home/volodymyr-sec/projects/_audit-targets/world-id-contracts/src` · 25 Solidity file(s)
 
@@ -11,7 +11,7 @@
 | Proof-verifier contracts | 7 |
 | Verifier consumers | 4 |
 | Verification call sites | 5 |
-| **Leads** | **8** |
+| **Flags** | **8** |
 
 **Verifiers:** `SemaphoreVerifier.sol`, `b10.sol`, `b100.sol`, `b10.sol`, `b100.sol`, `b1200.sol`, `b600.sol`
 
@@ -28,9 +28,9 @@ For each verifier consumer, three classic ZK-EVM protections are checked.
 | `WorldIDIdentityManagerImplV3.sol` | **no** | **no** |
 | `WorldIDRouterImplV1.sol` | **no** | yes |
 
-## Leads
+## Analysis observations
 
-Each row is a **lead** to confirm against the real data flow, not a finding.
+The following static-analysis observations require source-level and system-level verification before classification as findings.
 
 | # | Severity | Kind | Location | Note |
 | ---: | --- | --- | --- | --- |
@@ -43,9 +43,9 @@ Each row is a **lead** to confirm against the real data flow, not a finding.
 | 7 | High | `unbound-public-inputs` | WorldIDIdentityManagerImplV3.sol:81 | the proof's public inputs do not appear to commit to caller/recipient/scope/domain data (no msg.sender, nullifier, scope, recipient or domain-separator on the verification path) — a valid proof may be front-run or reused by another actor; confirm the binding. |
 | 8 | Critical | `possible-proof-replay` | WorldIDRouterImplV1.sol:351 | verifier is invoked but no nullifier tracking + reject-if-used guard was found in this file — a valid proof may be replayable. Confirm where the proof/nullifier is marked consumed. |
 
-## Verdict
+## Analysis status
 
-**Review required.** 8 high-severity integration lead(s) (replay / unbound public inputs / mutable verifier). Confirm before deployment.
+**REVIEW REQUIRED.** 8 observation(s) are mapped to high-impact integration-risk classes and require manual verification.
 
 ## Method & limits
 

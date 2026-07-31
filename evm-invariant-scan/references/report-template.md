@@ -1,13 +1,13 @@
-# evm-scan Report Template
+# EVM Invariant Scan Report Specification
 
-Write the report to `evm-scan/report.md`. Evidence-backed only; omit empty
-sections.
+Write the report to `evm-scan/report.md`. Omit sections that have no applicable
+content.
 
 ```markdown
 # EVM Invariant Scan — <project / scope>
 
-**Verdict (one line):** <e.g. "One reentrancy on withdraw and a permissionless
-fee setter; conservation invariant is enforced, solvency is not fuzz-covered.">
+**Status:** <No findings / Analysis observations identified / Findings identified /
+Analysis incomplete>
 
 **Scope:** <paths>
 **Contracts:** N   **Entry points:** N   **Permissionless:** N
@@ -15,13 +15,15 @@ fee setter; conservation invariant is enforced, solvency is not fuzz-covered.">
 
 ## 1. Entry-point & access map
 
-| Contract.function | Visibility | Access | Writes state | External call |
+| Source / function | Visibility | Access indicators | Writes state | External call |
 | --- | --- | --- | --- | --- |
-| `Vault.withdraw` | external | permissionless | yes | yes |
-| `Vault.setFee` | external | permissionless | yes | no |
+| `Vault.sol / withdraw` | external | none detected | yes | yes |
+| `Vault.sol / setFee` | external | `onlyOwner` | yes | no |
 
-Group by contract. For >30 entry points, keep permissionless ones in full and
-compact the role-gated ones.
+List every state-changing public or external entry point. `none detected` means
+that no recognized modifier was present; it does not establish that the
+function is unauthorized because authorization may occur in function bodies or
+inherited code.
 
 ## 2. Findings
 
@@ -46,11 +48,11 @@ compact the role-gated ones.
 For each On-chain=No invariant, include a ready-to-use property phrasing
 (Foundry/Echidna/Halmos) so it can be tested immediately.
 
-## Handoffs
+## Related analysis requirements
 
 - Proof-verifier binding → `verifier-bridge-audit`.
 - Circuit soundness → `zk-circuit-review`.
 ```
 
-Keep under ~450 lines. The invariant catalog and findings are the deliverable;
-the map supports them.
+Limit the report to analysis-relevant content. Do not reproduce source except
+where required to establish a finding or invariant.

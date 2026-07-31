@@ -5,52 +5,42 @@ description: "Audits the seam between a zero-knowledge proof and the EVM: the on
 
 # Verifier Bridge Audit
 
-A sound circuit and a correct verifier can still lose funds if the **binding**
-between them is wrong. This skill audits the ZK-to-EVM seam: the on-chain
-verifier and, more importantly, the contracts that trust its output. The
-recurring failures are: a valid proof that can be spent twice, a proof whose
-public inputs are not tied to the actor or state they authorize, and a verifying
-key that the wrong party can swap.
+## Purpose
 
-`$SKILL_DIR` is the directory containing this file, resolved from the path you
-loaded it from.
+Assess the integration between an on-chain proof verifier and contracts that
+consume its result. The analysis covers replay protection, public-input
+binding, verifier and verifying-key trust, encoding, and call ordering.
 
-Output goes into a `bridge-audit/` folder at the project root. Write nothing
-outside it.
+Resolve `$SKILL_DIR` to the directory containing this file.
 
-## Progress tracking (MANDATORY)
-
-Create these todos (all pending), one in progress at a time:
-
-1. `Phase 1: Locate verifiers & consumers`
-2. `Phase 2: Audit the binding & trust boundary`
-3. `Phase 3: Write bridge-audit report`
+Write analysis artifacts under `bridge-audit/` at the project root. Do not
+modify target source.
 
 ## Phase 1 — Locate verifiers & consumers
 
-Mark Phase 1 in progress. Determine scope (user-specified path, else the
+Determine scope from the user-specified path or, when absent, the
 contracts directory — `src/` or `contracts/`). Run the locator:
 
 ```bash
-mkdir -p bridge-audit && python3 "$SKILL_DIR/scripts/scan_verifier.py" <scope-path> --json bridge-audit/scan.json --report bridge-audit/scan-report.md && cat bridge-audit/scan.json
+mkdir -p bridge-audit && python3 "$SKILL_DIR/scripts/scan_verifier.py" <scope-path> --json bridge-audit/scan.json --report bridge-audit/static-analysis.md && cat bridge-audit/scan.json
 ```
 
 The JSON identifies `verifier_contracts` (proof checkers), `consumer_contracts`
 (callers of `verify`/`verifyProof`), each verification call site, and
 deterministic `flags`: `possible-proof-replay`, `unbound-public-inputs`,
-`mutable-verifier`. Treat flags as leads. The script also writes
-`bridge-audit/scan-report.md` — an auto-generated summary of the deterministic
-pass (banner and progress go to stderr; stdout stays machine-readable JSON).
+`mutable-verifier`. Treat flags as machine-readable pattern matches requiring source-level
+verification. The script also writes
+`bridge-audit/static-analysis.md`, a generated representation of the
+deterministic scan. It is an input to the manual analysis in Phase 2, not the
+final assessment. Operational output is written to standard error; standard
+output remains machine-readable JSON.
 
-In the same message, preload `$SKILL_DIR/references/integration-threats.md`.
-
-Mark Phase 1 complete.
+Read `$SKILL_DIR/references/integration-threats.md` before Phase 2.
 
 ## Phase 2 — Audit the binding & trust boundary
 
-For every consumer call site, read the enclosing function and answer each
-question in `references/integration-threats.md`. You MUST read the code before
-asserting anything. Focus, in order:
+For every consumer call site, inspect the enclosing function and apply each
+control in `references/integration-threats.md`. Use the following priority:
 
 1. **Replay / double-spend.** After a proof verifies, is a unique identifier
    (nullifier, commitment, proof hash, monotonically increasing state) recorded
@@ -80,25 +70,28 @@ asserting anything. Focus, in order:
    this contract, and this version? Missing domain separation lets a proof valid
    on a testnet or a sibling deployment be replayed here.
 
-For each confirmed issue capture: file, line, function, root cause, the concrete
+For each confirmed issue, record: file, line, function, root cause, the concrete
 attack sequence (transaction 1 → transaction 2), impact, and the minimal fix.
-Unproven suspicions are leads.
-
-Mark Phase 2 complete.
+Classify observations without a demonstrated attack path as analysis observations.
 
 ## Phase 3 — Write bridge-audit report
 
 Write `bridge-audit/report.md` per
 `$SKILL_DIR/references/report-template.md`. Order by severity. Every finding
 carries a concrete two-step (or single-tx) attack trace and a minimal fix.
-State clearly which verifier(s) and consumer(s) were in scope. No fabrication.
+State which verifier and consumer contracts were in scope and identify all
+scope exclusions.
 
-Print the one-line verdict to the terminal at the end.
+Use `scan.json`, `static-analysis.md`, and Phase 2 source review as inputs.
+`report.md` is the final analytical deliverable.
+
+Print the report status line after writing the report.
 
 ## Constraints
 
-- Autonomous, single pass, no user interaction.
-- The scanner is static; do not report dynamic results you did not produce.
-- This skill covers the *binding*. Circuit soundness is `zk-circuit-review`;
-  generic EVM accounting is `evm-invariant-scan`. Note handoffs rather than
-  duplicating them.
+- Execute all phases without user interaction unless scope is ambiguous or a
+   required source path is unavailable.
+- The scanner performs static source analysis only. Do not attribute dynamic
+   execution or complete semantic coverage to its output.
+- Circuit soundness and generic EVM accounting are outside scope; identify the
+   corresponding `zk-circuit-review` or `evm-invariant-scan` analysis dependency.

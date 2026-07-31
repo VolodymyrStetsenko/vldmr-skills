@@ -1,6 +1,6 @@
 # ZK Circuit Review — src
 
-> VLDMR Skills · `zk-circuit-review` v1.2.0 · 2026-07-31 (UTC)
+> VLDMR Skills · `zk-circuit-review` v1.0.0 · 2026-07-31 (UTC)
 
 **Scope:** `/home/volodymyr-sec/projects/_audit-targets/semaphore/packages/circuits/src` · 1 file(s) · languages: circom
 
@@ -15,18 +15,18 @@
 | Assign+constrain (`<==`) | 4 |
 | Witness-only assignments (`<--`) | 0 |
 | Unconstrained regions | 0 |
-| **Leads** | **0** |
+| **Flags** | **0** |
 
-## Leads
+## Analysis observations
 
-No heuristic leads. Every declared signal that this scanner can see is referenced by a constraint. This is *not* a proof of soundness — cryptographic-protocol checks (Fiat–Shamir, trusted setup) remain manual.
+No implemented detection pattern matched the analyzed source. Fiat–Shamir transcript construction, trusted-setup provenance, and imported dependency graphs require separate assessment.
 
-## Verdict
+## Analysis status
 
-**Clean surface.** No under-constrained outputs, unused public inputs, or unconstrained regions were detected by static enumeration.
+**NO FLAGS.** No implemented under-constraint or unused-input detection pattern matched the analyzed source.
 
 ## Method & limits
 
 - Deterministic, comment-stripped source analysis (no proving, no network).
-- Leads are heuristic; confirm each with a concrete second witness or a constraint trace before reporting as a finding.
+- Flags require verification with an alternate witness or a constraint trace before classification as findings.
 - Library sub-circuits imported from `node_modules`/`target` are not followed.

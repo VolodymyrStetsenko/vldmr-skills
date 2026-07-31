@@ -1,41 +1,54 @@
-# Contributing
+# Contribution Requirements
 
-Thanks for your interest in improving these skills. The bar is simple: changes
-must make the security analysis **more accurate**, **more reproducible**, or
-**clearer to act on** — never noisier.
+Contributions are evaluated for analytical accuracy, deterministic behavior,
+interface stability, test coverage, and documentation quality.
 
-## Ground rules
+## Change Requirements
 
-- **One skill, one purpose.** Do not merge responsibilities across skills.
-- **No fabricated examples.** Every code sample, finding, or trace in a skill or
-  reference file must reflect a real, reproducible case. Placeholder findings are
-  not acceptable.
-- **Scripts stay deterministic.** Helper scripts under `scripts/` must produce
-  the same output for the same input. No network calls in the enumeration path,
-  no time-dependent behavior.
-- **No secrets.** Never commit API keys, private keys, RPC URLs with tokens, or
-  client data.
-- **POSIX-portable shell.** Shell scripts must run on GNU (Linux) and BSD
-  (macOS) tooling. Use POSIX ERE and POSIX character classes — no PCRE-only
-  escapes.
+1. Limit each change to a defined component or shared documentation concern.
+2. Preserve component independence. A top-level skill must not require runtime
+  files from another skill.
+3. Preserve deterministic, offline execution in `scripts/`.
+4. Use the Python standard library unless a dependency is required by a
+  documented analysis capability and approved before implementation.
+5. Classify static detections as analysis observations unless a reproducible violation
+  is established.
+6. Do not include credentials, private target data, proprietary findings, or
+  unauthorized source material.
+7. Update the affected `VERSION`, `CHANGELOG.md`, interface documentation, and
+  examples when behavior or output changes.
 
-## Making a change
+## Validation Requirements
 
-1. Fork and branch from `main`.
-2. Keep the change scoped to a single skill unless you are editing shared docs.
-3. If you change a skill's behavior, bump its `VERSION` file (semantic
-   versioning) and add a line to [CHANGELOG.md](CHANGELOG.md).
-4. Run the skill's scripts against the fixtures in that skill's `scripts/`
-   directory (where present) and confirm they still pass.
-5. Open a pull request describing *what* changed and *why the analysis is better*.
+Before submitting a change:
 
-## Adding a new skill
+1. Compile modified Python files with `python3 -m py_compile`.
+2. Execute the affected script against every fixture in its
+  `scripts/fixtures/` directory.
+3. Verify that standard output remains valid JSON when no output file is
+  specified.
+4. Verify report generation when the change affects report content.
+5. Test at least one representative external codebase for changes to detection
+  logic with material false-positive or false-negative risk.
+6. Document known detection limitations introduced or modified by the change.
 
-A new skill must include, at minimum:
+## Pull Request Content
 
-- `SKILL.md` with valid YAML frontmatter (`name`, `description` with triggers).
-- A `VERSION` file starting at `1.0.0`.
-- Deterministic helper scripts under `scripts/` if the skill enumerates code.
-- Reference material under `references/` — taxonomies and templates, not prose.
+A pull request must identify:
 
-Open an issue first to discuss scope so the suite stays focused.
+- the affected component and interface;
+- the security-analysis behavior changed;
+- the validation commands executed;
+- expected changes to false-positive and false-negative characteristics;
+- compatibility or migration considerations.
+
+## New Components
+
+A new component requires:
+
+- valid Agent Skills frontmatter and an executable procedure in `SKILL.md`;
+- a `VERSION` initialized to `1.0.0`;
+- deterministic analysis utilities where source enumeration is required;
+- a documented input and output interface;
+- a threat taxonomy and report specification under `references/`;
+- fixtures representing supported detections and relevant negative controls.

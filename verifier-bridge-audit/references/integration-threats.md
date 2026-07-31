@@ -25,10 +25,10 @@ interactions). Never key replay protection on the proof bytes.
 ## 2. Unbound / under-bound public inputs
 
 **Failure.** The action authorized by the proof depends on data that is *not* in
-the public-input vector. The most common form: `recipient`, `amount`, or
-`msg.sender` is a free function parameter while the proof only attests to a
-Merkle root or nullifier. Anyone who observes the proof can resubmit it with
-their own parameters.
+the public-input vector. A common form uses `recipient`, `amount`, or
+`msg.sender` as an independent function parameter while the proof attests only
+to a Merkle root or nullifier. An observed proof may then be submitted with
+substituted parameters.
 
 **Confirm.** Reconstruct the public-input vector and show a field that the
 handler treats as authorized but the verifier never received. Then give the
@@ -138,7 +138,8 @@ re-validate on-chain what the circuit does not guarantee.
 - **Medium** — missing domain separation with no current second deployment,
   malleability with byte-keyed de-dup not yet exploited, timelock too short.
 - **Low** — hardening: undocumented input ordering, event/telemetry gaps.
-- **Lead** — a boundary weakness you could not turn into a concrete tx sequence.
+- **Analysis observation** — a detected boundary condition without a
+  demonstrated transaction sequence.
 
 ---
 
@@ -166,4 +167,4 @@ begins:
   `unbound-public-inputs`.
 - **Limits.** The scanner does not follow public-input *ordering* (threat 3),
   point malleability (threat 5), or transcript/Fiat–Shamir soundness — these
-  remain manual. Every flag is a lead to confirm against the real data flow.
+  remain manual. Every flag requires verification against the actual data flow.

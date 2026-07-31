@@ -9,7 +9,7 @@ It builds a reproducible map of a protocol's attack surface without compiling:
   - every contract and its public/external functions,
   - each function's visibility, mutability, access modifiers, and whether it
     writes state or makes an external call,
-  - deterministic leads: permissionless state changes, external calls without a
+    - deterministic flags: permissionless state changes, external calls without a
     reentrancy guard, unchecked low-level calls,
   - invariant seeds: balance mappings paired with a supply variable
     (conservation candidates).
@@ -81,7 +81,7 @@ def _read_version() -> str:
 
 
 def build_report(summary: dict) -> str:
-    """Render a professional, minimalist markdown report from the JSON summary."""
+    """Render the normative markdown summary for an EVM enumeration result."""
     t = summary["totals"]
     root = os.path.basename(summary["root"].rstrip("/")) or summary["root"]
     date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
@@ -103,21 +103,44 @@ def build_report(summary: dict) -> str:
     L.append(f"| Entry points (external/public) | {t['entry_points']} |")
     L.append(f"| Permissionless entry points | {t['permissionless_entry_points']} |")
     L.append(f"| Conservation seeds (supply vs. balances) | {t['conservation_seeds']} |")
-    L.append(f"| **Leads** | **{t['flags']}** |")
+    L.append(f"| **Flags** | **{t['flags']}** |")
     L.append("")
-    L.append("## Leads")
+
+    L.append("## Entry-point and access map")
+    L.append("")
+    L.append("| Source / function | Visibility | Access indicators | Writes state | External call |")
+    L.append("| --- | --- | --- | :---: | :---: |")
+    entry_points = []
+    for file_report in summary.get("files", []):
+        source = os.path.basename(file_report["file"])
+        for function in file_report.get("functions", []):
+            if function.get("entry_point"):
+                entry_points.append((source, function))
+    if entry_points:
+        for source, function in entry_points:
+            modifiers = ", ".join(function.get("modifiers") or []) or "none detected"
+            writes = "yes" if function.get("writes_state") else "no"
+            external = "yes" if function.get("external_call") else "no"
+            L.append(f"| `{source} / {function['name']}` | {function['visibility']} | "
+                     f"{modifiers} | {writes} | {external} |")
+    else:
+        L.append("| _(no state-changing public or external entry points enumerated)_ | — | — | — | — |")
+    L.append("")
+
+    L.append("## Analysis observations")
     L.append("")
     if not flags:
-        L.append("No heuristic leads. No permissionless config setters, unguarded external "
-                 "calls, oracle/flash-loan/upgrade risks were detected. This is a surface "
-                 "map, not a proof of correctness — confirm invariants with fuzzing.")
+        L.append("No implemented access-control, external-call, oracle, flash-loan, or "
+                 "upgradeability detection pattern matched the analyzed source. Derived "
+                 "invariants require implementation and execution in a verification tool.")
     else:
-        L.append("Each row is a **lead** to confirm against the code, not a final finding.")
+        L.append("The following static-analysis observations require source-level and "
+                 "state-transition verification before classification as findings.")
         L.append("")
         L.append("| # | Severity | Kind | Function | Location | Note |")
         L.append("| ---: | --- | --- | --- | --- | --- |")
         for i, f in enumerate(flags, 1):
-            sev = _SEVERITY.get(f["kind"], "Lead")
+            sev = _SEVERITY.get(f["kind"], "Unrated")
             fn = f.get("function") or "—"
             loc = f"{os.path.basename(f['file'])}:{f['line']}"
             L.append(f"| {i} | {sev} | `{f['kind']}` | `{fn}` | {loc} | {f['note']} |")
@@ -134,27 +157,28 @@ def build_report(summary: dict) -> str:
     L.append("- **Monotonicity / solvency:** encode any documented \"never decreases\" or "
              "\"assets ≥ liabilities\" property as an Echidna/Medusa invariant.")
     L.append("")
-    L.append("## Verdict")
+    L.append("## Analysis status")
     L.append("")
     L.append(_verdict(flags))
     L.append("")
     L.append("## Method & limits")
     L.append("")
     L.append("- Deterministic regex over comment-stripped Solidity (no compile, no network).")
-    L.append("- Leads are structural; a flagged pattern is not proof of a bug, and an absent "
-             "flag is not proof of safety. Pair with fuzzing and manual review.")
+    L.append("- Flags identify structural source patterns. Classification requires manual "
+             "review and, where applicable, executable verification.")
     return "\n".join(L) + "\n"
 
 
 def _verdict(flags: List[dict]) -> str:
     if not flags:
-        return ("**Clean surface.** No permissionless-setter, reentrancy, oracle, flash-loan, "
-                "or upgrade leads were detected by static enumeration.")
+        return ("**NO FLAGS.** No implemented access-control, external-call, oracle, "
+                "flash-loan, or upgradeability detection pattern matched the analyzed source.")
     crit = [f for f in flags if _SEVERITY.get(f["kind"]) in {"Critical", "High"}]
     if crit:
-        return (f"**Review required.** {len(crit)} high-severity lead(s) "
-                "(upgrade / access-control / reentrancy / oracle). Confirm before deployment.")
-    return f"**Leads to confirm.** {len(flags)} lower-severity lead(s) to review."
+        return (f"**REVIEW REQUIRED.** {len(crit)} observation(s) are mapped to "
+                "high-impact EVM risk classes and require manual verification.")
+    return (f"**REVIEW REQUIRED.** {len(flags)} observation(s) require manual "
+        "verification and disposition.")
 
 
 
@@ -404,15 +428,15 @@ def analyze(path: str) -> FileReport:
         has_guard = bool(REENTRANCY_GUARD.search(attrs))
         has_init_guard = bool(INITIALIZER_MODS.search(attrs))
 
-        # High-signal: a config/admin-style setter that anyone can call.
+        # High-signal: a configuration setter without recognized authorization.
         # An `initializer`/`reinitializer` modifier is a one-shot guard, so a
         # guarded initializer is not a permissionless setter.
         if entry and writes and not has_access and not has_init_guard and CONFIG_SETTER.match(name):
             rep.flags.append(Flag(
                 file=path, line=line, kind="permissionless-config-setter",
                 function=name,
-                note="a setter/admin-style function writes state with no access modifier — "
-                     "anyone can change protocol configuration; confirm intended"))
+                 note="a configuration function writes state without a recognized access "
+                     "modifier or inline authorization check"))
 
         # Reentrancy leads focus on caller-open functions that call out.
         if entry and ext and not has_guard and not has_access:

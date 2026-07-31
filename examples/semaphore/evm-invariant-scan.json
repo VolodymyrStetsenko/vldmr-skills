@@ -15,7 +15,7 @@
       "line": 92,
       "kind": "permissionless-config-setter",
       "function": "updateMember",
-      "note": "a setter/admin-style function writes state with no access modifier \u2014 anyone can change protocol configuration; confirm intended"
+      "note": "a configuration function writes state without a recognized access modifier or inline authorization check"
     }
   ],
   "files": [
@@ -181,7 +181,7 @@
           "line": 92,
           "kind": "permissionless-config-setter",
           "function": "updateMember",
-          "note": "a setter/admin-style function writes state with no access modifier \u2014 anyone can change protocol configuration; confirm intended"
+          "note": "a configuration function writes state without a recognized access modifier or inline authorization check"
         }
       ]
     },

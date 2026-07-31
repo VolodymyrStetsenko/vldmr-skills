@@ -1,34 +1,46 @@
 # Security Policy
 
-## Scope
+## Supported Version
 
-This policy covers the **skills in this repository** — the `SKILL.md` playbooks
-and their helper scripts. It does not cover third-party protocols you analyze
-with these skills.
+Security corrections are applied to the current release on the `main` branch.
 
-## Reporting a vulnerability
+## Security Boundary
 
-If you discover a security issue in a skill or its scripts — for example a script
-that could be coerced into executing untrusted input, writing outside its output
-directory, or leaking data — please report it privately.
+The repository contains execution procedures and static-analysis scripts. The
+scripts:
 
-- Open a [GitHub security advisory](https://github.com/VolodymyrStetsenko/vldmr-skills/security/advisories/new), or
-- Contact the maintainer directly before public disclosure.
+- read source files from a user-specified path;
+- write files only to explicitly supplied `--json` and `--report` paths;
+- do not execute, compile, import, or evaluate target source code;
+- do not initiate network requests;
+- do not require elevated privileges.
 
-Please include:
+Target source is treated as untrusted input. Reports may reproduce identifiers,
+paths, and source-derived text. Generated artifacts must be handled according
+to the target's data classification and access-control requirements.
 
-- The skill and script affected.
-- A minimal reproduction.
-- The impact you believe it has.
+Agent Skills-compatible runtimes may provide capabilities beyond the bundled
+scripts. Runtime permissions, network policy, command execution policy, and
+data-retention controls remain outside this repository's security boundary.
 
-You will receive an acknowledgement, and a fix or mitigation will be
-prioritized according to severity. Please give a reasonable window for a fix
-before any public disclosure.
+## Operational Requirements
 
-## Safe usage guidance
+- Execute analysis under a non-privileged account.
+- Restrict scope to source authorized for review.
+- Write output to a controlled directory with appropriate permissions.
+- Review generated artifacts before transfer to external systems.
+- Select repository commits or release artifacts according to the deployment's
+  software-supply-chain policy.
 
-- Run these skills on code you are authorized to review.
-- Review the helper scripts before running them in a privileged environment;
-  they are intentionally small and readable.
-- The skills only write into their dedicated output directory at the project
-  root and clean up their own scratch files.
+## Vulnerability Reporting
+
+Report vulnerabilities in the skills, scripts, output handling, or repository
+supply chain through a private
+[GitHub security advisory](https://github.com/VolodymyrStetsenko/vldmr-skills/security/advisories/new).
+
+Include the affected component and version, reproduction procedure, observed
+impact, and relevant deployment conditions. Do not include confidential target
+source unless explicitly requested through an approved secure channel.
+
+Reports are triaged according to exploitability, confidentiality impact,
+integrity impact, availability impact, and affected deployment conditions.

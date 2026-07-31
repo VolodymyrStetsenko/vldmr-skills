@@ -13,7 +13,7 @@ It answers three questions about a Solidity codebase, deterministically:
      trustworthy verifying-key source?
 
 No compilation, no network. Regex over comment-stripped source. Every flag is a
-lead for a human/agent to confirm against the real data flow.
+source-pattern match requiring verification against the relevant data flow.
 
 Usage:
   scan_verifier.py <path> [--json OUT]
@@ -71,7 +71,7 @@ def _read_version() -> str:
 
 
 def build_report(summary: dict) -> str:
-    """Render a professional, minimalist markdown report from the JSON summary."""
+    """Render the normative markdown summary for a verifier scan result."""
     t = summary["totals"]
     root = os.path.basename(summary["root"].rstrip("/")) or summary["root"]
     date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
@@ -91,7 +91,7 @@ def build_report(summary: dict) -> str:
     L.append(f"| Proof-verifier contracts | {t['verifiers']} |")
     L.append(f"| Verifier consumers | {t['consumers']} |")
     L.append(f"| Verification call sites | {t['verification_call_sites']} |")
-    L.append(f"| **Leads** | **{t['flags']}** |")
+    L.append(f"| **Flags** | **{t['flags']}** |")
     L.append("")
 
     verifiers = summary.get("verifier_contracts") or []
@@ -121,23 +121,24 @@ def build_report(summary: dict) -> str:
         L.append("| _(no verifier consumers found)_ | — | — |")
     L.append("")
 
-    L.append("## Leads")
+    L.append("## Analysis observations")
     L.append("")
     if not flags:
-        L.append("No integration leads. Every verifier consumer this scanner can see has "
-                 "replay tracking and binds public inputs to context. Confirm the binding "
-                 "actually covers the recipient/scope your protocol relies on.")
+        L.append("No implemented integration-risk detection pattern matched the analyzed "
+                 "source. Public-input ordering, semantic equivalence, and cross-contract "
+                 "state transitions require separate assessment.")
     else:
-        L.append("Each row is a **lead** to confirm against the real data flow, not a finding.")
+        L.append("The following static-analysis observations require source-level and "
+                 "system-level verification before classification as findings.")
         L.append("")
         L.append("| # | Severity | Kind | Location | Note |")
         L.append("| ---: | --- | --- | --- | --- |")
         for i, f in enumerate(flags, 1):
-            sev = _SEVERITY.get(f["kind"], "Lead")
+            sev = _SEVERITY.get(f["kind"], "Unrated")
             loc = f"{os.path.basename(f['file'])}:{f['line']}"
             L.append(f"| {i} | {sev} | `{f['kind']}` | {loc} | {f['note']} |")
     L.append("")
-    L.append("## Verdict")
+    L.append("## Analysis status")
     L.append("")
     L.append(_verdict(flags))
     L.append("")
@@ -153,13 +154,14 @@ def build_report(summary: dict) -> str:
 
 def _verdict(flags: List[dict]) -> str:
     if not flags:
-        return ("**Clean surface.** No replay, unbound-input, or mutable-verifier leads were "
-                "detected across verifier consumers.")
+        return ("**NO FLAGS.** No implemented replay, context-binding, or mutable-verifier "
+                "detection pattern matched the analyzed source.")
     crit = [f for f in flags if _SEVERITY.get(f["kind"]) in {"Critical", "High"}]
     if crit:
-        return (f"**Review required.** {len(crit)} high-severity integration lead(s) "
-                "(replay / unbound public inputs / mutable verifier). Confirm before deployment.")
-    return f"**Leads to confirm.** {len(flags)} lead(s) to review."
+        return (f"**REVIEW REQUIRED.** {len(crit)} observation(s) are mapped to "
+                "high-impact integration-risk classes and require manual verification.")
+    return (f"**REVIEW REQUIRED.** {len(flags)} observation(s) require manual "
+        "verification and disposition.")
 
 
 

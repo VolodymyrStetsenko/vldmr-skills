@@ -1,34 +1,32 @@
-# AGENTS.md
+# Repository Execution Requirements
 
-Guidance for AI coding agents working in this repository.
+This file defines repository-level requirements for automated coding agents.
 
-## What this repo is
+## Component Selection
 
-A small, focused library of security-audit **skills** for zero-knowledge and EVM
-smart-contract systems. Each top-level directory is one self-contained skill in
-the [Agent Skills](https://docs.claude.com/en/docs/agents-and-tools/agent-skills)
-format: a `SKILL.md` playbook, a `VERSION`, deterministic `scripts/`, and
-`references/`.
-
-| Skill | Run it when the user wants to… |
+| Component | Selection condition |
 | --- | --- |
-| `zk-circuit-review` | review a Circom / Noir / Halo2 circuit for soundness / under-constraint bugs |
-| `verifier-bridge-audit` | audit an on-chain proof verifier and its consumers (replay, input binding, VK trust) |
-| `evm-invariant-scan` | map EVM entry points / access control and derive fuzzable invariants |
+| `zk-circuit-review` | The scope contains Circom, Noir, or Halo2 source requiring constraint or witness analysis. |
+| `verifier-bridge-audit` | The scope contains an on-chain proof verifier or a contract consuming proof-verification results. |
+| `evm-invariant-scan` | The scope contains Solidity requiring entry-point, access-control, accounting, or invariant analysis. |
 
-## How to run a skill
+## Execution Requirements
 
-1. Read that skill's `SKILL.md` fully and follow its phases in order.
-2. Run its `scripts/` for the deterministic enumeration — do not hand-roll it.
-3. Confirm every script flag against the real code before reporting it; anything
-   unproven is a *lead*, not a finding.
-4. Write the report only into the skill's output folder at the project root.
+1. Read the selected component's `SKILL.md` before analysis.
+2. Use the bundled deterministic script for source enumeration.
+3. Verify each script flag against referenced source and relevant control flow
+  before classifying it as a finding.
+4. Record unresolved detections as analysis observations.
+5. Write artifacts only to the documented output directory unless another path
+  is specified by the user.
+6. State scope, exclusions, component version, and incomplete checks in the
+  report.
 
-## Rules when editing this repo
+## Repository Modification Requirements
 
-- One skill, one purpose. Do not merge responsibilities.
-- Scripts stay deterministic and dependency-free (Python 3 stdlib only). No
-  network access in the enumeration path.
-- No fabricated findings or examples anywhere.
-- Bump the skill's `VERSION` and update `CHANGELOG.md` on any behavior change.
-- Validate scripts against the fixtures in each `scripts/fixtures/` directory.
+- Preserve separation of responsibilities among components.
+- Preserve standard-library-only, offline script execution.
+- Update fixtures for changes to detection behavior.
+- Update `VERSION` and `CHANGELOG.md` for externally observable changes.
+- Do not include target credentials, confidential source, or unverified
+  vulnerability claims in repository content.
