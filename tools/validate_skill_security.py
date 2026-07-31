@@ -609,9 +609,16 @@ def _sarif(findings: list[Finding], skill_names: list[str]) -> dict[str, Any]:
     }
 
 
+def _skill_name(value: str) -> str:
+    if value not in SKILL_NAMES:
+        choices = ", ".join(SKILL_NAMES)
+        raise argparse.ArgumentTypeError(f"invalid skill: {value!r} (choose from {choices})")
+    return value
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("skills", nargs="*", choices=SKILL_NAMES, help="skills to validate")
+    parser.add_argument("skills", nargs="*", type=_skill_name, help="skills to validate")
     parser.add_argument("--root", type=Path, default=ROOT, help="repository root to validate")
     parser.add_argument("--refresh", action="store_true", help="plan a payload-hash refresh")
     parser.add_argument("--apply", action="store_true", help="apply a planned payload-hash refresh")

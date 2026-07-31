@@ -18,6 +18,7 @@ Initial public release.
 - Added deterministic JSON and hash-bound SARIF 2.1.0 security evidence.
 - Added a pre-mutation receipt and explicit apply gate for integrity refreshes.
 - Added adversarial AST01-AST10 regression coverage and CI enforcement.
+- Fixed optional skill selection under Python 3.9 without weakening invalid-name validation.
 
 ### Components
 

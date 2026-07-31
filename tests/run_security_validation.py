@@ -217,6 +217,11 @@ def main() -> int:
         raise AssertionError(f"unexpected baseline summary: {baseline['summary']}")
     print("PASS baseline security contracts: 3 skills, 0 findings")
 
+    invalid_skill = run_validator(ROOT, "not-a-skill")
+    if invalid_skill.returncode != 2 or "invalid skill" not in invalid_skill.stderr:
+        raise AssertionError("invalid positional skill name did not fail argument parsing")
+    print("PASS portable optional skill argument parsing")
+
     sarif = run_validator(ROOT, "--format", "sarif")
     sarif_report = json.loads(sarif.stdout)
     if sarif.returncode != 0 or sarif_report.get("version") != "2.1.0":
