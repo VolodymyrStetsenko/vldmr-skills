@@ -1,0 +1,24 @@
+[run]
+branch = True
+parallel = True
+patch = subprocess
+relative_files = True
+source =
+    tools
+    tests
+    evm-invariant-scan/scripts
+    verifier-bridge-audit/scripts
+    zk-circuit-review/scripts
+omit =
+    */fixtures/*
+
+[report]
+precision = 1
+show_missing = True
+skip_covered = True
+
+[html]
+directory = coverage-html
+
+[xml]
+output = coverage.xml

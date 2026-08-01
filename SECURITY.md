@@ -1,8 +1,13 @@
 # Security Policy
 
-## Supported Version
+## Supported Versions
 
 Security corrections are applied to the current release on the `main` branch.
+
+| Version | Supported |
+| --- | :---: |
+| `2.0.0` | Yes |
+| `< 2.0.0` | No |
 
 ## Security Boundary
 
@@ -49,9 +54,28 @@ Report vulnerabilities in the skills, scripts, output handling, or repository
 supply chain through a private
 [GitHub security advisory](https://github.com/VolodymyrStetsenko/vldmr-skills/security/advisories/new).
 
+Do not disclose a suspected vulnerability in a public issue, discussion, pull
+request, or social-media post before coordinated disclosure. Submit one report
+per vulnerability and include only the information required to reproduce and
+assess it. Do not access, retain, or disclose third-party data while testing.
+
 Include the affected component and version, reproduction procedure, observed
 impact, and relevant deployment conditions. Do not include confidential target
 source unless explicitly requested through an approved secure channel.
+
+The maintainer targets the following response times:
+
+| Stage | Target |
+| --- | --- |
+| Acknowledge receipt | Within 3 business days |
+| Provide an initial assessment | Within 7 business days after acknowledgement |
+| Provide progress updates for an accepted report | At least every 14 calendar days |
+
+These are good-faith response targets rather than contractual service-level
+commitments. Remediation and disclosure timing depend on severity, affected
+deployments, fix complexity, and coordination needs. The maintainer will agree
+on a disclosure date with the reporter when practical and will credit the
+reporter if requested and legally permissible.
 
 Reports are triaged according to exploitability, confidentiality impact,
 integrity impact, availability impact, and affected deployment conditions.

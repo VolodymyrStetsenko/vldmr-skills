@@ -22,6 +22,12 @@ AST01-AST10 cases, including undeclared instructions, permission escalation,
 Unicode smuggling, unsafe payloads, symlink escapes, integrity drift, and
 malformed metadata.
 
+GitHub Actions also measures line and branch coverage for the functional and
+security suites, including Python subprocesses launched by those suites. The
+coverage job publishes `coverage.xml` and a browsable HTML report in the
+`python-coverage` workflow artifact. Coverage measurement is a CI-only quality
+control and does not add a runtime dependency to any skill package.
+
 The worked Nomad example under [`examples/`](../examples/) demonstrates the
 full workflow against a pinned real-protocol revision. Fixture and example
 results apply only to their recorded source and scope; they do not establish

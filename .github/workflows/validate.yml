@@ -16,8 +16,8 @@ jobs:
       matrix:
         python-version: ["3.9", "3.14"]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v6
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
         with:
           python-version: ${{ matrix.python-version }}
       - name: Compile analyzers
@@ -41,8 +41,8 @@ jobs:
       contents: read
       security-events: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v6
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
         with:
           python-version: "3.14"
       - name: Generate JSON and SARIF evidence
@@ -54,7 +54,7 @@ jobs:
             --format sarif \
             --output security-reports/vldmr-skills.sarif
       - name: Upload security evidence
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: skill-security-evidence
           path: security-reports/
@@ -62,6 +62,33 @@ jobs:
         if: >-
           github.event_name != 'pull_request' ||
           github.event.pull_request.head.repo.full_name == github.repository
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@a2983b8bed1923f44751c5c43237f479442827b3 # v3.37.4
         with:
           sarif_file: security-reports/vldmr-skills.sarif
+
+  coverage:
+    name: Python coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: "3.14"
+      - name: Install coverage measurement tool
+        run: python -m pip install --disable-pip-version-check coverage==7.15.2
+      - name: Measure line and branch coverage
+        run: |
+          python -m coverage erase
+          python -m coverage run tests/run_validation.py
+          python -m coverage run tests/run_security_validation.py
+          python -m coverage combine
+          python -m coverage report
+          python -m coverage xml
+          python -m coverage html
+      - name: Upload coverage evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: python-coverage
+          path: |
+            coverage.xml
+            coverage-html/
