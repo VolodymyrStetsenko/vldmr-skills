@@ -2,7 +2,7 @@
 
 ## Scope
 
-Each VLDMR component ships a `skill-manifest.json` security contract next to
+Each Skills component ships a `skill-manifest.json` security contract next to
 its `SKILL.md`. The contract is intentionally separate from Agent Skills
 frontmatter so runtimes that accept only the standard discovery fields do not
 silently discard or reinterpret security metadata.
@@ -63,7 +63,7 @@ Run the deterministic standard-library-only gate:
 
 ```bash
 python3 tools/validate_skill_security.py
-python3 tools/validate_skill_security.py --format sarif --output security-reports/vldmr-skills.sarif
+python3 tools/validate_skill_security.py --format sarif --output security-reports/skills.sarif
 python3 tests/run_security_validation.py
 ```
 
@@ -107,7 +107,7 @@ privacy-safe receipt with `writes_started: false` before updating manifests.
 | AST07 Update Drift | Content hash mismatch fails validation; refresh requires plan plus explicit apply | Implemented locally and in CI |
 | AST08 Poor Scanning | Full package traversal without truncation; instruction and code checks; adversarial fixtures; JSON and SARIF output | Partial: deterministic scanner is not semantic or dynamic analysis |
 | AST09 No Governance | Version/hash inventory, CI evidence, pre-mutation receipts, security policy and private reporting | Implemented at repository level; enterprise CMDB/IAM is out of scope |
-| AST10 Cross-Platform Reuse | Standard Agent Skills frontmatter validation plus a platform-neutral adjacent security contract | Partial: the security manifest is a VLDMR extension and host enforcement remains platform-specific |
+| AST10 Cross-Platform Reuse | Standard Agent Skills frontmatter validation plus a platform-neutral adjacent security contract | Partial: the security manifest is a Skills extension and host enforcement remains platform-specific |
 
 ## Adversarial Coverage
 
@@ -147,5 +147,5 @@ after a host grants the skill broader capabilities.
 ## Attribution
 
 Control names and risk identifiers refer to the OWASP Agentic Skills Top 10,
-licensed CC BY-SA 4.0. This document describes VLDMR's independent MIT-licensed
+licensed CC BY-SA 4.0. This document describes Skills' independent MIT-licensed
 implementation and indicates where its controls are incomplete.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Adversarial regression checks for VLDMR skill package security."""
+"""Adversarial regression checks for Skills skill package security."""
 
 from __future__ import annotations
 
@@ -36,7 +36,7 @@ def assert_rules(
     mutate: Callable[[Path], None],
     expected_rules: set[str],
 ) -> None:
-    with tempfile.TemporaryDirectory(prefix="vldmr-security-case-") as temp_dir:
+    with tempfile.TemporaryDirectory(prefix="skills-security-case-") as temp_dir:
         case_root = Path(temp_dir)
         copy_packages(case_root)
         mutate(case_root)
@@ -165,7 +165,7 @@ def mutate_non_allowlisted_external_instruction(root: Path) -> None:
 
 
 def validate_refresh_receipt() -> None:
-    with tempfile.TemporaryDirectory(prefix="vldmr-security-refresh-") as temp_dir:
+    with tempfile.TemporaryDirectory(prefix="skills-security-refresh-") as temp_dir:
         case_root = Path(temp_dir)
         copy_packages(case_root)
         append_text(case_root, "zk-circuit-review/VERSION", "\n")
@@ -188,7 +188,7 @@ def validate_refresh_receipt() -> None:
 
 
 def validate_refresh_symlink_rejection() -> None:
-    with tempfile.TemporaryDirectory(prefix="vldmr-security-refresh-link-") as temp_dir:
+    with tempfile.TemporaryDirectory(prefix="skills-security-refresh-link-") as temp_dir:
         case_root = Path(temp_dir)
         copy_packages(case_root)
         manifest_path = case_root / "zk-circuit-review/skill-manifest.json"

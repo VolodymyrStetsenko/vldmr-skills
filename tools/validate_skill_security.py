@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate VLDMR skill packages against their declared security contracts."""
+"""Validate Skills skill packages against their declared security contracts."""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_NAME = "skill-manifest.json"
-SCHEMA_VERSION = "vldmr.skill-security.v2"
+SCHEMA_VERSION = "skills.skill-security.v2"
 SKILL_NAMES = (
     "zk-circuit-review",
     "verifier-bridge-audit",
@@ -543,7 +543,7 @@ def prepare_manifest_refresh(skill_dir: Path) -> tuple[Path, str]:
 
 def _refresh_plan(skill_names: list[str]) -> dict[str, Any]:
     return {
-        "schema": "vldmr.manifest-refresh.plan.v2",
+        "schema": "skills.manifest-refresh.plan.v2",
         "mode": "apply",
         "resources_planned": {
             "manifests": [f"{skill_name}/{MANIFEST_NAME}" for skill_name in skill_names]
@@ -579,7 +579,7 @@ def _sarif(findings: list[Finding], skill_names: list[str]) -> dict[str, Any]:
             {
                 "tool": {
                     "driver": {
-                        "name": "vldmr-skill-security",
+                        "name": "skills-security",
                         "version": "2.0.0",
                         "rules": [{"id": rule} for rule in rules],
                     }
@@ -682,8 +682,8 @@ def main() -> int:
         report = _sarif(findings, skill_names)
     else:
         report = {
-            "schema": "vldmr.skill-security-report.v2",
-            "tool": {"name": "vldmr-skill-security", "version": "2.0.0"},
+            "schema": "skills.skill-security-report.v2",
+            "tool": {"name": "skills-security", "version": "2.0.0"},
             "packages": packages,
             "summary": {
                 "skills": len(packages),

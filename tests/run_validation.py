@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regression checks for VLDMR Agent Skills and deterministic analyzers."""
+"""Regression checks for Skills Agent Skills and deterministic analyzers."""
 
 from __future__ import annotations
 
@@ -222,7 +222,7 @@ def main() -> int:
         validate_frontmatter(component)
         validate_agentic_workflow(component)
     print("PASS autonomous workflow and report contracts")
-    with tempfile.TemporaryDirectory(prefix="vldmr-skills-") as temp_dir:
+    with tempfile.TemporaryDirectory(prefix="skills-") as temp_dir:
         output_dir = Path(temp_dir)
         for component in COMPONENTS:
             validate_component(component, output_dir)

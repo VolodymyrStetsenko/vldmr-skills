@@ -52,7 +52,7 @@ revocation path is deployed.
 
 Report vulnerabilities in the skills, scripts, output handling, or repository
 supply chain through a private
-[GitHub security advisory](https://github.com/VolodymyrStetsenko/vldmr-skills/security/advisories/new).
+[GitHub security advisory](https://github.com/VolodymyrStetsenko/skills/security/advisories/new).
 
 Do not disclose a suspected vulnerability in a public issue, discussion, pull
 request, or social-media post before coordinated disclosure. Submit one report

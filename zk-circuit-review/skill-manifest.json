@@ -1,5 +1,5 @@
 {
-  "schema": "vldmr.skill-security.v2",
+  "schema": "skills.skill-security.v2",
   "name": "zk-circuit-review",
   "version": "2.0.0",
   "description": "Autonomous evidence-gated ZK circuit review with constraint modeling, independent attack lanes, challenge, and mandatory reporting.",
@@ -69,21 +69,21 @@
     "data_handling": "source-derived paths and identifiers may appear in local reports"
   },
   "provenance": {
-    "repository": "https://github.com/VolodymyrStetsenko/vldmr-skills",
+    "repository": "https://github.com/VolodymyrStetsenko/skills",
     "publisher_identity": "github:VolodymyrStetsenko",
     "signature_status": "unsigned-development",
     "release_tag": "v2.0.0"
   },
   "integrity": {
     "algorithm": "sha256",
-    "content_hash": "sha256:ab45c5106dac5596b516f1cdd8a4f125b01d1efbd8e51bb245c3bddfffb4d629",
+    "content_hash": "sha256:fca8f59c77ea36d55570b953d5e499d0b6e4d188edac4746104e363ca3f6e2c5",
     "files": {
       "SKILL.md": "7142e4fb723ae5c5138e31b1c489c06d5fa144278834d16d2afa09033eb56319",
       "VERSION": "c28fcca53637bc88e124af1725df13cb98c69dedefd62fb3cdbe1cdb6b760624",
       "references/reasoning-workflow.md": "17c8e79d2483080d4e0cc83568b14776f29b1cc4b3a9f671fc029913f5990a70",
       "references/report-template.md": "9f9a1fe2576b1bd72a94b726bca5d9736a2f8282d82d37155409bd197b24864a",
       "references/vulnerability-classes.md": "51bf7af08ef781e207bcb461388c79f9bd3b9dbbafdc796fa59ea658fd473787",
-      "scripts/enumerate_circuit.py": "eee9dba445e636ae506ed73638ac5b39a76ae7e35fc91c0bbfddf15dc1c7ac94",
+      "scripts/enumerate_circuit.py": "59b5d7aa713cff30a60223a7777bbe465a7593bae3124b9576ef1e751c21c008",
       "scripts/fixtures/sample.circom": "a06560bdc66c0feed1574430004e8387458f6b43f5a442187d2cf0bb1fc84a62",
       "scripts/fixtures/sample.nr": "1d547899221b9c3e33d16aebdec7a6ed8bafbaf010f97da803309deaa73ed4b5",
       "scripts/fixtures/sample_halo2.rs": "2afddb29123acc4d76f8280e6f5b0b3dcbe5235001b1468b4cf7161d35630e36"

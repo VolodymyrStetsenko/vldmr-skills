@@ -22,8 +22,8 @@ execute target code or access the network.
 ## Install
 
 ```bash
-git clone https://github.com/VolodymyrStetsenko/vldmr-skills.git
-cd vldmr-skills
+git clone https://github.com/VolodymyrStetsenko/skills.git
+cd skills
 ```
 
 Install or reference the required top-level skill directory from an Agent

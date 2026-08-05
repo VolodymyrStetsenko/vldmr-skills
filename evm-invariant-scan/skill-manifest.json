@@ -1,5 +1,5 @@
 {
-  "schema": "vldmr.skill-security.v2",
+  "schema": "skills.skill-security.v2",
   "name": "evm-invariant-scan",
   "version": "2.0.0",
   "description": "Autonomous evidence-gated EVM review with deterministic inventory, independent reasoning lanes, adversarial challenge, and mandatory reporting.",
@@ -69,21 +69,21 @@
     "data_handling": "source-derived paths and identifiers may appear in local reports"
   },
   "provenance": {
-    "repository": "https://github.com/VolodymyrStetsenko/vldmr-skills",
+    "repository": "https://github.com/VolodymyrStetsenko/skills",
     "publisher_identity": "github:VolodymyrStetsenko",
     "signature_status": "unsigned-development",
     "release_tag": "v2.0.0"
   },
   "integrity": {
     "algorithm": "sha256",
-    "content_hash": "sha256:00238079cf198be92d34c2f7685c37eba20c52dd174eacb869eead3a4ce1d189",
+    "content_hash": "sha256:65bc868c9b7aaadb6874f429b5538a34f9ce09a4d956965b75379d84615cce5f",
     "files": {
       "SKILL.md": "5e925d3c51391adcd53c36b654bf96e4a501b235f44149842dad537f77726a7f",
       "VERSION": "c28fcca53637bc88e124af1725df13cb98c69dedefd62fb3cdbe1cdb6b760624",
       "references/invariant-taxonomy.md": "3379f85ed9e98c22e1cdeb1a58e9adba7cea01bd5552b573f50a4120bef3ab03",
       "references/reasoning-workflow.md": "450b9b5340fd6e4462e8063b18e0e4b1cfe5a0486355cd067d28ed4f3210e52a",
       "references/report-template.md": "4743b805efc29b943cdad730a8e9442fbd36ab4c2ee33201bd8d85cad4f08f3b",
-      "scripts/enumerate_evm.py": "7ec9aa50f31da61736033773ed63385057ca7ac53e45eb5d1282f219d2f7f65b",
+      "scripts/enumerate_evm.py": "6fe0d8008f54e5c919dababf3374657138fede6624d6f3a76728da1c7888ab74",
       "scripts/fixtures/DefiVault.sol": "4ad8076f04a5db2c0f902d336ad8779cb4b1fc43a6f67434ae2e89f829429039",
       "scripts/fixtures/Vault.sol": "a5d8edc9b3f0c4e00ab633e30e9b035dae1089b69f6370d6b351fa9d7825709e"
     }

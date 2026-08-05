@@ -65,9 +65,9 @@ _SEVERITY = {
 
 
 def _print_banner(subtitle: str) -> None:
-    """Print the VLDMR Skills banner to stderr (stdout stays machine-readable)."""
+    """Print the Skills banner to stderr (stdout stays machine-readable)."""
     print(_BANNER, file=sys.stderr)
-    print(f"  VLDMR Skills · {subtitle}\n", file=sys.stderr)
+    print(f"  Skills · {subtitle}\n", file=sys.stderr)
 
 
 def _read_version() -> str:
@@ -88,7 +88,7 @@ def build_report(summary: dict) -> str:
     L: list[str] = []
     L.append(f"# EVM Invariant Scan — {root}")
     L.append("")
-    L.append(f"> VLDMR Skills · `evm-invariant-scan` v{_read_version()} · {date} (UTC)")
+    L.append(f"> Skills · `evm-invariant-scan` v{_read_version()} · {date} (UTC)")
     L.append("")
     L.append(f"**Scope:** `{summary['root']}` · {summary['files_scanned']} Solidity file(s)")
     L.append("")
