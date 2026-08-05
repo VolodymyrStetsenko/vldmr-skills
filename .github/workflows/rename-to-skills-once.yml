@@ -37,6 +37,7 @@ jobs:
           replacements = (
               ('VLDMR Security Skills', 'Skills'),
               ('VLDMR Skills', 'Skills'),
+              ('vldmr-skill-security', 'skills-security'),
               ('vldmr-skills', 'skills'),
               ('vldmr_skills', 'skills'),
               ('VLDMR', 'Skills'),
@@ -103,9 +104,10 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
 
+          workflow_path = Path('.github/workflows/rename-to-skills-once.yml')
           matches = []
           for path in sorted(Path('.').rglob('*')):
-              if not path.is_file() or '.git' in path.parts:
+              if not path.is_file() or '.git' in path.parts or path == workflow_path:
                   continue
               try:
                   text = path.read_text(encoding='utf-8')
