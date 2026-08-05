@@ -1,4 +1,4 @@
-# VLDMR Security Skills
+# Skills
 
 Autonomous Agent Skills for source-level security review of EVM contracts,
 proof-verifier integrations, and zero-knowledge circuits.
