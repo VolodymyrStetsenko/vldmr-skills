@@ -32,7 +32,6 @@ jobs:
           from pathlib import Path
 
           root = Path('.')
-          workflow_path = Path('.github/workflows/rename-to-skills-once.yml')
 
           replacements = (
               ('VLDMR Security Skills', 'Skills'),
@@ -45,9 +44,12 @@ jobs:
               ("Skills's", "Skills'"),
           )
 
+          def excluded(path: Path) -> bool:
+              return '.git' in path.parts or path.parts[:2] == ('.github', 'workflows')
+
           changed_files = []
           for path in sorted(root.rglob('*')):
-              if not path.is_file() or '.git' in path.parts or path == workflow_path:
+              if not path.is_file() or excluded(path):
                   continue
               try:
                   original = path.read_text(encoding='utf-8')
@@ -66,8 +68,7 @@ jobs:
           candidates = sorted(
               (
                   path for path in root.rglob('*')
-                  if '.git' not in path.parts and path != workflow_path
-                  and ('vldmr' in path.name.lower())
+                  if not excluded(path) and 'vldmr' in path.name.lower()
               ),
               key=lambda path: len(path.parts),
               reverse=True,
@@ -98,16 +99,19 @@ jobs:
           python3 tests/run_security_validation.py
           git diff --check
 
-      - name: Verify legacy name is absent
+      - name: Verify legacy name is absent outside workflows
         shell: bash
         run: |
           python3 - <<'PY'
           from pathlib import Path
 
-          workflow_path = Path('.github/workflows/rename-to-skills-once.yml')
           matches = []
           for path in sorted(Path('.').rglob('*')):
-              if not path.is_file() or '.git' in path.parts or path == workflow_path:
+              if (
+                  not path.is_file()
+                  or '.git' in path.parts
+                  or path.parts[:2] == ('.github', 'workflows')
+              ):
                   continue
               try:
                   text = path.read_text(encoding='utf-8')
@@ -118,14 +122,13 @@ jobs:
 
           if matches:
               raise SystemExit('Legacy branding remains in: ' + ', '.join(matches))
-          print('Legacy branding is absent from tracked text and paths.')
+          print('Legacy branding is absent outside workflow files.')
           PY
 
-      - name: Publish rename and remove migration workflow
+      - name: Publish repository rename
         shell: bash
         run: |
-          rm .github/workflows/rename-to-skills-once.yml
-          git add -A
+          git add -A -- ':!.github/workflows'
 
           if git diff --cached --quiet; then
             echo 'No repository changes were required.'
