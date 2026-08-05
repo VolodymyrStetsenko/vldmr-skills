@@ -49,10 +49,10 @@ jobs:
         run: |
           mkdir -p security-reports
           python tools/validate_skill_security.py \
-            --output security-reports/vldmr-skills.json
+            --output security-reports/skills.json
           python tools/validate_skill_security.py \
             --format sarif \
-            --output security-reports/vldmr-skills.sarif
+            --output security-reports/skills.sarif
       - name: Upload security evidence
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
@@ -64,7 +64,7 @@ jobs:
           github.event.pull_request.head.repo.full_name == github.repository
         uses: github/codeql-action/upload-sarif@a2983b8bed1923f44751c5c43237f479442827b3 # v3.37.4
         with:
-          sarif_file: security-reports/vldmr-skills.sarif
+          sarif_file: security-reports/skills.sarif
 
   coverage:
     name: Python coverage
