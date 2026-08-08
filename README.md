@@ -7,6 +7,11 @@ Each skill combines deterministic source enumeration with independent reasoning
 lanes, adversarial challenge, complete candidate accounting, and a mandatory
 final report. Scanner flags are evidence inputs, not findings.
 
+These packages are public methodology and automation from
+[Volodymyr Stetsenko's security practice](https://volodymyrstetsenko.github.io/VolodymyrStetsenko/).
+For a fixed-scope protocol or agentic-systems review, see the
+[engagement model](https://github.com/VolodymyrStetsenko/VolodymyrStetsenko/blob/main/WORK_WITH_ME.md).
+
 ## Skills
 
 | Skill | Scope |
